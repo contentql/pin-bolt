@@ -1,47 +1,82 @@
-import { Blog, User } from '@payload-types'
+import BlogsList from '../../List/components/BlogsList'
+import { Blog, DetailsType, User } from '@payload-types'
 import Link from 'next/link'
-import { LiaBlogSolid } from 'react-icons/lia'
 
-import TabComponent, { TabContent } from '@/payload/blocks/common/Tabs'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
+import { logoMapping } from '@/utils/logoMapping'
 
 interface AuthorDetailsProps {
-  blogsData: Blog[]
+  blogsData?: Blog[]
   author: User
+  block: DetailsType
 }
 
-const AuthorDetails: React.FC<AuthorDetailsProps> = ({ blogsData, author }) => {
-  const tabs = [
-    {
-      title: 'Author Details',
-      id: 'author',
-      icon: <LiaBlogSolid size={24} />,
-      color: '#5d5dff',
-      content: TabContent,
-      data: author,
-    },
-    {
-      title: 'Blogs',
-      id: 'blogs',
-      icon: <LiaBlogSolid size={24} />,
-      color: '#5d5dff',
-      content: TabContent,
-      data: blogsData,
-    },
-  ]
+const AuthorDetails: React.FC<AuthorDetailsProps> = ({
+  blogsData,
+  author,
+  block,
+}) => {
+  const authorDetails = {
+    image:
+      typeof author.imageUrl !== 'string'
+        ? {
+            url: author.imageUrl?.url!,
+            alt: author.imageUrl?.alt,
+          }
+        : undefined,
+    name: author.displayName || author.username,
+    bio: "Classical musician turned AI researcher. I'm fascinated by the harmony between human creativity and machine learning capabilities.",
+    socialLinks: author.socialLinks || [],
+    username: author.username!,
+  }
+
   return (
-    <div className='mx-auto max-h-screen min-h-screen max-w-7xl  gap-6 overflow-hidden px-2'>
-      <div className='mt-4 flex items-center justify-between'>
-        <p className='rounded-rounded-box border-2 border-base-content/10 bg-base-content/20 px-4 py-2'>
-          Get Started with src/app/(app)/(marketing)/author/[authorName]
-        </p>
-        <Link
-          href={`/authors`}
-          className='rounded-rounded-box border-2 border-base-content/10 bg-base-content/20 px-4 py-2'>
-          Back
-        </Link>
+    <>
+      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4 '>
+        <Avatar className='aspect-[9/16] h-full max-h-80 w-full rounded'>
+          {authorDetails.image && (
+            <AvatarImage
+              src={authorDetails.image.url}
+              className='h-full w-full animate-image-blur'
+            />
+          )}
+
+          <AvatarFallback className='rounded' />
+        </Avatar>
+
+        <div className='flex flex-col justify-center lg:col-span-3'>
+          <h3 className='text-xl font-semibold'>{authorDetails.name}</h3>
+          <p className='max-w-[50ch] text-secondary'>{authorDetails.bio}</p>
+
+          <div className='mt-4 flex flex-wrap items-center gap-3'>
+            {authorDetails.socialLinks.length
+              ? authorDetails.socialLinks.map(({ platform, value }) => {
+                  const Element = logoMapping[platform]
+                  return (
+                    <Link
+                      target='_blank'
+                      className='flex items-center gap-2 rounded-md bg-secondary/20 px-3 py-2 text-sm capitalize hover:bg-secondary/30'
+                      href={value}
+                      key={platform}>
+                      <Element className='size-5' />
+                      {platform}
+                    </Link>
+                  )
+                })
+              : null}
+          </div>
+        </div>
       </div>
-      <TabComponent tabs={tabs} />
-    </div>
+
+      {blogsData ? (
+        <BlogsList
+          blogs={blogsData}
+          authorLink={block['author-link']}
+          blogLink={block['blog-link']}
+          tagLink={block['tag-link']}
+        />
+      ) : null}
+    </>
   )
 }
 

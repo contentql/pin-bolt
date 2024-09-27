@@ -17,6 +17,7 @@ export interface Config {
     media: Media;
     pages: Page;
     search: Search;
+    'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
@@ -63,6 +64,7 @@ export interface User {
   socialLinks?:
     | {
         platform:
+          | 'website'
           | 'facebook'
           | 'instagram'
           | 'twitter'
@@ -192,6 +194,11 @@ export interface Page {
   id: string;
   title: string;
   layout?: (HomeType | DetailsType | ListType)[] | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+  };
   isHome?: boolean | null;
   isDynamic?: boolean | null;
   slugMode?: ('generate' | 'custom') | null;
@@ -207,11 +214,6 @@ export interface Page {
         id?: string | null;
       }[]
     | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: (string | null) | Media;
-  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -234,6 +236,9 @@ export interface HomeType {
  */
 export interface DetailsType {
   collectionSlug?: ('blogs' | 'tags' | 'users') | null;
+  'blog-link'?: (string | null) | Page;
+  'author-link'?: (string | null) | Page;
+  'tag-link'?: (string | null) | Page;
   id?: string | null;
   blockName?: string | null;
   blockType: 'Details';
@@ -245,7 +250,9 @@ export interface DetailsType {
 export interface ListType {
   title?: string | null;
   collectionSlug?: ('blogs' | 'tags' | 'users') | null;
-  link?: (string | null) | Page;
+  'blog-link'?: (string | null) | Page;
+  'author-link'?: (string | null) | Page;
+  'tag-link'?: (string | null) | Page;
   id?: string | null;
   blockName?: string | null;
   blockType: 'List';
@@ -271,6 +278,45 @@ export interface Search {
         relationTo: 'users';
         value: string | User;
       };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-locked-documents".
+ */
+export interface PayloadLockedDocument {
+  id: string;
+  document?:
+    | ({
+        relationTo: 'users';
+        value: string | User;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
+        relationTo: 'blogs';
+        value: string | Blog;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'search';
+        value: string | Search;
+      } | null);
+  globalSlug?: string | null;
+  user: {
+    relationTo: 'users';
+    value: string | User;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -395,6 +441,7 @@ export interface SiteSetting {
     socialLinks?:
       | {
           platform:
+            | 'website'
             | 'facebook'
             | 'instagram'
             | 'twitter'

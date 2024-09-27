@@ -36,13 +36,33 @@ const ListConfig: Block = {
       ],
     },
     {
-      name: 'link',
+      name: 'blog-link',
       type: 'relationship',
       relationTo: 'pages',
-      label: 'Redirect Link',
+      label: 'Blog redirect link',
       maxDepth: 1,
       admin: {
-        description: 'This redirects to a particular details page',
+        description: 'This redirects to a blog details page',
+      },
+    },
+    {
+      name: 'author-link',
+      type: 'relationship',
+      relationTo: 'pages',
+      label: 'Author redirect link',
+      maxDepth: 1,
+      admin: {
+        description: 'This redirects to a author details page',
+      },
+    },
+    {
+      name: 'tag-link',
+      type: 'relationship',
+      relationTo: 'pages',
+      label: 'Tag redirect link',
+      maxDepth: 1,
+      admin: {
+        description: 'This redirects to a tag details page',
       },
     },
   ],

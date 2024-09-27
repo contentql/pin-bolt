@@ -53,6 +53,18 @@ const config: Config = {
         sans: ['var(--font-geist-sans)'],
         mono: ['var(--font-geist-mono)'],
       },
+      transitionTimingFunction: {
+        'custom-ease': 'cubic-bezier(0.33, 1, 0.68, 1)',
+      },
+      keyframes: {
+        'image-blur-frames': {
+          '0%': { filter: 'blur(16px)' },
+          '100%': { filter: 'blur(0px)' },
+        },
+      },
+      animation: {
+        'image-blur': 'image-blur-frames 0.1s ease-in',
+      },
     },
   },
   plugins: [require('@tailwindcss/typography'), require('tailwindcss-animate')],

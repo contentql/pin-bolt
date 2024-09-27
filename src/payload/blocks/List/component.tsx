@@ -18,7 +18,15 @@ const List: React.FC<ListProps> = ({ params, ...block }) => {
   switch (block?.collectionSlug) {
     case 'blogs': {
       const { data: blogs } = trpc.blog.getAllBlogs.useQuery()
-      return <BlogsList blogs={blogs} block={block} />
+      return (
+        <BlogsList
+          blogs={blogs}
+          authorLink={block['author-link']}
+          blogLink={block['blog-link']}
+          tagLink={block['tag-link']}
+          title={block['title']}
+        />
+      )
     }
 
     case 'tags': {

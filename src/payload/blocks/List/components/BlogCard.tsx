@@ -28,7 +28,14 @@ const formatAvatarName = (names: string[]): string => {
   return `${nameList.join(' & ')} & ${firstNameList.length - 2} Others`
 }
 
-const BlogCard = ({ blog, link }: { blog: Blog; link: ListType['link'] }) => {
+type BlogCardType = {
+  blog: Blog
+  blogLink: ListType['blog-link']
+  tagLink: ListType['tag-link']
+  authorLink: ListType['author-link']
+}
+
+const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
   const imageURL =
     typeof blog.blogImage !== 'string'
       ? {
@@ -37,8 +44,9 @@ const BlogCard = ({ blog, link }: { blog: Blog; link: ListType['link'] }) => {
         }
       : undefined
 
-  const slug = link && typeof link !== 'string' ? link.path! : ''
-  const slicedSlug = slug ? slug.split('[')[0] : ''
+  const blogSlug =
+    blogLink && typeof blogLink !== 'string' ? blogLink.path! : ''
+  const slicedBlogSlug = blogSlug ? blogSlug.split('[')[0] : ''
 
   const tags = blog.tags
     ? blog.tags.map(({ value }) => {
@@ -75,14 +83,16 @@ const BlogCard = ({ blog, link }: { blog: Blog; link: ListType['link'] }) => {
     : []
 
   return (
-    <div className='space-y-4'>
+    <Link
+      href={`${slicedBlogSlug}${blog.slug}`}
+      className='group block space-y-4'>
       <div className='relative aspect-video w-full overflow-hidden rounded bg-secondary'>
         {imageURL && (
           <Image
             src={imageURL.src}
             fill
             alt={imageURL.alt}
-            className='object-cover'
+            className='animate-image-blur object-cover transition-transform duration-500 group-hover:scale-110'
           />
         )}
       </div>
@@ -112,12 +122,11 @@ const BlogCard = ({ blog, link }: { blog: Blog; link: ListType['link'] }) => {
           </time>
         </div>
 
-        <Link
-          href={`${slicedSlug}${blog.slug}`}
+        <p
           className='line-clamp-2 text-lg font-semibold transition-colors hover:text-primary'
           title={blog.title}>
           {blog.title}
-        </Link>
+        </p>
 
         <p className='line-clamp-3 text-secondary'>{blog.description}</p>
 
@@ -152,7 +161,7 @@ const BlogCard = ({ blog, link }: { blog: Blog; link: ListType['link'] }) => {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 

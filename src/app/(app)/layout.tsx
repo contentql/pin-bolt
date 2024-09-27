@@ -33,8 +33,6 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     ]
 
-    console.log({ title, description, ogImage })
-
     return {
       title,
       description,
@@ -80,7 +78,8 @@ export default async function RootLayout({
         {/* added a explicit link tag because favicon is coming from site-settings */}
         <link rel='icon' type='image/x-icon' href={faviconUrl} />
       </head>
-      <body className={`${GeistSans.className} ${GeistMono.variable}`}>
+      <body
+        className={`${GeistSans.className} ${GeistMono.variable} antialiased`}>
         {/* <LivePreviewListener /> */}
         <Provider>{children}</Provider>
 

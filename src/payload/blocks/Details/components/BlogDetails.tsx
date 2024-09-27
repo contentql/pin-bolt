@@ -1,12 +1,12 @@
 'use client'
 
-import ShareList from '../../common/ShareList'
 import { Blog } from '@payload-types'
 import { payloadSlateToHtmlConfig, slateToHtml } from '@slate-serializers/html'
 import { format } from 'date-fns'
 import DOMPurify from 'isomorphic-dompurify'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import ShareList from '../../common/ShareList'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 import { getInitials } from '@/utils/getInitials'
@@ -157,7 +157,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
             src={imageURL.url}
             alt={imageURL.alt || `${blog.title} cover pic`}
             fill
-            className='h-full w-full object-cover'
+            className='h-full w-full object-cover animate-image-blur bg-secondary'
           />
         </div>
 

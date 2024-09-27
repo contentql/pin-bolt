@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@contentql/core": "^0.2.0",
+    "@contentql/core": "^0.2.3",
     "@hookform/resolvers": "^3.4.0",
     "@payloadcms/live-preview-react": "beta",
     "@payloadcms/next": "beta",
@@ -53,15 +53,15 @@
     "isomorphic-dompurify": "^2.15.0",
     "kbar": "0.1.0-beta.45",
     "mongodb": "^6.8.0",
-    "next": "15.0.0-canary.104",
+    "next": "15.0.0-canary.160",
     "node-schedule": "^2.1.1",
     "nprogress": "^0.2.0",
     "ora": "^8.0.1",
     "payload": "beta",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.5.14",
-    "react": "^19.0.0-rc-06d0b89e-20240801",
-    "react-dom": "^19.0.0-rc-06d0b89e-20240801",
+    "react": "19.0.0-rc-5dcb0097-20240918",
+    "react-dom": "19.0.0-rc-5dcb0097-20240918",
     "react-hook-form": "^7.52.0",
     "react-icons": "^5.2.1",
     "react-json-tree": "^0.19.0",
@@ -78,8 +78,8 @@
     "@types/node": "^20.14.9",
     "@types/node-schedule": "^2.1.7",
     "@types/nprogress": "^0.2.3",
-    "@types/react": "npm:types-react@19.0.0-rc.0",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.0",
+    "@types/react": "npm:types-react-dom@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-next": "15.0.0-rc.0",
@@ -93,12 +93,12 @@
   },
   "pnpm": {
     "overrides": {
-      "@types/react": "npm:types-react@19.0.0-rc.0",
-      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.0"
+      "@types/react": "npm:types-react@19.0.0-rc.1",
+      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
     }
   },
   "overrides": {
-    "@types/react": "npm:types-react@19.0.0-rc.0",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.0"
+    "@types/react": "npm:types-react@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
   }
 }

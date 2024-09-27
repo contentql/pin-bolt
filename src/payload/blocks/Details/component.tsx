@@ -2,6 +2,7 @@
 
 import { Params } from '../types'
 import { Blog, DetailsType } from '@payload-types'
+import { notFound } from 'next/navigation'
 
 import { trpc } from '@/trpc/client'
 
@@ -42,15 +43,37 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
     }
 
     case 'users': {
-      const { data: author } = trpc.author.getAuthorByName.useQuery({
+      const {
+        data: author,
+        isPending,
+        isFetching,
+      } = trpc.author.getAuthorByName.useQuery({
         authorName: params?.route.at(-1)!,
       })
-      const { data: authorBlogs } = trpc.author.getBlogsByAuthorName.useQuery({
-        authorName: params?.route.at(-1)!,
-      })
+      const { data: authorBlogs } = trpc.author.getBlogsByAuthorName.useQuery(
+        {
+          authorName: params?.route.at(-1)!,
+        },
+        {
+          enabled: !!author, // calling the blogs based on the author details
+        },
+      )
+
+      // if author not found showing 404
+      if (!author && !isFetching && !isPending) {
+        return notFound()
+      }
+
+      if (isPending) {
+        return <p>Loading Author details...</p>
+      }
 
       return (
-        <AuthorDetails author={author as any} blogsData={authorBlogs as any} />
+        <AuthorDetails
+          author={author as any}
+          blogsData={authorBlogs}
+          block={block}
+        />
       )
     }
   }
