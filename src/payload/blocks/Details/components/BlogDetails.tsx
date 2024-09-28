@@ -1,12 +1,13 @@
 'use client'
 
+import ShareList from '../../common/ShareList'
 import { Blog } from '@payload-types'
 import { payloadSlateToHtmlConfig, slateToHtml } from '@slate-serializers/html'
 import { format } from 'date-fns'
+import { Element } from 'domhandler'
 import DOMPurify from 'isomorphic-dompurify'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import ShareList from '../../common/ShareList'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 import { getInitials } from '@/utils/getInitials'
@@ -25,11 +26,25 @@ const readTime = (content: string) => {
 const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
   const router = useRouter()
 
+  console.log({ payloadSlateToHtmlConfig })
+
   const html = slateToHtml(blog?.content || [], {
     ...payloadSlateToHtmlConfig,
     markMap: {
       ...payloadSlateToHtmlConfig.markMap,
       mark: ['mark'],
+      kbd: ['kbd'],
+      iframe: ['iframe'],
+    },
+    markTransforms: {
+      'custom-iframe': ({ node }) => {
+        return new Element('iframe', {
+          src: node.text,
+        })
+      },
+    },
+    elementTransforms: {
+      ...payloadSlateToHtmlConfig.elementTransforms,
     },
   })
   const purifiedHtml = DOMPurify.sanitize(html, {
@@ -78,7 +93,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
 
   return (
     <section className='grid gap-16 lg:grid-cols-[auto_1fr]'>
-      <article className='prose-headings:font prose prose-purple dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:after:content-["↗"] hover:prose-a:text-primary/90 prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:rounded prose-img:bg-secondary dark:prose-pre:bg-primary/10'>
+      <article className='prose-headings:font prose prose-purple dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:after:content-["↗"] hover:prose-a:text-primary/90 prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:rounded prose-img:bg-secondary dark:prose-pre:bg-primary/10 [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded'>
         <span
           className='not-prose cursor-pointer text-sm text-secondary'
           onClick={() => router.back()}>
@@ -157,7 +172,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
             src={imageURL.url}
             alt={imageURL.alt || `${blog.title} cover pic`}
             fill
-            className='h-full w-full object-cover animate-image-blur bg-secondary'
+            className='h-full w-full animate-image-blur bg-secondary object-cover'
           />
         </div>
 

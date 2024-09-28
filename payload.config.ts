@@ -53,6 +53,16 @@ export default cqlConfig({
           Leaf: 'src/payload/slate/mark/Leaf',
           name: 'mark',
         },
+        {
+          Button: 'src/payload/slate/kbd/Button',
+          Leaf: 'src/payload/slate/kbd/Leaf',
+          name: 'kbd',
+        },
+        {
+          Button: 'src/payload/slate/custom-iframe/Button',
+          Leaf: 'src/payload/slate/custom-iframe/Leaf',
+          name: 'custom-iframe',
+        },
       ],
     },
   }),

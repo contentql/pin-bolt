@@ -3,9 +3,9 @@
 import { useLeaf } from '@payloadcms/richtext-slate/client'
 
 const Leaf = () => {
-  const { attributes, children } = useLeaf()
+  const { attributes, children, leaf } = useLeaf()
 
-  return <mark {...attributes}>{children}</mark>
+  return <kbd {...attributes}>{children}</kbd>
 }
 
 export default Leaf

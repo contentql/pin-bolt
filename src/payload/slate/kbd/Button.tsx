@@ -4,7 +4,7 @@ import { LeafButton } from '@payloadcms/richtext-slate/client'
 
 const Button = () => {
   return (
-    <LeafButton format={'mark'}>
+    <LeafButton format={'kbd'}>
       <svg
         xmlns='http://www.w3.org/2000/svg'
         width='24'
@@ -15,8 +15,7 @@ const Button = () => {
         strokeWidth='2'
         strokeLinecap='round'
         strokeLinejoin='round'>
-        <path d='m9 11-6 6v3h9l3-3' />
-        <path d='m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4' />
+        <path d='M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3' />
       </svg>
     </LeafButton>
   )
