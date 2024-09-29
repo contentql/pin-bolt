@@ -126,8 +126,6 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                   tagLink && typeof tagLink !== 'string' ? tagLink.path! : ''
                 const slicedTagSlug = tagSlug ? tagSlug.split('[')[0] : ''
 
-                console.log(`${slicedTagSlug}${details.slug}`, tagLink)
-
                 return (
                   <Link
                     href={`${slicedTagSlug}${details.slug}`}
@@ -173,6 +171,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                 <AuthorPopover
                   user={user}
                   href={`${slicedUserSlug}${user.slug}`}
+                  key={`${slicedUserSlug}${user.slug}`}
                   initials={initials}>
                   <Avatar
                     key={user.name}

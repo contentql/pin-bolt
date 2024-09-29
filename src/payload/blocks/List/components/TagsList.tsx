@@ -56,14 +56,14 @@ const TagsList = ({
         </div>
       )}
 
-      <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-4'>
+      <div className='grid grid-cols-2 gap-8 lg:grid-cols-4'>
         {tagsList.length > 0
           ? tagsList.map(tag => (
               <Link
                 href={`${slicedSlug}${tag.slug}`}
                 className='group block cursor-pointer'
                 key={tag.title}>
-                <Avatar className='size-40 rounded'>
+                <Avatar className='size-24 rounded sm:size-40'>
                   {tag.image && (
                     <AvatarImage
                       src={tag.image.url}

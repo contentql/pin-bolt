@@ -89,6 +89,21 @@ export default cqlConfig({
           Leaf: 'src/payload/slate/custom-iframe/Leaf',
           name: 'custom-iframe',
         },
+        {
+          Button: 'src/payload/slate/italic/Button',
+          Leaf: 'src/payload/slate/italic/Leaf',
+          name: 'italic',
+        },
+        {
+          Button: 'src/payload/slate/Strikethrough/Button',
+          Leaf: 'src/payload/slate/Strikethrough/Leaf',
+          name: 'strikethrough',
+        },
+        {
+          Button: 'src/payload/slate/underline/Button',
+          Leaf: 'src/payload/slate/underline/Leaf',
+          name: 'underline',
+        },
       ],
     },
   }),

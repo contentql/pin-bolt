@@ -22,48 +22,54 @@ import { default as default_20 } from 'src/payload/slate/kbd/Button'
 import { default as default_21 } from 'src/payload/slate/kbd/Leaf'
 import { default as default_22 } from 'src/payload/slate/custom-iframe/Button'
 import { default as default_23 } from 'src/payload/slate/custom-iframe/Leaf'
-import { BlockquoteElementButton as BlockquoteElementButton_24 } from '@payloadcms/richtext-slate/client'
-import { BlockquoteElement as BlockquoteElement_25 } from '@payloadcms/richtext-slate/client'
-import { H1ElementButton as H1ElementButton_26 } from '@payloadcms/richtext-slate/client'
-import { Heading1Element as Heading1Element_27 } from '@payloadcms/richtext-slate/client'
-import { H2ElementButton as H2ElementButton_28 } from '@payloadcms/richtext-slate/client'
-import { Heading2Element as Heading2Element_29 } from '@payloadcms/richtext-slate/client'
-import { H3ElementButton as H3ElementButton_30 } from '@payloadcms/richtext-slate/client'
-import { Heading3Element as Heading3Element_31 } from '@payloadcms/richtext-slate/client'
-import { H4ElementButton as H4ElementButton_32 } from '@payloadcms/richtext-slate/client'
-import { Heading4Element as Heading4Element_33 } from '@payloadcms/richtext-slate/client'
-import { H5ElementButton as H5ElementButton_34 } from '@payloadcms/richtext-slate/client'
-import { Heading5Element as Heading5Element_35 } from '@payloadcms/richtext-slate/client'
-import { H6ElementButton as H6ElementButton_36 } from '@payloadcms/richtext-slate/client'
-import { Heading6Element as Heading6Element_37 } from '@payloadcms/richtext-slate/client'
-import { IndentButton as IndentButton_38 } from '@payloadcms/richtext-slate/client'
-import { IndentElement as IndentElement_39 } from '@payloadcms/richtext-slate/client'
-import { ListItemElement as ListItemElement_40 } from '@payloadcms/richtext-slate/client'
-import { LinkButton as LinkButton_41 } from '@payloadcms/richtext-slate/client'
-import { LinkElement as LinkElement_42 } from '@payloadcms/richtext-slate/client'
-import { WithLinks as WithLinks_43 } from '@payloadcms/richtext-slate/client'
-import { OLElementButton as OLElementButton_44 } from '@payloadcms/richtext-slate/client'
-import { OrderedListElement as OrderedListElement_45 } from '@payloadcms/richtext-slate/client'
-import { RelationshipButton as RelationshipButton_46 } from '@payloadcms/richtext-slate/client'
-import { RelationshipElement as RelationshipElement_47 } from '@payloadcms/richtext-slate/client'
-import { WithRelationship as WithRelationship_48 } from '@payloadcms/richtext-slate/client'
-import { TextAlignElementButton as TextAlignElementButton_49 } from '@payloadcms/richtext-slate/client'
-import { ULElementButton as ULElementButton_50 } from '@payloadcms/richtext-slate/client'
-import { UnorderedListElement as UnorderedListElement_51 } from '@payloadcms/richtext-slate/client'
-import { UploadElementButton as UploadElementButton_52 } from '@payloadcms/richtext-slate/client'
-import { UploadElement as UploadElement_53 } from '@payloadcms/richtext-slate/client'
-import { WithUpload as WithUpload_54 } from '@payloadcms/richtext-slate/client'
-import { CustomPublishOnFieldLabel as CustomPublishOnFieldLabel_55 } from '@contentql/core/client'
-import { CustomPublishOnField as CustomPublishOnField_56 } from '@contentql/core/client'
-import { OverviewComponent as OverviewComponent_57 } from '@payloadcms/plugin-seo/client'
-import { MetaTitleComponent as MetaTitleComponent_58 } from '@payloadcms/plugin-seo/client'
-import { MetaDescriptionComponent as MetaDescriptionComponent_59 } from '@payloadcms/plugin-seo/client'
-import { MetaImageComponent as MetaImageComponent_60 } from '@payloadcms/plugin-seo/client'
-import { PreviewComponent as PreviewComponent_61 } from '@payloadcms/plugin-seo/client'
-import { CustomPathField as CustomPathField_62 } from '@contentql/core/client'
-import { LinkToDoc as LinkToDoc_63 } from '@payloadcms/plugin-search/client'
-import { default as default_64 } from 'src/payload/style/icons/Icon.tsx'
-import { default as default_65 } from 'src/payload/style/icons/Logo.tsx'
+import { default as default_24 } from 'src/payload/slate/italic/Button'
+import { default as default_25 } from 'src/payload/slate/italic/Leaf'
+import { default as default_26 } from 'src/payload/slate/Strikethrough/Button'
+import { default as default_27 } from 'src/payload/slate/Strikethrough/Leaf'
+import { default as default_28 } from 'src/payload/slate/underline/Button'
+import { default as default_29 } from 'src/payload/slate/underline/Leaf'
+import { BlockquoteElementButton as BlockquoteElementButton_30 } from '@payloadcms/richtext-slate/client'
+import { BlockquoteElement as BlockquoteElement_31 } from '@payloadcms/richtext-slate/client'
+import { H1ElementButton as H1ElementButton_32 } from '@payloadcms/richtext-slate/client'
+import { Heading1Element as Heading1Element_33 } from '@payloadcms/richtext-slate/client'
+import { H2ElementButton as H2ElementButton_34 } from '@payloadcms/richtext-slate/client'
+import { Heading2Element as Heading2Element_35 } from '@payloadcms/richtext-slate/client'
+import { H3ElementButton as H3ElementButton_36 } from '@payloadcms/richtext-slate/client'
+import { Heading3Element as Heading3Element_37 } from '@payloadcms/richtext-slate/client'
+import { H4ElementButton as H4ElementButton_38 } from '@payloadcms/richtext-slate/client'
+import { Heading4Element as Heading4Element_39 } from '@payloadcms/richtext-slate/client'
+import { H5ElementButton as H5ElementButton_40 } from '@payloadcms/richtext-slate/client'
+import { Heading5Element as Heading5Element_41 } from '@payloadcms/richtext-slate/client'
+import { H6ElementButton as H6ElementButton_42 } from '@payloadcms/richtext-slate/client'
+import { Heading6Element as Heading6Element_43 } from '@payloadcms/richtext-slate/client'
+import { IndentButton as IndentButton_44 } from '@payloadcms/richtext-slate/client'
+import { IndentElement as IndentElement_45 } from '@payloadcms/richtext-slate/client'
+import { ListItemElement as ListItemElement_46 } from '@payloadcms/richtext-slate/client'
+import { LinkButton as LinkButton_47 } from '@payloadcms/richtext-slate/client'
+import { LinkElement as LinkElement_48 } from '@payloadcms/richtext-slate/client'
+import { WithLinks as WithLinks_49 } from '@payloadcms/richtext-slate/client'
+import { OLElementButton as OLElementButton_50 } from '@payloadcms/richtext-slate/client'
+import { OrderedListElement as OrderedListElement_51 } from '@payloadcms/richtext-slate/client'
+import { RelationshipButton as RelationshipButton_52 } from '@payloadcms/richtext-slate/client'
+import { RelationshipElement as RelationshipElement_53 } from '@payloadcms/richtext-slate/client'
+import { WithRelationship as WithRelationship_54 } from '@payloadcms/richtext-slate/client'
+import { TextAlignElementButton as TextAlignElementButton_55 } from '@payloadcms/richtext-slate/client'
+import { ULElementButton as ULElementButton_56 } from '@payloadcms/richtext-slate/client'
+import { UnorderedListElement as UnorderedListElement_57 } from '@payloadcms/richtext-slate/client'
+import { UploadElementButton as UploadElementButton_58 } from '@payloadcms/richtext-slate/client'
+import { UploadElement as UploadElement_59 } from '@payloadcms/richtext-slate/client'
+import { WithUpload as WithUpload_60 } from '@payloadcms/richtext-slate/client'
+import { CustomPublishOnFieldLabel as CustomPublishOnFieldLabel_61 } from '@contentql/core/client'
+import { CustomPublishOnField as CustomPublishOnField_62 } from '@contentql/core/client'
+import { OverviewComponent as OverviewComponent_63 } from '@payloadcms/plugin-seo/client'
+import { MetaTitleComponent as MetaTitleComponent_64 } from '@payloadcms/plugin-seo/client'
+import { MetaDescriptionComponent as MetaDescriptionComponent_65 } from '@payloadcms/plugin-seo/client'
+import { MetaImageComponent as MetaImageComponent_66 } from '@payloadcms/plugin-seo/client'
+import { PreviewComponent as PreviewComponent_67 } from '@payloadcms/plugin-seo/client'
+import { CustomPathField as CustomPathField_68 } from '@contentql/core/client'
+import { LinkToDoc as LinkToDoc_69 } from '@payloadcms/plugin-search/client'
+import { default as default_70 } from 'src/payload/style/icons/Icon.tsx'
+import { default as default_71 } from 'src/payload/style/icons/Logo.tsx'
 
 export const importMap = {
   "@contentql/core/client#CustomSlugField": CustomSlugField_0,
@@ -90,46 +96,52 @@ export const importMap = {
   "src/payload/slate/kbd/Leaf#default": default_21,
   "src/payload/slate/custom-iframe/Button#default": default_22,
   "src/payload/slate/custom-iframe/Leaf#default": default_23,
-  "@payloadcms/richtext-slate/client#BlockquoteElementButton": BlockquoteElementButton_24,
-  "@payloadcms/richtext-slate/client#BlockquoteElement": BlockquoteElement_25,
-  "@payloadcms/richtext-slate/client#H1ElementButton": H1ElementButton_26,
-  "@payloadcms/richtext-slate/client#Heading1Element": Heading1Element_27,
-  "@payloadcms/richtext-slate/client#H2ElementButton": H2ElementButton_28,
-  "@payloadcms/richtext-slate/client#Heading2Element": Heading2Element_29,
-  "@payloadcms/richtext-slate/client#H3ElementButton": H3ElementButton_30,
-  "@payloadcms/richtext-slate/client#Heading3Element": Heading3Element_31,
-  "@payloadcms/richtext-slate/client#H4ElementButton": H4ElementButton_32,
-  "@payloadcms/richtext-slate/client#Heading4Element": Heading4Element_33,
-  "@payloadcms/richtext-slate/client#H5ElementButton": H5ElementButton_34,
-  "@payloadcms/richtext-slate/client#Heading5Element": Heading5Element_35,
-  "@payloadcms/richtext-slate/client#H6ElementButton": H6ElementButton_36,
-  "@payloadcms/richtext-slate/client#Heading6Element": Heading6Element_37,
-  "@payloadcms/richtext-slate/client#IndentButton": IndentButton_38,
-  "@payloadcms/richtext-slate/client#IndentElement": IndentElement_39,
-  "@payloadcms/richtext-slate/client#ListItemElement": ListItemElement_40,
-  "@payloadcms/richtext-slate/client#LinkButton": LinkButton_41,
-  "@payloadcms/richtext-slate/client#LinkElement": LinkElement_42,
-  "@payloadcms/richtext-slate/client#WithLinks": WithLinks_43,
-  "@payloadcms/richtext-slate/client#OLElementButton": OLElementButton_44,
-  "@payloadcms/richtext-slate/client#OrderedListElement": OrderedListElement_45,
-  "@payloadcms/richtext-slate/client#RelationshipButton": RelationshipButton_46,
-  "@payloadcms/richtext-slate/client#RelationshipElement": RelationshipElement_47,
-  "@payloadcms/richtext-slate/client#WithRelationship": WithRelationship_48,
-  "@payloadcms/richtext-slate/client#TextAlignElementButton": TextAlignElementButton_49,
-  "@payloadcms/richtext-slate/client#ULElementButton": ULElementButton_50,
-  "@payloadcms/richtext-slate/client#UnorderedListElement": UnorderedListElement_51,
-  "@payloadcms/richtext-slate/client#UploadElementButton": UploadElementButton_52,
-  "@payloadcms/richtext-slate/client#UploadElement": UploadElement_53,
-  "@payloadcms/richtext-slate/client#WithUpload": WithUpload_54,
-  "@contentql/core/client#CustomPublishOnFieldLabel": CustomPublishOnFieldLabel_55,
-  "@contentql/core/client#CustomPublishOnField": CustomPublishOnField_56,
-  "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_57,
-  "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_58,
-  "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_59,
-  "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_60,
-  "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_61,
-  "@contentql/core/client#CustomPathField": CustomPathField_62,
-  "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_63,
-  "/src/payload/style/icons/Icon.tsx#default": default_64,
-  "/src/payload/style/icons/Logo.tsx#default": default_65
+  "src/payload/slate/italic/Button#default": default_24,
+  "src/payload/slate/italic/Leaf#default": default_25,
+  "src/payload/slate/Strikethrough/Button#default": default_26,
+  "src/payload/slate/Strikethrough/Leaf#default": default_27,
+  "src/payload/slate/underline/Button#default": default_28,
+  "src/payload/slate/underline/Leaf#default": default_29,
+  "@payloadcms/richtext-slate/client#BlockquoteElementButton": BlockquoteElementButton_30,
+  "@payloadcms/richtext-slate/client#BlockquoteElement": BlockquoteElement_31,
+  "@payloadcms/richtext-slate/client#H1ElementButton": H1ElementButton_32,
+  "@payloadcms/richtext-slate/client#Heading1Element": Heading1Element_33,
+  "@payloadcms/richtext-slate/client#H2ElementButton": H2ElementButton_34,
+  "@payloadcms/richtext-slate/client#Heading2Element": Heading2Element_35,
+  "@payloadcms/richtext-slate/client#H3ElementButton": H3ElementButton_36,
+  "@payloadcms/richtext-slate/client#Heading3Element": Heading3Element_37,
+  "@payloadcms/richtext-slate/client#H4ElementButton": H4ElementButton_38,
+  "@payloadcms/richtext-slate/client#Heading4Element": Heading4Element_39,
+  "@payloadcms/richtext-slate/client#H5ElementButton": H5ElementButton_40,
+  "@payloadcms/richtext-slate/client#Heading5Element": Heading5Element_41,
+  "@payloadcms/richtext-slate/client#H6ElementButton": H6ElementButton_42,
+  "@payloadcms/richtext-slate/client#Heading6Element": Heading6Element_43,
+  "@payloadcms/richtext-slate/client#IndentButton": IndentButton_44,
+  "@payloadcms/richtext-slate/client#IndentElement": IndentElement_45,
+  "@payloadcms/richtext-slate/client#ListItemElement": ListItemElement_46,
+  "@payloadcms/richtext-slate/client#LinkButton": LinkButton_47,
+  "@payloadcms/richtext-slate/client#LinkElement": LinkElement_48,
+  "@payloadcms/richtext-slate/client#WithLinks": WithLinks_49,
+  "@payloadcms/richtext-slate/client#OLElementButton": OLElementButton_50,
+  "@payloadcms/richtext-slate/client#OrderedListElement": OrderedListElement_51,
+  "@payloadcms/richtext-slate/client#RelationshipButton": RelationshipButton_52,
+  "@payloadcms/richtext-slate/client#RelationshipElement": RelationshipElement_53,
+  "@payloadcms/richtext-slate/client#WithRelationship": WithRelationship_54,
+  "@payloadcms/richtext-slate/client#TextAlignElementButton": TextAlignElementButton_55,
+  "@payloadcms/richtext-slate/client#ULElementButton": ULElementButton_56,
+  "@payloadcms/richtext-slate/client#UnorderedListElement": UnorderedListElement_57,
+  "@payloadcms/richtext-slate/client#UploadElementButton": UploadElementButton_58,
+  "@payloadcms/richtext-slate/client#UploadElement": UploadElement_59,
+  "@payloadcms/richtext-slate/client#WithUpload": WithUpload_60,
+  "@contentql/core/client#CustomPublishOnFieldLabel": CustomPublishOnFieldLabel_61,
+  "@contentql/core/client#CustomPublishOnField": CustomPublishOnField_62,
+  "@payloadcms/plugin-seo/client#OverviewComponent": OverviewComponent_63,
+  "@payloadcms/plugin-seo/client#MetaTitleComponent": MetaTitleComponent_64,
+  "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_65,
+  "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_66,
+  "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_67,
+  "@contentql/core/client#CustomPathField": CustomPathField_68,
+  "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_69,
+  "/src/payload/style/icons/Icon.tsx#default": default_70,
+  "/src/payload/style/icons/Logo.tsx#default": default_71
 }

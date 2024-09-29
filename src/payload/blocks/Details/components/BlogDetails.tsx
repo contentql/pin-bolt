@@ -21,7 +21,7 @@ interface BlogDetailsProps {
 
 const readTime = (content: string) => {
   const contentLength = content.toString().split('').length
-  const time = Math.ceil(contentLength / 200)
+  const time = Math.ceil(contentLength / 300)
 
   return time
 }
@@ -164,7 +164,8 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog, block }) => {
                   user={user}
                   offset={0}
                   initials={initials}
-                  href={`${slicedUserSlug}${user.slug}`}>
+                  href={`${slicedUserSlug}${user.slug}`}
+                  key={`${slicedUserSlug}${user.slug}`}>
                   <Avatar key={user.name}>
                     <AvatarImage src={user.url?.src} />
                     <AvatarFallback className='text-sm'>
@@ -235,7 +236,8 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog, block }) => {
                   user={user}
                   offset={0}
                   initials={initials}
-                  href={`${slicedUserSlug}${user.slug}`}>
+                  href={`${slicedUserSlug}${user.slug}`}
+                  key={`${slicedUserSlug}${user.slug}`}>
                   <div className='mb-4 flex w-full cursor-pointer items-center gap-3'>
                     <Avatar>
                       <AvatarImage src={user.url?.src} />

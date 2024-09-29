@@ -1,8 +1,14 @@
 import type { SiteSetting } from '@payload-types'
+import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { HiChevronDown } from 'react-icons/hi'
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/common/Dropdown'
 import { generateMenuLinks } from '@/utils/generateMenuLinks'
 
 import CommandBar from './CommandBar'
@@ -35,16 +41,20 @@ const Navbar = ({ metadata }: { metadata: SiteSetting }) => {
     return null
   }
 
+  const { height, width } = logo
+
   return (
-    <header className='fixed left-0 top-0 z-[60] w-full bg-secondary/10 backdrop-blur-lg'>
+    <header
+      id='main-header'
+      className='fixed left-0 top-0 z-[60] w-full bg-secondary/10 backdrop-blur-lg'>
       <div className='container flex h-14 items-center justify-between'>
         {logoDetails.url && (
           <Link href='/'>
             <Image
               src={logoDetails.url}
               alt={logoDetails.alt}
-              width={24}
-              height={24}
+              width={width || 24}
+              height={height || 24}
             />
           </Link>
         )}
@@ -53,11 +63,35 @@ const Navbar = ({ metadata }: { metadata: SiteSetting }) => {
           {navLinks?.length > 0 && (
             <nav>
               <ul className='flex gap-8'>
-                {navLinks.map(({ label, children, href, newTab, type }) => (
-                  <li className='flex list-none items-center gap-1' key={label}>
-                    {label}{' '}
-                    {children && (
-                      <HiChevronDown className='size-4 text-slate-100' />
+                {navLinks.map(({ label, children, href = '', newTab }) => (
+                  <li
+                    className='flex list-none items-center gap-1 text-sm'
+                    key={label}>
+                    {children ? (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className='flex items-center gap-1'>
+                          {label}
+                          <ChevronDown size={16} />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          className='z-[60] max-w-56'
+                          align='end'>
+                          {children.map(details => (
+                            <Link
+                              href={details.href}
+                              key={details.label}
+                              target={details.newTab ? '_blank' : '_self'}>
+                              <DropdownMenuItem className='cursor-pointer'>
+                                {details.label}
+                              </DropdownMenuItem>
+                            </Link>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    ) : (
+                      <Link href={href} target={newTab ? '_blank' : '_self'}>
+                        {label}
+                      </Link>
                     )}
                   </li>
                 ))}

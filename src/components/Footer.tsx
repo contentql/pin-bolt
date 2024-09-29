@@ -2,6 +2,7 @@ import type { SiteSetting } from '@payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { generateMenuLinks } from '@/utils/generateMenuLinks'
 import { logoMapping } from '@/utils/logoMapping'
 
 const Footer = ({ metadata }: { metadata: SiteSetting }) => {
@@ -34,35 +35,68 @@ const Footer = ({ metadata }: { metadata: SiteSetting }) => {
     return null
   }
 
+  const menuLinks = footerLinks?.length ? generateMenuLinks(footerLinks) : []
+
   return (
-    <footer className='border-t'>
-      <div className='container flex h-14 items-center justify-between'>
-        <div className='flex items-center gap-2'>
+    <footer className='space-y-8 border-t pt-8'>
+      <div className='container sm:flex sm:justify-between'>
+        <div className='space-y-4'>
           {logoDetails.url && (
-            <Image
-              src={logoDetails.url}
-              alt={logoDetails.alt}
-              width={24}
-              height={24}
-            />
+            <Link href='/'>
+              <Image
+                src={logoDetails.url}
+                alt={logoDetails.alt}
+                width={40}
+                height={40}
+              />
+            </Link>
           )}
 
           {logo.description && (
-            <span className='hidden text-sm text-slate-300 md:block'>
-              {logo.description}
-            </span>
+            <p className='text-secondary '>{logo.description}</p>
           )}
         </div>
+
+        <div className='mt-8 flex flex-wrap gap-8 sm:mt-0'>
+          {menuLinks.map(({ children, label }, index) => {
+            if (children) {
+              return (
+                <div className='text-sm' key={index}>
+                  <p className='mb-4 text-secondary'>{label}</p>
+
+                  <div className='space-y-2'>
+                    {children.map(details => (
+                      <Link
+                        href={details.href}
+                        key={details.label}
+                        className='block'
+                        target={details.newTab ? '_blank' : '_self'}>
+                        {details.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )
+            }
+
+            return null
+          })}
+        </div>
+      </div>
+
+      <div className='container flex items-center justify-between border-t pb-8 pt-4'>
+        <p className='text-secondary'>{footer.copyright}</p>
 
         {socialLinks?.length ? (
           <div>
             <ul className='flex gap-8'>
               {socialLinks.map(({ platform, value, id }) => {
                 const Component = logoMapping[platform]
+
                 return Component ? (
                   <Link href={value} target='_blank' key={id}>
                     <li className='flex list-none items-center gap-1'>
-                      <Component className='size-6 text-slate-500' />
+                      <Component className='size-6 [&_path]:fill-secondary' />
                     </li>
                   </Link>
                 ) : null

@@ -93,3 +93,8 @@
 .yellow-tag {
   @apply text-warning hover:text-warning/80;
 }
+
+/* shadcn dropdown hides scroll when it's open */
+body[data-scroll-locked] #main-header {
+  padding-right: var(--removed-body-scroll-bar-size);
+}

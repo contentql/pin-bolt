@@ -13,9 +13,12 @@ import {
   useMatches,
   useRegisterActions,
 } from 'kbar'
+import { Search } from 'lucide-react'
 import { useState } from 'react'
 
 import { trpc } from '@/trpc/client'
+
+import Button from './common/Button'
 
 const CommandBar = () => {
   const [formattedSearchResults, setFormattedSearchResults] = useState<
@@ -84,11 +87,6 @@ const CommandBar = () => {
     [searchQuery],
   )
 
-  // useEffect(() => {
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [debouncedSearchTerm, globalSearchMutate])
-
   // This hook will update the kbar actions
   useRegisterActions(formattedSearchResults, [formattedSearchResults])
 
@@ -96,9 +94,8 @@ const CommandBar = () => {
 
   return (
     <>
-      <button
-        type='button'
-        className='rounded-full bg-primary p-2 text-sm font-medium text-white hover:bg-primary/80 lg:static lg:bottom-0 lg:right-0'
+      <Button
+        size='icon'
         onClick={() => {
           // in case of no results found clearing the search results
           if (formattedSearchResults.length > 0) {
@@ -113,43 +110,22 @@ const CommandBar = () => {
           // this will toggle the search-bar
           query.toggle()
         }}>
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          strokeWidth='1.5'
-          stroke='currentColor'
-          className='size-4 stroke-slate-900'>
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
-          />
-        </svg>
-      </button>
+        <Search size={16} />
+      </Button>
 
       <KBarPortal>
-        <KBarPositioner className='z-50 h-full bg-black/50 backdrop-blur-sm'>
+        <KBarPositioner className='z-[70] h-full bg-black/50 backdrop-blur-sm'>
           <KBarAnimator className='w-full max-w-lg'>
-            <div className='mx-auto w-full rounded-lg bg-slate-900 p-4'>
+            <div className='mx-auto w-full rounded-lg bg-popover p-4'>
               <div className='relative'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  strokeWidth='1.5'
-                  stroke='currentColor'
-                  className='absolute left-2 top-2.5 size-5 stroke-slate-600'>
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    d='m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z'
-                  />
-                </svg>
+                <Search
+                  size={20}
+                  className='absolute left-2 top-2.5 text-secondary'
+                />
 
                 <KBarSearch
                   defaultPlaceholder='Search'
-                  className='block w-full rounded-md border bg-inherit stroke-slate-600 py-2 pl-9  pr-3.5 text-slate-400 outline-none placeholder:text-gray-400 sm:text-sm sm:leading-6'
+                  className='block w-full rounded-md border bg-inherit stroke-slate-600 py-2 pl-9  pr-3.5 text-secondary outline-none placeholder:text-secondary sm:text-sm sm:leading-6'
                 />
               </div>
 
@@ -159,12 +135,12 @@ const CommandBar = () => {
                     items={results}
                     onRender={({ item, active }) =>
                       typeof item === 'string' ? (
-                        <div className='pb-2 text-sm capitalize text-slate-400'>
+                        <div className='pb-2 text-sm capitalize text-secondary'>
                           {item}
                         </div>
                       ) : (
                         <div
-                          className='block rounded-md p-2 hover:cursor-pointer data-[active-item=true]:bg-slate-400/10'
+                          className='block rounded-md p-2 hover:cursor-pointer data-[active-item=true]:bg-secondary/10'
                           data-active-item={active}>
                           <p>{item.name}</p>
 
@@ -172,7 +148,7 @@ const CommandBar = () => {
                           {!['No results Found!', 'Searching'].includes(
                             item.name,
                           ) && (
-                            <p className='overflow-hidden text-ellipsis text-nowrap text-sm text-slate-500'>
+                            <p className='overflow-hidden text-ellipsis text-nowrap text-sm text-secondary'>
                               {item.subtitle}
                             </p>
                           )}

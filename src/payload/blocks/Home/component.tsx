@@ -3,6 +3,7 @@ import { HomeType } from '@payload-types'
 import Image from 'next/image'
 
 import Button from '@/components/common/Button'
+import { Input } from '@/components/common/Input'
 
 interface HomeProps extends HomeType {
   params: Params
@@ -28,9 +29,9 @@ const Home: React.FC<HomeProps> = ({ params, ...block }) => {
             Subscribe to my newsletter to get latest updates
           </p>
           <form
-            className='flex flex-col gap-4 sm:flex-row'
+            className='flex flex-col gap-2 sm:flex-row'
             onSubmit={e => e.preventDefault()}>
-            <input placeholder='Email' type='email' required />
+            <Input placeholder='Email' type='email' required />
             <Button type='submit'>Subscribe</Button>
           </form>
         </div>
@@ -40,7 +41,7 @@ const Home: React.FC<HomeProps> = ({ params, ...block }) => {
         {imageURL && (
           <Image
             src={imageURL.url}
-            className='h-full w-full object-cover object-center'
+            className='h-full w-full animate-image-blur object-cover object-center'
             fill
             alt={imageURL.alt}
           />
