@@ -7,8 +7,11 @@ import { notFound } from 'next/navigation'
 import { trpc } from '@/trpc/client'
 
 import AuthorDetails from './components/AuthorDetails'
+import AuthorDetailsLoading from './components/AuthorDetailsLoading'
 import BlogDetails from './components/BlogDetails'
+import BlogDetailsLoading from './components/BlogDetailsLoading'
 import TagDetails from './components/TagDetails'
+import TagDetailsLoading from './components/TagDetailsLoading'
 
 interface DetailsProps extends DetailsType {
   params: Params
@@ -17,29 +20,59 @@ interface DetailsProps extends DetailsType {
 const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
   switch (block?.collectionSlug) {
     case 'blogs': {
-      const { data: blog } = trpc.blog.getBlogBySlug.useQuery({
+      const {
+        data: blog,
+        isPending,
+        isFetching,
+      } = trpc.blog.getBlogBySlug.useQuery({
         slug: params?.route.at(-1),
       })
 
-      console.log({ blog }, params?.route.at(-1))
+      if (isPending) {
+        return <BlogDetailsLoading />
+      }
+
+      // if blog not found showing 404
+      if (!blog && !isFetching && !isPending) {
+        return notFound()
+      }
 
       if (blog) {
-        return <BlogDetails blog={blog as Blog} />
+        return <BlogDetails blog={blog as Blog} block={block} />
       }
 
       return null
     }
 
     case 'tags': {
-      const { data: blogs } = trpc.tag.getBlogs.useQuery({
+      const {
+        data: blogs,
+        isPending,
+        isFetching,
+      } = trpc.tag.getBlogs.useQuery({
         tagSlug: params?.route.at(-1)!,
       })
-      return (
-        <TagDetails
-          blogs={blogs?.blogsData as Blog[]}
-          tagDetails={blogs?.tagData?.at(0)}
-        />
-      )
+
+      const tagDetails = (blogs?.tagData || [])?.at(0)
+
+      if (isPending) {
+        return <TagDetailsLoading />
+      }
+
+      // if tag not found showing 404
+      if (!tagDetails && !isFetching && !isPending) {
+        return notFound()
+      }
+
+      if (tagDetails) {
+        return (
+          <TagDetails
+            blogs={blogs?.blogsData}
+            tagDetails={tagDetails}
+            block={block}
+          />
+        )
+      }
     }
 
     case 'users': {
@@ -65,16 +98,18 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
       }
 
       if (isPending) {
-        return <p>Loading Author details...</p>
+        return <AuthorDetailsLoading />
       }
 
-      return (
-        <AuthorDetails
-          author={author as any}
-          blogsData={authorBlogs}
-          block={block}
-        />
-      )
+      if (author) {
+        return (
+          <AuthorDetails
+            author={author}
+            blogsData={authorBlogs}
+            block={block}
+          />
+        )
+      }
     }
   }
 }

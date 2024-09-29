@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 import { logoMapping } from '@/utils/logoMapping'
 
+import NoPostsFound from './NoPostsFound'
+
 interface AuthorDetailsProps {
   blogsData?: Blog[]
   author: User
@@ -25,14 +27,14 @@ const AuthorDetails: React.FC<AuthorDetailsProps> = ({
           }
         : undefined,
     name: author.displayName || author.username,
-    bio: "Classical musician turned AI researcher. I'm fascinated by the harmony between human creativity and machine learning capabilities.",
+    bio: author.bio || '',
     socialLinks: author.socialLinks || [],
     username: author.username!,
   }
 
   return (
     <>
-      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4 '>
+      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
         <Avatar className='aspect-[9/16] h-full max-h-80 w-full rounded'>
           {authorDetails.image && (
             <AvatarImage
@@ -70,12 +72,15 @@ const AuthorDetails: React.FC<AuthorDetailsProps> = ({
 
       {blogsData ? (
         <BlogsList
+          title='Posts'
           blogs={blogsData}
           authorLink={block['author-link']}
           blogLink={block['blog-link']}
           tagLink={block['tag-link']}
         />
-      ) : null}
+      ) : (
+        <NoPostsFound />
+      )}
     </>
   )
 }

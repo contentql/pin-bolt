@@ -19,6 +19,7 @@
   danger-foreground: #440d13;
   success: #00ca50;
   success-foreground: #00320b
+  popover: #0C0C0C
 */
 
 @layer base {
@@ -55,10 +56,11 @@
     --danger-foreground: 353 68% 16%;
     --success: 144 100% 40%;
     --success-foreground: 133 100% 10%;
+    --popover: 0 0% 5%;
   }
 
   html {
-    @apply bg-background text-primary antialiased;
+    @apply scroll-smooth bg-background text-primary antialiased;
   }
 
   body {
@@ -66,16 +68,28 @@
   }
 
   * {
-    @apply border-secondary;
+    @apply border-secondary/10 outline-offset-4 outline-primary;
   }
 }
 
-/* 'blue' | 'gray' | 'red' | 'green' | 'yellow' | 'indigo' | 'purple' | 'pink' */
+/*  'indigo' | 'pink' */
 
 .green-tag {
-  @apply text-success;
+  @apply text-success hover:text-success/80;
 }
 
 .purple-tag {
-  @apply text-primary;
+  @apply text-primary hover:text-primary/80;
+}
+
+.blue-tag {
+  @apply text-info hover:text-info/80;
+}
+
+.red-tag {
+  @apply text-danger hover:text-danger/80;
+}
+
+.yellow-tag {
+  @apply text-warning hover:text-warning/80;
 }

@@ -85,6 +85,7 @@ export interface User {
         id?: string | null;
       }[]
     | null;
+  bio?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;

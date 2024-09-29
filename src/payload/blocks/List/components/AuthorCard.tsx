@@ -22,7 +22,7 @@ const AuthorCard = ({ author, authorLink }: AuthorCardType) => {
           }
         : undefined,
     name: author.displayName || author.username,
-    bio: "Classical musician turned AI researcher. I'm fascinated by the harmony between human creativity and machine learning capabilities.",
+    bio: author.bio || '',
     socialLinks: author.socialLinks,
     username: author.username!,
   }
@@ -36,7 +36,7 @@ const AuthorCard = ({ author, authorLink }: AuthorCardType) => {
         {authorDetails.image && (
           <AvatarImage
             src={authorDetails.image.url}
-            className='animate-image-blur h-full w-full transition-transform hover:scale-110'
+            className='h-full w-full animate-image-blur transition-transform hover:scale-110'
           />
         )}
 

@@ -26,6 +26,7 @@ export const tagRouter = router({
             },
           },
         })
+
         const { docs: blogsData } = await payload.find({
           collection: 'blogs',
           where: {

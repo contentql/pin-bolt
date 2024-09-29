@@ -36,7 +36,7 @@ const Navbar = ({ metadata }: { metadata: SiteSetting }) => {
   }
 
   return (
-    <header className='fixed left-0 top-0 z-10 w-full bg-slate-700/50 backdrop-blur-lg'>
+    <header className='fixed left-0 top-0 z-[60] w-full bg-secondary/10 backdrop-blur-lg'>
       <div className='container flex h-14 items-center justify-between'>
         {logoDetails.url && (
           <Link href='/'>

@@ -1,3 +1,5 @@
+'use client'
+
 import { Blog, ListType } from '@payload-types'
 import { format } from 'date-fns'
 import Image from 'next/image'
@@ -5,6 +7,8 @@ import Link from 'next/link'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 import { getInitials } from '@/utils/getInitials'
+
+import AuthorPopover from './AuthorPopover'
 
 const formatAvatarName = (names: string[]): string => {
   if (names.length === 1) {
@@ -54,6 +58,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
           return {
             title: value.title,
             color: value.color || 'purple',
+            slug: value.slug!,
           }
         }
       })
@@ -62,7 +67,13 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
   const userDetails = blog.author
     ? blog.author.map(({ value }) => {
         if (typeof value !== 'string') {
-          const { displayName, username, imageUrl } = value
+          const {
+            displayName,
+            username,
+            imageUrl,
+            bio = '',
+            socialLinks = [],
+          } = value
 
           const url =
             imageUrl && typeof imageUrl !== 'string'
@@ -75,6 +86,9 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
           return {
             name: displayName || username,
             url,
+            bio,
+            socialLinks,
+            slug: username!,
           }
         }
 
@@ -83,23 +97,24 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
     : []
 
   return (
-    <Link
-      href={`${slicedBlogSlug}${blog.slug}`}
-      className='group block space-y-4'>
-      <div className='relative aspect-video w-full overflow-hidden rounded bg-secondary'>
+    <div className='block space-y-4'>
+      <Link
+        href={`${slicedBlogSlug}${blog.slug}`}
+        tabIndex={-1}
+        className='relative block aspect-video w-full cursor-pointer overflow-hidden rounded bg-secondary outline-none'>
         {imageURL && (
           <Image
             src={imageURL.src}
             fill
             alt={imageURL.alt}
-            className='animate-image-blur object-cover transition-transform duration-500 group-hover:scale-110'
+            className='animate-image-blur object-cover transition-transform duration-500 hover:scale-110'
           />
         )}
-      </div>
+      </Link>
 
       <div className='flex flex-col md:self-center'>
         <div className='mb-2 flex w-full items-center justify-between gap-8'>
-          <div className='flex gap-1'>
+          <div className='flex gap-4'>
             {tags
               .filter(value => Boolean(value))
               .map((details, index) => {
@@ -107,12 +122,19 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                   return null
                 }
 
+                const tagSlug =
+                  tagLink && typeof tagLink !== 'string' ? tagLink.path! : ''
+                const slicedTagSlug = tagSlug ? tagSlug.split('[')[0] : ''
+
+                console.log(`${slicedTagSlug}${details.slug}`, tagLink)
+
                 return (
-                  <span
+                  <Link
+                    href={`${slicedTagSlug}${details.slug}`}
                     className={`text-xs font-bold uppercase ${details.color}-tag`}
                     key={index}>
                     {details.title}
-                  </span>
+                  </Link>
                 )
               })}
           </div>
@@ -122,11 +144,12 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
           </time>
         </div>
 
-        <p
+        <Link
+          href={`${slicedBlogSlug}${blog.slug}`}
           className='line-clamp-2 text-lg font-semibold transition-colors hover:text-primary'
           title={blog.title}>
           {blog.title}
-        </p>
+        </Link>
 
         <p className='line-clamp-3 text-secondary'>{blog.description}</p>
 
@@ -138,17 +161,28 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                 return null
               }
 
+              const userSlug =
+                authorLink && typeof authorLink !== 'string'
+                  ? authorLink.path!
+                  : ''
+              const slicedUserSlug = userSlug ? userSlug.split('[')[0] : ''
+
               const initials = getInitials(user.name || '')
 
               return (
-                <Avatar
-                  key={user.name}
-                  className='-ml-2 border-2 border-background'>
-                  <AvatarImage src={user.url?.src} />
-                  <AvatarFallback className='text-sm'>
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
+                <AuthorPopover
+                  user={user}
+                  href={`${slicedUserSlug}${user.slug}`}
+                  initials={initials}>
+                  <Avatar
+                    key={user.name}
+                    className='-ml-2 cursor-pointer border-2 border-background'>
+                    <AvatarImage src={user.url?.src} />
+                    <AvatarFallback className='text-sm'>
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                </AuthorPopover>
               )
             })}
 
@@ -161,7 +195,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
           </span>
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
 

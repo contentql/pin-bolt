@@ -19,10 +19,6 @@ export const authorRouter = router({
         },
       })
 
-      //   const { docs: blogs } = await payload.find({
-      //     collection: 'blogs',
-      //   })
-
       const authorBlogCounts = await Promise.all(
         authors.map(async author => {
           const count = await payload.count({

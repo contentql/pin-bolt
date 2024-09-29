@@ -42,6 +42,7 @@ const config: Config = {
           DEFAULT: 'hsl(var(--success))',
           foreground: 'hsl(var(--success-foreground))',
         },
+        popover: 'hsl(var(--popover))',
       },
       borderRadius: {
         DEFAULT: '0.5rem',

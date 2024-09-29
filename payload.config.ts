@@ -1,4 +1,4 @@
-import { cqlConfig } from '@contentql/core'
+import { collectionSlug, cqlConfig } from '@contentql/core'
 import { env } from '@env'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import path from 'path'
@@ -45,9 +45,35 @@ export default cqlConfig({
   },
 
   blocks,
+
+  collections: [
+    {
+      slug: collectionSlug.users,
+      fields: [
+        {
+          name: 'bio',
+          type: 'text',
+          admin: {
+            description: 'This bio will be shown in the authors details page',
+          },
+        },
+      ],
+    },
+  ],
+
   editor: slateEditor({
     admin: {
       leaves: [
+        {
+          Button: 'src/payload/slate/strong/Button',
+          Leaf: 'src/payload/slate/strong/Leaf',
+          name: 'strong',
+        },
+        {
+          Button: 'src/payload/slate/pre/Button',
+          Leaf: 'src/payload/slate/pre/Leaf',
+          name: 'pre',
+        },
         {
           Button: 'src/payload/slate/mark/Button',
           Leaf: 'src/payload/slate/mark/Leaf',

@@ -1,12 +1,14 @@
 'use client'
 
+import AuthorPopover from '../../List/components/AuthorPopover'
 import ShareList from '../../common/ShareList'
-import { Blog } from '@payload-types'
+import { Blog, DetailsType } from '@payload-types'
 import { payloadSlateToHtmlConfig, slateToHtml } from '@slate-serializers/html'
 import { format } from 'date-fns'
 import { Element } from 'domhandler'
 import DOMPurify from 'isomorphic-dompurify'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
@@ -14,6 +16,7 @@ import { getInitials } from '@/utils/getInitials'
 
 interface BlogDetailsProps {
   blog: Blog
+  block: DetailsType
 }
 
 const readTime = (content: string) => {
@@ -23,10 +26,8 @@ const readTime = (content: string) => {
   return time
 }
 
-const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
+const BlogDetails: React.FC<BlogDetailsProps> = ({ blog, block }) => {
   const router = useRouter()
-
-  console.log({ payloadSlateToHtmlConfig })
 
   const html = slateToHtml(blog?.content || [], {
     ...payloadSlateToHtmlConfig,
@@ -35,6 +36,8 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
       mark: ['mark'],
       kbd: ['kbd'],
       iframe: ['iframe'],
+      pre: ['pre'],
+      strong: ['strong'],
     },
     markTransforms: {
       'custom-iframe': ({ node }) => {
@@ -63,6 +66,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
           return {
             title: value.title,
             color: value.color || 'purple',
+            slug: value.slug!,
           }
         }
       })
@@ -71,7 +75,13 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
   const userDetails = blog.author
     ? blog.author.map(({ value }) => {
         if (typeof value !== 'string') {
-          const { displayName, username, imageUrl } = value
+          const {
+            displayName,
+            username,
+            imageUrl,
+            bio = '',
+            socialLinks = [],
+          } = value
 
           const url =
             imageUrl && typeof imageUrl !== 'string'
@@ -84,12 +94,23 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
           return {
             name: displayName || username,
             url,
+            bio,
+            socialLinks,
+            slug: username!,
           }
         }
 
         return null
       })
     : []
+
+  const tagLink = block['tag-link']
+
+  const authorLink = block['author-link']
+
+  const userSlug =
+    authorLink && typeof authorLink !== 'string' ? authorLink.path! : ''
+  const slicedUserSlug = userSlug ? userSlug.split('[')[0] : ''
 
   return (
     <section className='grid gap-16 lg:grid-cols-[auto_1fr]'>
@@ -100,7 +121,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
           {'<-'} Go Back
         </span>
 
-        <div className='not-prose mb-4 mt-6 flex gap-1'>
+        <div className='not-prose mb-4 mt-6 flex gap-4'>
           {tags
             .filter(value => Boolean(value))
             .map((details, index) => {
@@ -108,12 +129,17 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
                 return null
               }
 
+              const tagSlug =
+                tagLink && typeof tagLink !== 'string' ? tagLink.path! : ''
+              const slicedTagSlug = tagSlug ? tagSlug.split('[')[0] : ''
+
               return (
-                <span
+                <Link
+                  href={`${slicedTagSlug}${details.slug}`}
                   className={`text-sm font-bold uppercase ${details.color}-tag`}
                   key={index}>
                   {details.title}
-                </span>
+                </Link>
               )
             })}
         </div>
@@ -134,12 +160,18 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
               const initials = getInitials(user.name || '')
 
               return (
-                <Avatar key={user.name}>
-                  <AvatarImage src={user.url?.src} />
-                  <AvatarFallback className='text-sm'>
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
+                <AuthorPopover
+                  user={user}
+                  offset={0}
+                  initials={initials}
+                  href={`${slicedUserSlug}${user.slug}`}>
+                  <Avatar key={user.name}>
+                    <AvatarImage src={user.url?.src} />
+                    <AvatarFallback className='text-sm'>
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                </AuthorPopover>
               )
             })}
         </div>
@@ -167,7 +199,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
           <time>{format(blog.createdAt, 'LLL d, yyyy')}</time>
         </div>
 
-        <div className='not-prose relative mb-16 mt-8 aspect-square max-h-[37.5rem] w-full overflow-hidden rounded'>
+        <div className='not-prose relative mb-16 mt-8 aspect-square max-h-[30rem] w-full overflow-hidden rounded'>
           <Image
             src={imageURL.url}
             alt={imageURL.alt || `${blog.title} cover pic`}
@@ -199,16 +231,22 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
               const initials = getInitials(user.name || '')
 
               return (
-                <div key={user.name} className='mb-4 flex items-center gap-3'>
-                  <Avatar>
-                    <AvatarImage src={user.url?.src} />
-                    <AvatarFallback className='text-sm'>
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
+                <AuthorPopover
+                  user={user}
+                  offset={0}
+                  initials={initials}
+                  href={`${slicedUserSlug}${user.slug}`}>
+                  <div className='mb-4 flex w-full cursor-pointer items-center gap-3'>
+                    <Avatar>
+                      <AvatarImage src={user.url?.src} />
+                      <AvatarFallback className='text-sm'>
+                        {initials}
+                      </AvatarFallback>
+                    </Avatar>
 
-                  <p>{user.name}</p>
-                </div>
+                    <p>{user.name}</p>
+                  </div>
+                </AuthorPopover>
               )
             })}
         </div>
