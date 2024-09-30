@@ -62,7 +62,7 @@ const Navbar = ({ metadata }: { metadata: SiteSetting }) => {
         <div className='flex items-center gap-8'>
           {navLinks?.length > 0 && (
             <nav>
-              <ul className='flex gap-8'>
+              <ul className='hidden gap-8 sm:flex'>
                 {navLinks.map(({ label, children, href = '', newTab }) => (
                   <li
                     className='flex list-none items-center gap-1 text-sm'

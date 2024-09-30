@@ -20,14 +20,7 @@ const List: React.FC<ListProps> = ({ params, ...block }) => {
       const { data: blogs, isPending } = trpc.blog.getAllBlogs.useQuery()
 
       return (
-        <BlogsList
-          blogs={blogs}
-          authorLink={block['author-link']}
-          blogLink={block['blog-link']}
-          tagLink={block['tag-link']}
-          title={block['title']}
-          isPending={isPending}
-        />
+        <BlogsList blogs={blogs} title={block['title']} isPending={isPending} />
       )
     }
 
@@ -38,7 +31,6 @@ const List: React.FC<ListProps> = ({ params, ...block }) => {
         <TagsList
           tags={tags}
           title={block?.title || ''}
-          link={block['tag-link']}
           isPending={isPending}
         />
       )

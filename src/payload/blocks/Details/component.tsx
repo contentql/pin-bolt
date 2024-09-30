@@ -38,7 +38,7 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
       }
 
       if (blog) {
-        return <BlogDetails blog={blog as Blog} block={block} />
+        return <BlogDetails blog={blog as Blog} />
       }
 
       return null
@@ -65,13 +65,7 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
       }
 
       if (tagDetails) {
-        return (
-          <TagDetails
-            blogs={blogs?.blogsData}
-            tagDetails={tagDetails}
-            block={block}
-          />
-        )
+        return <TagDetails blogs={blogs?.blogsData} tagDetails={tagDetails} />
       }
     }
 
@@ -102,13 +96,7 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
       }
 
       if (author) {
-        return (
-          <AuthorDetails
-            author={author}
-            blogsData={authorBlogs}
-            block={block}
-          />
-        )
+        return <AuthorDetails author={author} blogsData={authorBlogs} />
       }
     }
   }

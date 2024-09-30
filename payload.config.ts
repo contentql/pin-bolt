@@ -5,6 +5,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { blocks } from '@/payload/blocks/index'
+import { subscribersCollection } from '@/payload/collections/subscribers'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -56,6 +57,57 @@ export default cqlConfig({
           admin: {
             description: 'This bio will be shown in the authors details page',
           },
+        },
+      ],
+    },
+    subscribersCollection,
+  ],
+
+  globals: [
+    {
+      slug: 'site-settings',
+      fields: [
+        {
+          type: 'tabs',
+          label: 'Settings',
+          tabs: [
+            {
+              label: 'Redirection Links',
+              name: 'redirectionLinks',
+              fields: [
+                {
+                  name: 'blogLink',
+                  type: 'relationship',
+                  relationTo: 'pages',
+                  label: 'Blog redirect link',
+                  maxDepth: 1,
+                  admin: {
+                    description: 'This redirects to a blog details page',
+                  },
+                },
+                {
+                  name: 'authorLink',
+                  type: 'relationship',
+                  relationTo: 'pages',
+                  label: 'Author redirect link',
+                  maxDepth: 1,
+                  admin: {
+                    description: 'This redirects to a author details page',
+                  },
+                },
+                {
+                  name: 'tagLink',
+                  type: 'relationship',
+                  relationTo: 'pages',
+                  label: 'Tag redirect link',
+                  maxDepth: 1,
+                  admin: {
+                    description: 'This redirects to a tag details page',
+                  },
+                },
+              ],
+            },
+          ],
         },
       ],
     },

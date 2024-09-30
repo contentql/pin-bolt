@@ -1,5 +1,5 @@
 import BlogsList from '../../List/components/BlogsList'
-import { Blog, DetailsType, User } from '@payload-types'
+import { Blog, User } from '@payload-types'
 import Link from 'next/link'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
@@ -10,14 +10,9 @@ import NoPostsFound from './NoPostsFound'
 interface AuthorDetailsProps {
   blogsData?: Blog[]
   author: User
-  block: DetailsType
 }
 
-const AuthorDetails: React.FC<AuthorDetailsProps> = ({
-  blogsData,
-  author,
-  block,
-}) => {
+const AuthorDetails: React.FC<AuthorDetailsProps> = ({ blogsData, author }) => {
   const authorDetails = {
     image:
       typeof author.imageUrl !== 'string'
@@ -71,13 +66,7 @@ const AuthorDetails: React.FC<AuthorDetailsProps> = ({
       </div>
 
       {blogsData ? (
-        <BlogsList
-          title='Posts'
-          blogs={blogsData}
-          authorLink={block['author-link']}
-          blogLink={block['blog-link']}
-          tagLink={block['tag-link']}
-        />
+        <BlogsList title='Posts' blogs={blogsData} />
       ) : (
         <NoPostsFound />
       )}

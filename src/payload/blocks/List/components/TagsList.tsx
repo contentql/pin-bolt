@@ -1,8 +1,9 @@
-import { ListType, Tag } from '@payload-types'
+import { Tag } from '@payload-types'
 import Link from 'next/link'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 import { Skeleton } from '@/components/common/Skeleton'
+import { useMetadata } from '@/utils/metadataContext'
 
 interface TagsType extends Tag {
   count: number
@@ -11,14 +12,15 @@ interface TagsType extends Tag {
 const TagsList = ({
   tags,
   title,
-  link,
   isPending,
 }: {
   tags?: TagsType[]
   title?: string
-  link: ListType['tag-link']
   isPending?: boolean
 }) => {
+  const { redirectionLinks } = useMetadata()
+
+  const link = redirectionLinks?.tagLink
   const slug = link && typeof link !== 'string' ? link.path! : ''
   const slicedSlug = slug ? slug.split('[')[0] : ''
 

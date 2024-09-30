@@ -16,6 +16,7 @@ export interface Config {
     blogs: Blog;
     media: Media;
     pages: Page;
+    subscribers: Subscriber;
     search: Search;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -194,7 +195,7 @@ export interface Blog {
 export interface Page {
   id: string;
   title: string;
-  layout?: (HomeType | DetailsType | ListType)[] | null;
+  layout?: (HomeType | DetailsType | ListType | NewsletterType)[] | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -237,9 +238,6 @@ export interface HomeType {
  */
 export interface DetailsType {
   collectionSlug?: ('blogs' | 'tags' | 'users') | null;
-  'blog-link'?: (string | null) | Page;
-  'author-link'?: (string | null) | Page;
-  'tag-link'?: (string | null) | Page;
   id?: string | null;
   blockName?: string | null;
   blockType: 'Details';
@@ -251,12 +249,31 @@ export interface DetailsType {
 export interface ListType {
   title?: string | null;
   collectionSlug?: ('blogs' | 'tags' | 'users') | null;
-  'blog-link'?: (string | null) | Page;
-  'author-link'?: (string | null) | Page;
-  'tag-link'?: (string | null) | Page;
   id?: string | null;
   blockName?: string | null;
   blockType: 'List';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsletterType".
+ */
+export interface NewsletterType {
+  heading: string;
+  description: string;
+  buttonText: string;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'Newsletter';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers".
+ */
+export interface Subscriber {
+  id: string;
+  email: string;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -308,6 +325,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: string | Page;
+      } | null)
+    | ({
+        relationTo: 'subscribers';
+        value: string | Subscriber;
       } | null)
     | ({
         relationTo: 'search';
@@ -464,6 +485,11 @@ export interface SiteSetting {
         }[]
       | null;
     copyright?: string | null;
+  };
+  redirectionLinks?: {
+    blogLink?: (string | null) | Page;
+    authorLink?: (string | null) | Page;
+    tagLink?: (string | null) | Page;
   };
   updatedAt?: string | null;
   createdAt?: string | null;

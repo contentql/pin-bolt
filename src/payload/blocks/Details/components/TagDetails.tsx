@@ -1,5 +1,5 @@
 import BlogsList from '../../List/components/BlogsList'
-import { Blog, DetailsType, Tag } from '@payload-types'
+import { Blog, Tag } from '@payload-types'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 
@@ -8,13 +8,8 @@ import NoPostsFound from './NoPostsFound'
 interface TagDetailsProps {
   tagDetails: Tag
   blogs?: Blog[]
-  block: DetailsType
 }
-const TagDetails: React.FC<TagDetailsProps> = ({
-  tagDetails,
-  blogs,
-  block,
-}) => {
+const TagDetails: React.FC<TagDetailsProps> = ({ tagDetails, blogs }) => {
   const tag = {
     image:
       typeof tagDetails.tagImage !== 'string'
@@ -48,13 +43,7 @@ const TagDetails: React.FC<TagDetailsProps> = ({
       </div>
 
       {blogs && blogs.length ? (
-        <BlogsList
-          title='Posts'
-          blogs={blogs}
-          authorLink={block['author-link']}
-          blogLink={block['blog-link']}
-          tagLink={block['tag-link']}
-        />
+        <BlogsList title='Posts' blogs={blogs} />
       ) : (
         <NoPostsFound />
       )}

@@ -84,7 +84,7 @@ const Footer = ({ metadata }: { metadata: SiteSetting }) => {
         </div>
       </div>
 
-      <div className='container flex items-center justify-between border-t pb-8 pt-4'>
+      <div className='container flex flex-col items-center justify-between gap-4 border-t pb-8 pt-4 sm:flex-row'>
         <p className='text-secondary'>{footer.copyright}</p>
 
         {socialLinks?.length ? (

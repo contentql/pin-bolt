@@ -4,6 +4,7 @@ import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import { serverClient } from '@/trpc/serverClient'
 import { getCurrentUser } from '@/utils/getCurrentUser'
+import { MetadataProvider } from '@/utils/metadataContext'
 
 const MarketingLayout = async ({ children }: { children: React.ReactNode }) => {
   const metadata = await serverClient.siteSettings.getSiteSettings()
@@ -12,13 +13,13 @@ const MarketingLayout = async ({ children }: { children: React.ReactNode }) => {
   const user = await getCurrentUser(headersList)
 
   return (
-    <>
-      <div className='flex min-h-screen flex-col'>
+    <MetadataProvider metadata={metadata}>
+      <div className='grid min-h-screen grid-rows-[1fr_auto]'>
         <Navbar metadata={metadata} />
         <main className='container my-20 flex-grow'>{children}</main>
         <Footer metadata={metadata} />
       </div>
-    </>
+    </MetadataProvider>
   )
 }
 

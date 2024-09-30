@@ -35,36 +35,6 @@ const ListConfig: Block = {
         },
       ],
     },
-    {
-      name: 'blog-link',
-      type: 'relationship',
-      relationTo: 'pages',
-      label: 'Blog redirect link',
-      maxDepth: 1,
-      admin: {
-        description: 'This redirects to a blog details page',
-      },
-    },
-    {
-      name: 'author-link',
-      type: 'relationship',
-      relationTo: 'pages',
-      label: 'Author redirect link',
-      maxDepth: 1,
-      admin: {
-        description: 'This redirects to a author details page',
-      },
-    },
-    {
-      name: 'tag-link',
-      type: 'relationship',
-      relationTo: 'pages',
-      label: 'Tag redirect link',
-      maxDepth: 1,
-      admin: {
-        description: 'This redirects to a tag details page',
-      },
-    },
   ],
 }
 

@@ -37,7 +37,7 @@ const RenderBlocks: React.FC<RenderBlocksProps> = ({
   const dataToUse = livePreviewData?.layout || pageData?.layout
 
   return (
-    <div className='space-y-20'>
+    <div className='relative space-y-20'>
       {dataToUse?.map((block, index) => {
         // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
         const Block = blocksJSX[block.blockType] as React.FC<any>

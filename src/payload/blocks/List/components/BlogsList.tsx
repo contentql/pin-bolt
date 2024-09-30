@@ -1,25 +1,22 @@
 import { Blog, ListType } from '@payload-types'
 
+import { useMetadata } from '@/utils/metadataContext'
+
 import BlogCard from './BlogCard'
 import BlogCardLoading from './BlogCardLoading'
 
 interface BlogsListProps {
   blogs?: Blog[]
-  authorLink: ListType['author-link']
-  blogLink: ListType['blog-link']
-  tagLink: ListType['tag-link']
   title?: ListType['title']
   isPending?: boolean
 }
 
-const BlogsList: React.FC<BlogsListProps> = ({
-  blogs,
-  authorLink,
-  blogLink,
-  tagLink,
-  title,
-  isPending,
-}) => {
+const BlogsList: React.FC<BlogsListProps> = ({ blogs, title, isPending }) => {
+  const { redirectionLinks } = useMetadata()
+  const authorLink = redirectionLinks?.authorLink
+  const blogLink = redirectionLinks?.blogLink
+  const tagLink = redirectionLinks?.tagLink
+
   return (
     <section className='space-y-4'>
       <p className='font-semibold'>{title}</p>

@@ -3,6 +3,7 @@
 import { useDebouncedEffect } from '@payloadcms/ui'
 import {
   type Action,
+  ActionImpl,
   KBarAnimator,
   KBarPortal,
   KBarPositioner,
@@ -13,23 +14,31 @@ import {
   useMatches,
   useRegisterActions,
 } from 'kbar'
-import { Search } from 'lucide-react'
-import { useState } from 'react'
+import { Hash, Search, UserRound } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { ReactElement, useState } from 'react'
 
 import { trpc } from '@/trpc/client'
+import { useMetadata } from '@/utils/metadataContext'
 
 import Button from './common/Button'
+
+type IconMapping = {
+  [key: string]: ReactElement
+}
 
 const CommandBar = () => {
   const [formattedSearchResults, setFormattedSearchResults] = useState<
     Action[]
   >([])
+  const router = useRouter()
 
   // if we return state that time only getting the searchQuery, visualState
   const { query, searchQuery, visualState } = useKBar(state => {
     return state
   })
-  // const debouncedSearchTerm = useDebounce(searchQuery, 800)
+
+  const { redirectionLinks } = useMetadata()
 
   const { mutate: globalSearchMutate } = trpc.search.globalSearch.useMutation({
     // during mutation adding searching text
@@ -45,12 +54,38 @@ const CommandBar = () => {
     onSuccess: data => {
       if (data && data.length > 0) {
         const list = data.map(result => {
+          const section = result?.parsedValues?.category as
+            | 'blogs'
+            | 'tags'
+            | 'authors'
+
           return {
             id: result.id,
             name: result.parsedValues?.title || '',
             subtitle: result.parsedValues?.description || '',
-            perform: () => alert(result?.parsedValues?.path),
-            section: result?.parsedValues?.category,
+            perform: () => {
+              if (redirectionLinks) {
+                const { authorLink, blogLink, tagLink } = redirectionLinks
+
+                const linkMap = {
+                  blogs: blogLink,
+                  tags: tagLink,
+                  authors: authorLink,
+                }
+
+                const link = linkMap[section]
+
+                const slug = link && typeof link !== 'string' ? link.path! : ''
+                const slicedSlug = slug ? slug.split('[')[0] : ''
+
+                if (slug) {
+                  return router.push(
+                    `${slicedSlug}${result?.parsedValues?.path}`,
+                  )
+                }
+              }
+            },
+            section,
             priority: result.priority as number,
           }
         })
@@ -91,6 +126,39 @@ const CommandBar = () => {
   useRegisterActions(formattedSearchResults, [formattedSearchResults])
 
   const { results } = useMatches()
+
+  const SearchItem = ({
+    item,
+    active,
+  }: {
+    item: NonNullable<ActionImpl>
+    active: boolean
+  }) => {
+    const { name, subtitle, section = '' } = item
+
+    const iconMapping: IconMapping = {
+      authors: <UserRound size={16} className='self-center' />,
+      tags: <Hash size={16} className='self-center' />,
+    }
+
+    return (
+      <div
+        className='block rounded-md p-2 hover:cursor-pointer data-[active-item=true]:bg-secondary/10'
+        data-active-item={active}>
+        <div className='flex gap-2'>
+          {section ? iconMapping[section as string] || <></> : null}
+          <p>{name}</p>
+        </div>
+
+        {/* here hiding the description when no results found or during API loading */}
+        {!['No results Found!', 'Searching'].includes(item.name) && (
+          <p className='overflow-hidden text-ellipsis text-nowrap text-sm text-secondary'>
+            {subtitle}
+          </p>
+        )}
+      </div>
+    )
+  }
 
   return (
     <>
@@ -133,28 +201,19 @@ const CommandBar = () => {
                 <div className='mt-2'>
                   <KBarResults
                     items={results}
-                    onRender={({ item, active }) =>
-                      typeof item === 'string' ? (
-                        <div className='pb-2 text-sm capitalize text-secondary'>
-                          {item}
-                        </div>
-                      ) : (
-                        <div
-                          className='block rounded-md p-2 hover:cursor-pointer data-[active-item=true]:bg-secondary/10'
-                          data-active-item={active}>
-                          <p>{item.name}</p>
-
-                          {/* here hiding the description when no results found or during API loading */}
-                          {!['No results Found!', 'Searching'].includes(
-                            item.name,
-                          ) && (
-                            <p className='overflow-hidden text-ellipsis text-nowrap text-sm text-secondary'>
-                              {item.subtitle}
-                            </p>
+                    onRender={({ item, active }) => {
+                      return (
+                        <div>
+                          {typeof item === 'string' ? (
+                            <div className='pb-2 text-sm capitalize text-secondary'>
+                              {item}
+                            </div>
+                          ) : (
+                            <SearchItem item={item} active={active} />
                           )}
                         </div>
                       )
-                    }
+                    }}
                   />
                 </div>
               ) : null}
