@@ -5,7 +5,8 @@ export const UpdateProfileImageSchema = z.object({
 })
 
 export const UpdateUserSchema = z.object({
-  name: z.string().optional(),
+  displayName: z.string().optional(),
   password: z.string().min(6).optional(),
   confirmPassword: z.string().min(6).optional(),
+  bio: z.string().optional(),
 })

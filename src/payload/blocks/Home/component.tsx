@@ -1,9 +1,7 @@
+import Form from '../Newsletter/Form'
 import { Params } from '../types'
 import { HomeType } from '@payload-types'
 import Image from 'next/image'
-
-import Button from '@/components/common/Button'
-import { Input } from '@/components/common/Input'
 
 interface HomeProps extends HomeType {
   params: Params
@@ -24,17 +22,14 @@ const Home: React.FC<HomeProps> = ({ params, ...block }) => {
         <h1 className='text-2xl font-semibold md:text-5xl'>{block.heading}</h1>
         <p className='text-secondary md:text-xl'>{block?.subHeading}</p>
 
-        <div className='pt-12'>
-          <p className='mb-2 text-sm text-secondary'>
-            Subscribe to my newsletter to get latest updates
-          </p>
-          <form
-            className='flex flex-col gap-2 sm:flex-row'
-            onSubmit={e => e.preventDefault()}>
-            <Input placeholder='Email' type='email' required />
-            <Button type='submit'>Subscribe</Button>
-          </form>
-        </div>
+        {block.subscribeField && (
+          <div className='pt-12'>
+            <p className='mb-2 text-sm text-secondary'>
+              Subscribe to newsletter to get latest updates
+            </p>
+            <Form buttonText='Subscribe' />
+          </div>
+        )}
       </div>
 
       <div className='relative aspect-square w-full max-w-lg overflow-hidden rounded bg-secondary'>

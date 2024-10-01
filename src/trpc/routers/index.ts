@@ -8,6 +8,7 @@ import { tagRouter } from '@/trpc/routers/tag'
 import { authRouter } from './auth'
 import { searchRouter } from './search'
 import { seedRouter } from './seed'
+import { subscriberRouter } from './subscribe'
 import { userRouter } from './user/user-route'
 
 export const appRouter = router({
@@ -21,6 +22,7 @@ export const appRouter = router({
   seed: seedRouter,
   // this is used for global search
   search: searchRouter,
+  subscribe: subscriberRouter,
 })
 
 export type AppRouter = typeof appRouter

@@ -1,11 +1,11 @@
 'use client'
 
-import { Blog, ListType } from '@payload-types'
+import { Blog, Page } from '@payload-types'
 import { format } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
+import { Avatar, AvatarFallback } from '@/components/common/Avatar'
 import { getInitials } from '@/utils/getInitials'
 
 import AuthorPopover from './AuthorPopover'
@@ -32,11 +32,13 @@ const formatAvatarName = (names: string[]): string => {
   return `${nameList.join(' & ')} & ${firstNameList.length - 2} Others`
 }
 
+type LinkType = (string | null) | Page
+
 type BlogCardType = {
   blog: Blog
-  blogLink: ListType['blog-link']
-  tagLink: ListType['tag-link']
-  authorLink: ListType['author-link']
+  blogLink?: LinkType
+  tagLink?: LinkType
+  authorLink?: LinkType
 }
 
 const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
@@ -176,7 +178,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                   <Avatar
                     key={user.name}
                     className='-ml-2 cursor-pointer border-2 border-background'>
-                    <AvatarImage src={user.url?.src} />
+                    {/* <AvatarImage src={user.url?.src} /> */}
                     <AvatarFallback className='text-sm'>
                       {initials}
                     </AvatarFallback>

@@ -164,6 +164,7 @@ const CommandBar = () => {
     <>
       <Button
         size='icon'
+        variant='outline'
         onClick={() => {
           // in case of no results found clearing the search results
           if (formattedSearchResults.length > 0) {
@@ -178,17 +179,17 @@ const CommandBar = () => {
           // this will toggle the search-bar
           query.toggle()
         }}>
-        <Search size={16} />
+        <Search size={16} className='text-primary' />
       </Button>
 
       <KBarPortal>
         <KBarPositioner className='z-[70] h-full bg-black/50 backdrop-blur-sm'>
           <KBarAnimator className='w-full max-w-lg'>
-            <div className='mx-auto w-full rounded-lg bg-popover p-4'>
-              <div className='relative'>
+            <div className='mx-auto w-full rounded-lg border bg-popover py-4'>
+              <div className='relative px-4'>
                 <Search
                   size={20}
-                  className='absolute left-2 top-2.5 text-secondary'
+                  className='absolute left-6 top-2.5 text-secondary'
                 />
 
                 <KBarSearch
@@ -198,7 +199,7 @@ const CommandBar = () => {
               </div>
 
               {results && results.length > 0 ? (
-                <div className='mt-2'>
+                <div className='ml-4 mt-2'>
                   <KBarResults
                     items={results}
                     onRender={({ item, active }) => {

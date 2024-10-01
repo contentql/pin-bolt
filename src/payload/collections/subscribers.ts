@@ -7,6 +7,8 @@ export const subscribersCollection: CustomCollectionConfig = {
       name: 'email',
       type: 'text',
       required: true,
+      unique: true,
+      hasMany: false,
     },
   ],
 }

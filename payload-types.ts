@@ -228,6 +228,7 @@ export interface HomeType {
   heading: string;
   subHeading?: string | null;
   image: string | Media;
+  subscribeField: boolean;
   id?: string | null;
   blockName?: string | null;
   blockType: 'Home';

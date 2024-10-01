@@ -1,7 +1,7 @@
 import { env } from '@env'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 
 import '@/app/(app)/globals.css'
@@ -59,6 +59,11 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
+export const viewport: Viewport = {
+  themeColor: 'dark',
+  initialScale: 1,
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -84,7 +89,7 @@ export default async function RootLayout({
         <Provider>{children}</Provider>
 
         {/* Sonnar toast library */}
-        <Toaster richColors />
+        <Toaster richColors theme='dark' />
       </body>
     </html>
   )

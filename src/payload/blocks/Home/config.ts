@@ -25,6 +25,12 @@ const HomeConfig: Block = {
       relationTo: 'media',
       required: true,
     },
+    {
+      name: 'subscribeField',
+      type: 'checkbox',
+      required: true,
+      defaultValue: false,
+    },
   ],
 }
 

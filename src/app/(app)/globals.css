@@ -57,6 +57,8 @@
     --success: 144 100% 40%;
     --success-foreground: 133 100% 10%;
     --popover: 0 0% 5%;
+    --pink: 289 68 82;
+    --indigo: 185 100% 74;
   }
 
   html {
@@ -71,8 +73,6 @@
     @apply border-secondary/10 outline-offset-4 outline-primary;
   }
 }
-
-/*  'indigo' | 'pink' */
 
 .green-tag {
   @apply text-success hover:text-success/80;
@@ -92,6 +92,14 @@
 
 .yellow-tag {
   @apply text-warning hover:text-warning/80;
+}
+
+.pink-tag {
+  @apply text-pink hover:text-pink/80;
+}
+
+.indigo-tag {
+  @apply text-indigo hover:text-indigo/80;
 }
 
 /* shadcn dropdown hides scroll when it's open */

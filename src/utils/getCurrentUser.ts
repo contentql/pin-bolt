@@ -1,5 +1,6 @@
 import { env } from '@env'
 import configPromise from '@payload-config'
+import { User } from '@payload-types'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 
 /**
@@ -21,7 +22,9 @@ import { getPayloadHMR } from '@payloadcms/next/utilities'
  * const user = await getCurrentUser(headers)
  * console.log(user) // User object or throws an error if not authenticated
  */
-export const getCurrentUser = async (headers?: Headers): Promise<any> => {
+export const getCurrentUser = async (
+  headers?: Headers,
+): Promise<User | null> => {
   if (!headers) {
     // This is a client component
     try {

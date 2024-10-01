@@ -1,4 +1,4 @@
-import type { SiteSetting } from '@payload-types'
+import type { SiteSetting, User } from '@payload-types'
 import { ChevronDown } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -12,8 +12,15 @@ import {
 import { generateMenuLinks } from '@/utils/generateMenuLinks'
 
 import CommandBar from './CommandBar'
+import ProfileDropdown from './ProfileDropdown'
 
-const Navbar = ({ metadata }: { metadata: SiteSetting }) => {
+const Navbar = ({
+  metadata,
+  user,
+}: {
+  metadata: SiteSetting
+  user: User | null
+}) => {
   const { navbar } = metadata
   const { logo, menuLinks } = navbar
 
@@ -46,7 +53,7 @@ const Navbar = ({ metadata }: { metadata: SiteSetting }) => {
   return (
     <header
       id='main-header'
-      className='fixed left-0 top-0 z-[60] w-full bg-secondary/10 backdrop-blur-lg'>
+      className='fixed left-0 top-0 z-[60] w-full bg-popover/50 backdrop-blur-lg'>
       <div className='container flex h-14 items-center justify-between'>
         {logoDetails.url && (
           <Link href='/'>
@@ -98,8 +105,11 @@ const Navbar = ({ metadata }: { metadata: SiteSetting }) => {
               </ul>
             </nav>
           )}
+        </div>
 
+        <div className='flex items-center gap-4'>
           <CommandBar />
+          <ProfileDropdown user={user} />
         </div>
       </div>
     </header>

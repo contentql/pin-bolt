@@ -43,6 +43,8 @@ const config: Config = {
           foreground: 'hsl(var(--success-foreground))',
         },
         popover: 'hsl(var(--popover))',
+        pink: 'hsl(var(--pink))',
+        indigo: 'hsl(var(--indigo))',
       },
       borderRadius: {
         DEFAULT: '0.5rem',

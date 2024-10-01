@@ -2,8 +2,7 @@
 
 import { NewsletterType } from '@payload-types'
 
-import Button from '@/components/common/Button'
-import { Input } from '@/components/common/Input'
+import Form from './Form'
 
 const Newsletter = ({ heading, description, buttonText }: NewsletterType) => {
   return (
@@ -14,22 +13,10 @@ const Newsletter = ({ heading, description, buttonText }: NewsletterType) => {
       <p className='mx-auto mt-2 max-w-xl text-center text-lg leading-8 text-secondary'>
         {description}
       </p>
-      <form className='mx-auto mt-10 max-w-md gap-x-4 sm:flex'>
-        <label htmlFor='email-address' className='sr-only'>
-          Email address
-        </label>
-        <Input
-          id='email-address'
-          name='email'
-          type='email'
-          required
-          placeholder='Enter your email'
-          autoComplete='email'
-        />
-        <Button type='submit' className='mt-4 w-full sm:mt-0 sm:w-max'>
-          {buttonText}
-        </Button>
-      </form>
+      <Form
+        buttonText={buttonText}
+        className='mx-auto mt-10 max-w-md gap-x-4'
+      />
       <svg
         viewBox='0 0 1024 1024'
         aria-hidden='true'

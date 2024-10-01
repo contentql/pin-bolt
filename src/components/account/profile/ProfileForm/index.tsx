@@ -1,35 +1,68 @@
 'use client'
 
 import type { User } from '@payload-types'
-import { useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { Camera, ImageUp } from 'lucide-react'
+import { ChangeEvent, useState } from 'react'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
+import Button from '@/components/common/Button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/common/Dialog'
+import { Input } from '@/components/common/Input'
+import { Textarea } from '@/components/common/Textarea'
 import { trpc } from '@/trpc/client'
+import { getInitials } from '@/utils/getInitials'
+import uploadMedia from '@/utils/uploadMedia'
 
 import DeleteAccountSection from './DeleteAccountSection'
-import Profile from './Profile'
 
 const ProfileFormSchema = z.object({
-  name: z.string().optional().nullable(),
-  password: z.string().optional().nullable(),
-  confirmPassword: z.string().optional().nullable(),
+  displayName: z.string().optional(),
+  password: z.string().optional(),
+  confirmPassword: z.string().optional(),
+  bio: z.string().optional(),
 })
+
 type ProfileFormDataType = z.infer<typeof ProfileFormSchema>
 
+const maxFileSize = 1024 * 1024 * 5
+
 const ProfileForm = ({ user }: { user: User }) => {
+  const { imageUrl, username, displayName, role, bio } = user
+
   const [formData, setFormData] = useState<ProfileFormDataType>({
-    name: user?.username,
+    displayName: typeof displayName === 'string' ? displayName : '',
     password: '',
     confirmPassword: '',
+    bio: typeof bio === 'string' ? bio : '',
   })
+
+  const [userImage, setUserImage] = useState<File>()
+  const [userImageURL, setUserImageURL] = useState('')
+
   const trpcUtils = trpc.useUtils()
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
+    console.log({ e })
+
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
+
+  const { mutate: uploadProfilePic, isPending: uploadingImage } = useMutation({
+    mutationFn: uploadMedia,
+  })
 
   const { mutate: updateUserMutation, isPending: isUpdateUserPending } =
     trpc.user.updateUser.useMutation({
@@ -48,6 +81,8 @@ const ProfileForm = ({ user }: { user: User }) => {
       Object.entries(formData).filter(([key, value]) => Boolean(value)),
     )
 
+    console.log({ sanitizedData })
+
     if (
       sanitizedData.password &&
       sanitizedData.password !== sanitizedData.confirmPassword
@@ -61,99 +96,232 @@ const ProfileForm = ({ user }: { user: User }) => {
     })
   }
 
-  return (
-    <div className='p-2 md:p-4'>
-      <div className='mt-8 w-full px-6 pb-8 sm:rounded-lg'>
-        <h2 className='pl-6 text-2xl font-bold text-base-content sm:text-xl'>
-          Personal Information
-        </h2>
+  const userDetails = {
+    url:
+      imageUrl && typeof imageUrl !== 'string'
+        ? {
+            src: imageUrl.sizes?.thumbnail?.url!,
+            alt: `${imageUrl?.alt}`,
+          }
+        : undefined,
+    name: displayName || username,
+    isAdmin: role.includes('admin'),
+  }
+  const initials = getInitials(userDetails.name!)
 
-        <div className='mx-auto mt-8 grid'>
-          <div className='flex flex-col items-center justify-center space-y-5 sm:flex-row sm:space-y-0'>
-            <Profile initialUser={user} />
+  const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+
+    // throwing and error if file size exceeds
+    if (file && file?.size > maxFileSize) {
+      return toast.error('Maximum upload size is 5MB')
+    }
+
+    if (userImageURL) {
+      URL.revokeObjectURL(userImageURL)
+    }
+
+    // this gives the preview of the image to the user
+    if (file) {
+      const url = URL.createObjectURL(file)
+      setUserImage(file)
+      setUserImageURL(url)
+    } else {
+      setUserImageURL('')
+    }
+  }
+
+  return (
+    <>
+      <h2 className='font-semibold'>Personal Information</h2>
+
+      <div className='relative h-max w-max'>
+        <Avatar className='my-8 size-40'>
+          <AvatarImage src={userDetails.url?.src} />
+          <AvatarFallback className='text-4xl'>{initials}</AvatarFallback>
+        </Avatar>
+
+        <Dialog
+          onOpenChange={state => {
+            if (!state) {
+              URL.revokeObjectURL(userImageURL)
+              setUserImage(undefined)
+              setUserImageURL('')
+            }
+          }}>
+          <DialogTrigger asChild>
+            <Button
+              size='icon'
+              className='absolute bottom-0 right-0 rounded-full border-2 border-background'>
+              <Camera size={20} />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className='sm:max-w-[425px]'>
+            <DialogHeader>
+              <DialogTitle>Change your photo</DialogTitle>
+              <DialogDescription>
+                This will be shown on your profile
+              </DialogDescription>
+            </DialogHeader>
+            <div className='grid grid-cols-[auto_1fr] gap-4 py-4'>
+              <Avatar className='size-16'>
+                <AvatarImage src={userImageURL || userDetails.url?.src || ''} />
+                <AvatarFallback className='text-lg'>{initials}</AvatarFallback>
+              </Avatar>
+
+              <div className='flex w-full items-center justify-center'>
+                <label
+                  htmlFor='dropzone-file'
+                  className='flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors hover:bg-secondary/10'>
+                  <div className='flex flex-col items-center justify-center pb-6 pt-5'>
+                    <ImageUp className='text-secondary' />
+
+                    <p className='mt-4 text-sm'>
+                      <span className='font-semibold'>Click to upload</span>
+                    </p>
+                    <p className='mt-2 text-center text-xs leading-5 text-secondary'>
+                      Use square image for best results,
+                      <br /> maximum upload size is 5MB
+                    </p>
+                  </div>
+                  <input
+                    accept='image/*'
+                    multiple={false}
+                    id='dropzone-file'
+                    type='file'
+                    className='hidden'
+                    onChange={handleUpload}
+                  />
+                </label>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant='outline'>Cancel</Button>
+              <Button
+                disabled={!userImage || uploadingImage}
+                isLoading={uploadingImage}
+                onClick={() => {
+                  if (userImage) {
+                    uploadProfilePic(userImage)
+                  }
+                }}>
+                Save changes
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <form
+        onSubmit={handleUserUpdateForm}
+        className='mb-16 max-w-3xl items-center'>
+        <div className='mb-4 sm:mb-6'>
+          <label
+            htmlFor='displayName'
+            className='mb-1 block text-sm font-medium text-secondary'>
+            Name
+          </label>
+          <Input
+            type='text'
+            id='displayName'
+            name='displayName'
+            placeholder='John'
+            value={formData?.displayName}
+            onChange={handleOnChange}
+          />
+        </div>
+
+        <div className='mb-4 sm:mb-6'>
+          <label
+            htmlFor='bio'
+            className='mb-1 block text-sm font-medium text-secondary'>
+            Bio
+          </label>
+          <Textarea
+            id='bio'
+            name='bio'
+            placeholder='John'
+            value={formData?.bio}
+            onChange={handleOnChange}
+          />
+        </div>
+
+        <div className='mb-4 flex w-full flex-col items-center space-x-0 space-y-4 sm:mb-6 sm:flex-row sm:space-x-4 sm:space-y-0'>
+          <div className='w-full'>
+            <label
+              htmlFor='username'
+              className='mb-1 block text-sm font-medium text-secondary'>
+              Username
+            </label>
+            <Input
+              type='text'
+              id='username'
+              name='username'
+              placeholder='john-deo'
+              value={user?.username!}
+              disabled
+            />
           </div>
 
-          <form
-            onSubmit={handleUserUpdateForm}
-            className='mt-8 items-center sm:mt-14'>
-            <div className='mb-4 sm:mb-6'>
-              <label
-                htmlFor='name'
-                className='block text-sm font-medium text-base-content/70'>
-                Name
-              </label>
-              <input
-                type='text'
-                id='name'
-                name='name'
-                placeholder='John'
-                value={user?.username || ''}
-                onChange={handleOnChange}
-                className='mt-1 w-full rounded-md bg-base-200 p-2 text-base-content transition-colors duration-300 focus:border-base-content/40 focus:outline-none focus:ring-1 focus:ring-base-content/40 focus:ring-offset-1'
-              />
-            </div>
-
-            <div className='mb-4 sm:mb-6'>
-              <label
-                htmlFor='email'
-                className='block text-sm font-medium text-base-content/70'>
-                E-Mail
-              </label>
-              <input
-                type='text'
-                id='email'
-                name='email'
-                placeholder='john.doe@example.com'
-                value={user?.email}
-                disabled
-                className='mt-1 w-full rounded-md bg-base-200 p-2 text-base-content transition-colors duration-300 focus:border-base-content/40 focus:outline-none focus:ring-1 focus:ring-base-content/40 focus:ring-offset-1'
-              />
-            </div>
-            <div className='mb-4 flex w-full flex-col items-center space-x-0 space-y-2 sm:mb-6 sm:flex-row sm:space-x-4 sm:space-y-0'>
-              <div className='w-full'>
-                <label
-                  htmlFor='password'
-                  className='block text-sm font-medium text-base-content/70'>
-                  New Password
-                </label>
-                <input
-                  type='password'
-                  id='password'
-                  name='password'
-                  placeholder='● ● ● ● ● ● ● ● ●'
-                  onChange={handleOnChange}
-                  className='mt-1 w-full rounded-md bg-base-200 p-2 text-base-content transition-colors duration-300 focus:border-base-content/40 focus:outline-none focus:ring-1 focus:ring-base-content/40 focus:ring-offset-1'
-                />
-              </div>
-              <div className='w-full'>
-                <label
-                  htmlFor='confirmPassword'
-                  className='block text-sm font-medium text-base-content/70'>
-                  Confirm Password
-                </label>
-                <input
-                  type='password'
-                  id='confirmPassword'
-                  name='confirmPassword'
-                  placeholder='● ● ● ● ● ● ● ● ●'
-                  onChange={handleOnChange}
-                  className='mt-1 w-full rounded-md bg-base-200 p-2 text-base-content transition-colors duration-300 focus:border-base-content/40 focus:outline-none focus:ring-1 focus:ring-base-content/40 focus:ring-offset-1'
-                />
-              </div>
-            </div>
-
-            <div className='flex justify-end'>
-              <button
-                type='submit'
-                className='w-full rounded-lg  bg-primary px-5 py-2.5 text-center text-sm font-medium text-base-content hover:bg-primary-focus focus:outline-none focus:ring-4 focus:ring-primary/30 sm:w-auto'>
-                {isUpdateUserPending ? 'Updating...' : 'Update Profile'}
-              </button>
-            </div>
-          </form>
+          <div className='w-full'>
+            <label
+              htmlFor='email'
+              className='mb-1 block text-sm font-medium text-secondary'>
+              Email
+            </label>
+            <Input
+              type='text'
+              id='email'
+              name='email'
+              placeholder='john.doe@example.com'
+              value={user?.email}
+              disabled
+            />
+          </div>
         </div>
-      </div>
-      <DeleteAccountSection />
-    </div>
+
+        <div className='mb-4 flex w-full flex-col items-center space-x-0 space-y-4 sm:mb-6 sm:flex-row sm:space-x-4 sm:space-y-0'>
+          <div className='w-full'>
+            <label
+              htmlFor='password'
+              className='mb-1 block text-sm font-medium text-secondary'>
+              New Password
+            </label>
+            <Input
+              type='password'
+              id='password'
+              name='password'
+              placeholder='● ● ● ● ● ● ● ● ●'
+              onChange={handleOnChange}
+            />
+          </div>
+
+          <div className='w-full'>
+            <label
+              htmlFor='confirmPassword'
+              className='mb-1 block text-sm font-medium text-secondary'>
+              Confirm Password
+            </label>
+            <Input
+              type='password'
+              id='confirmPassword'
+              name='confirmPassword'
+              placeholder='● ● ● ● ● ● ● ● ●'
+              onChange={handleOnChange}
+            />
+          </div>
+        </div>
+
+        <Button
+          type='submit'
+          isLoading={isUpdateUserPending}
+          disabled={isUpdateUserPending}>
+          Update Profile
+        </Button>
+      </form>
+
+      <DeleteAccountSection user={user} />
+    </>
   )
 }
 
