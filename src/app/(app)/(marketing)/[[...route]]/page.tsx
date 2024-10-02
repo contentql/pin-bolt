@@ -20,7 +20,7 @@ export async function generateMetadata({
 
     const metadata = pageData.meta
 
-    console.log({ metadata })
+    console.log({ pageData })
 
     if (metadata && Object.keys(metadata).length) {
       let ogImage = []

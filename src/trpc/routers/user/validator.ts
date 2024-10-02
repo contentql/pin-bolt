@@ -9,4 +9,5 @@ export const UpdateUserSchema = z.object({
   password: z.string().min(6).optional(),
   confirmPassword: z.string().min(6).optional(),
   bio: z.string().optional(),
+  imageUrl: z.string().optional(),
 })

@@ -1,13 +1,15 @@
 'use client'
 
+import { LabelInputContainer } from '../../common/fields'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Input, LabelInputContainer } from '../../common/fields'
 
 import { Alert, AlertDescription } from '@/components/common/Alert'
+import Button from '@/components/common/Button'
+import { Input } from '@/components/common/Input'
 import { trpc } from '@/trpc/client'
 import { SignInSchema } from '@/trpc/routers/auth/validator'
 
@@ -68,49 +70,38 @@ const SignInForm: React.FC = () => {
               </AlertDescription>
             </Alert>
           ) : null}
-          <h1 className='mb-6 text-center text-3xl font-semibold text-base-content'>
-            Sign In
-          </h1>
-          <h1 className='mb-6 text-center text-sm font-semibold text-base-content'>
-            Join to Our Community with all time access and free{' '}
-          </h1>
+          <h1 className=' mb-1 text-3xl font-semibold'>Sign In</h1>
+          <p className='mb-6 text-secondary'>
+            Join our Community with all time access and free{' '}
+          </p>
 
-          <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div>
               <LabelInputContainer className='mb-4'>
-                <div className='inline-flex justify-between'>
-                  <label
-                    htmlFor='email'
-                    className='block text-sm font-medium text-base-content/70'>
-                    E-Mail
-                  </label>
-                  {errors?.email && (
-                    <p className='text-sm text-error'>{errors.email.message}</p>
-                  )}
-                </div>
+                <label htmlFor='email' className=' block text-sm font-medium'>
+                  Email
+                </label>
+
                 <Input
                   {...register('email')}
                   type='text'
                   id='email'
+                  autoComplete='email'
                   name='email'
                   placeholder='john.doe@example.com'
                 />
+
+                {errors?.email && (
+                  <p className='text-sm text-danger'>{errors.email.message}</p>
+                )}
               </LabelInputContainer>
             </div>
             <div>
               <LabelInputContainer className='mb-8'>
-                <div className='inline-flex justify-between'>
-                  <label
-                    htmlFor='password'
-                    className='block text-sm font-medium text-base-content/70'>
-                    Password
-                  </label>
-                  {errors?.password && (
-                    <p className='text-sm text-error'>
-                      {errors.password.message}
-                    </p>
-                  )}
-                </div>
+                <label htmlFor='password' className='block text-sm font-medium'>
+                  Password
+                </label>
+
                 <Input
                   {...register('password')}
                   type='password'
@@ -118,29 +109,40 @@ const SignInForm: React.FC = () => {
                   name='password'
                   placeholder='● ● ● ● ● ● ● ● ●'
                 />
+
+                {errors?.password && (
+                  <p className='text-sm text-danger'>
+                    {errors.password.message}
+                  </p>
+                )}
               </LabelInputContainer>
             </div>
-            <p className='text-sm text-base-content/70'>
+
+            <p className='mb-2 text-sm text-secondary'>
               Forgot your password?{' '}
-              <Link className='underline' href='/reset-password'>
+              <Link
+                className='text-primary hover:underline'
+                href='/forgot-password'>
                 Reset it.
               </Link>
             </p>
+
             <div>
-              <button
+              <Button
                 type='submit'
-                className='w-full rounded-rounded-btn bg-primary  p-2 text-primary-content transition-all duration-500 hover:bg-primary-focus  focus:outline-none  disabled:cursor-not-allowed disabled:bg-opacity-50'
+                className='w-full'
+                isLoading={isSignInPending}
                 disabled={isSignInPending}>
-                {isSignInPending ? 'Signing in...' : 'Sign In'}
-              </button>
+                Sign In
+              </Button>
             </div>
           </form>
-          <div className='mt-4 text-center text-sm text-base-content/70'>
+          <div className='mt-8 text-center text-sm text-secondary'>
             <p>
               Don&apos;t have an account?{' '}
-              <a href='/sign-up' className='text-base-content hover:underline'>
-                SignUp here
-              </a>
+              <Link href='/sign-up' className='text-primary hover:underline'>
+                Sign Up
+              </Link>
             </p>
           </div>
         </div>

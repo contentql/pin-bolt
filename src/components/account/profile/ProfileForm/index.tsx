@@ -38,7 +38,14 @@ type ProfileFormDataType = z.infer<typeof ProfileFormSchema>
 const maxFileSize = 1024 * 1024 * 5
 
 const ProfileForm = ({ user }: { user: User }) => {
-  const { imageUrl, username, displayName, role, bio } = user
+  const { data, refetch: refetchUserData } = trpc.user.getUser.useQuery(
+    undefined,
+    {
+      initialData: { ...user, collection: 'users' },
+    },
+  )
+
+  const { imageUrl, username, displayName, role, bio } = data || user
 
   const [formData, setFormData] = useState<ProfileFormDataType>({
     displayName: typeof displayName === 'string' ? displayName : '',
@@ -49,31 +56,34 @@ const ProfileForm = ({ user }: { user: User }) => {
 
   const [userImage, setUserImage] = useState<File>()
   const [userImageURL, setUserImageURL] = useState('')
-
-  const trpcUtils = trpc.useUtils()
+  const [open, setOpen] = useState(false)
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    console.log({ e })
-
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
-
-  const { mutate: uploadProfilePic, isPending: uploadingImage } = useMutation({
-    mutationFn: uploadMedia,
-  })
 
   const { mutate: updateUserMutation, isPending: isUpdateUserPending } =
     trpc.user.updateUser.useMutation({
       onSuccess: () => {
+        refetchUserData()
         toast.success('Profile updated successfully')
-        trpcUtils.user.getUser.invalidate()
+        setOpen(false)
       },
       onError() {
         return null
       },
     })
+
+  const { mutate: uploadProfilePic, isPending: uploadingImage } = useMutation({
+    mutationFn: uploadMedia,
+    onSuccess: data => {
+      updateUserMutation({
+        imageUrl: data.id,
+      })
+    },
+  })
 
   const handleUserUpdateForm = (e: any) => {
     e.preventDefault()
@@ -107,6 +117,7 @@ const ProfileForm = ({ user }: { user: User }) => {
     name: displayName || username,
     isAdmin: role.includes('admin'),
   }
+
   const initials = getInitials(userDetails.name!)
 
   const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -142,16 +153,20 @@ const ProfileForm = ({ user }: { user: User }) => {
         </Avatar>
 
         <Dialog
+          open={open}
           onOpenChange={state => {
             if (!state) {
               URL.revokeObjectURL(userImageURL)
               setUserImage(undefined)
               setUserImageURL('')
             }
+
+            setOpen(state)
           }}>
           <DialogTrigger asChild>
             <Button
               size='icon'
+              onClick={() => setOpen(true)}
               className='absolute bottom-0 right-0 rounded-full border-2 border-background'>
               <Camera size={20} />
             </Button>
@@ -198,8 +213,8 @@ const ProfileForm = ({ user }: { user: User }) => {
             <DialogFooter>
               <Button variant='outline'>Cancel</Button>
               <Button
-                disabled={!userImage || uploadingImage}
-                isLoading={uploadingImage}
+                disabled={!userImage || uploadingImage || isUpdateUserPending}
+                isLoading={uploadingImage || isUpdateUserPending}
                 onClick={() => {
                   if (userImage) {
                     uploadProfilePic(userImage)

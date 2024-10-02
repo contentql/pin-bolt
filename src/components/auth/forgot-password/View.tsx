@@ -1,11 +1,7 @@
 import GenerateResetTokenForm from './GeneratedResetTokenForm'
 
 const ForgotPasswordView: React.FC = () => {
-  return (
-    <div>
-      <GenerateResetTokenForm />
-    </div>
-  )
+  return <GenerateResetTokenForm />
 }
 
 export default ForgotPasswordView

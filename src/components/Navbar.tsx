@@ -53,10 +53,10 @@ const Navbar = ({
   return (
     <header
       id='main-header'
-      className='fixed left-0 top-0 z-[60] w-full bg-popover/50 backdrop-blur-lg'>
+      className='fixed left-0 top-0 z-[60] w-full border-b bg-popover/50 backdrop-blur-lg'>
       <div className='container flex h-14 items-center justify-between'>
         {logoDetails.url && (
-          <Link href='/'>
+          <Link href='/' className='flex-1'>
             <Image
               src={logoDetails.url}
               alt={logoDetails.alt}
@@ -107,7 +107,7 @@ const Navbar = ({
           )}
         </div>
 
-        <div className='flex items-center gap-4'>
+        <div className='flex flex-1 items-center justify-end gap-4'>
           <CommandBar />
           <ProfileDropdown user={user} />
         </div>

@@ -11,13 +11,13 @@ import { IconType } from 'react-icons/lib'
 import { cn } from '@/utils/cn'
 
 const alertVariants = cva(
-  'relative flex gap-4 items-center rounded-rounded-btn w-full rounded py-4 px-2',
+  'relative flex gap-4 items-center rounded-rounded-btn w-full rounded p-4',
   {
     variants: {
       variant: {
-        default: 'bg-base-100',
-        danger: 'text-error bg-error/10  [&>svg]:text-error',
-        success: 'text-success bg-success/10 [&>svg]:text-success',
+        default: 'bg-secondary/10',
+        danger: 'text-danger bg-danger-foreground',
+        success: 'text-success bg-success-foreground',
       },
     },
     defaultVariants: {
@@ -42,7 +42,7 @@ const Alert = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof alertVariants>
 >(({ className, variant, children, ...props }, ref) => {
-  const IconComponent = variant ? icon[variant] : null
+  const IconComponent = icon[variant || 'default']
 
   return (
     <div
@@ -50,7 +50,7 @@ const Alert = React.forwardRef<
       role='alert'
       className={cn(alertVariants({ variant }), className)}
       {...props}>
-      {IconComponent && <IconComponent className={clsx('size-6')} />}
+      <IconComponent className={clsx('size-6 shrink-0')} />
       {children}
     </div>
   )

@@ -1,11 +1,13 @@
-import { ListType, User } from '@payload-types'
+import { Page, User } from '@payload-types'
 import Link from 'next/link'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 
+type LinkType = (string | null) | Page
+
 type AuthorCardType = {
   author: User
-  authorLink: ListType['author-link']
+  authorLink?: LinkType
 }
 
 const AuthorCard = ({ author, authorLink }: AuthorCardType) => {

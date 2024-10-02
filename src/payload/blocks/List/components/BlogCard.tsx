@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Avatar, AvatarFallback } from '@/components/common/Avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 import { getInitials } from '@/utils/getInitials'
 
 import AuthorPopover from './AuthorPopover'
@@ -140,7 +140,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
           </div>
 
           <time className='text-xs text-secondary'>
-            {format(blog.createdAt, 'LLL d')}
+            {format(blog.createdAt, 'LLL d, yyyy')}
           </time>
         </div>
 
@@ -178,7 +178,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                   <Avatar
                     key={user.name}
                     className='-ml-2 cursor-pointer border-2 border-background'>
-                    {/* <AvatarImage src={user.url?.src} /> */}
+                    <AvatarImage src={user.url?.src} />
                     <AvatarFallback className='text-sm'>
                       {initials}
                     </AvatarFallback>

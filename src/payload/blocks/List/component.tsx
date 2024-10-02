@@ -2,7 +2,7 @@
 
 import { Params } from '../types'
 import { ListType } from '@payload-types'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { trpc } from '@/trpc/client'
 
@@ -17,31 +17,95 @@ interface ListProps extends ListType {
 const List: React.FC<ListProps> = ({ params, ...block }) => {
   switch (block?.collectionSlug) {
     case 'blogs': {
-      const { data: blogs, isPending } = trpc.blog.getAllBlogs.useQuery()
+      const {
+        data,
+        fetchNextPage,
+        isPending,
+        isFetchingNextPage,
+        hasNextPage,
+      } = trpc.blog.getAllBlogs.useInfiniteQuery(
+        { limit: 10 },
+        {
+          getNextPageParam: lastPage => lastPage.nextCursor,
+        },
+      )
+
+      const flattedList = useMemo(() => {
+        const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
+        return docsList.flat()
+      }, [data])
 
       return (
-        <BlogsList blogs={blogs} title={block['title']} isPending={isPending} />
+        <BlogsList
+          blogs={flattedList}
+          title={block['title']}
+          isPending={isPending}
+          isFetchingNextPage={isFetchingNextPage}
+          hasNextPage={hasNextPage}
+          fetchNextPage={fetchNextPage}
+        />
       )
     }
 
     case 'tags': {
-      const { data: tags, isPending } = trpc.tag.getAllTags.useQuery()
+      const {
+        data,
+        fetchNextPage,
+        isPending,
+        isFetchingNextPage,
+        hasNextPage,
+      } = trpc.tag.getAllTags.useInfiniteQuery(
+        { limit: 10 },
+        {
+          getNextPageParam: lastPage => lastPage.nextCursor,
+        },
+      )
+
+      const flattedList = useMemo(() => {
+        const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
+        return docsList.flat()
+      }, [data])
 
       return (
         <TagsList
-          tags={tags}
+          tags={flattedList}
           title={block?.title || ''}
           isPending={isPending}
+          fetchNextPage={fetchNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          hasNextPage={hasNextPage}
         />
       )
     }
 
     case 'users': {
-      const { data: authors, isPending } =
-        trpc.author.getAllAuthorsWithCount.useQuery()
+      const {
+        data,
+        fetchNextPage,
+        isPending,
+        isFetchingNextPage,
+        hasNextPage,
+      } = trpc.author.getAllAuthorsWithCount.useInfiniteQuery(
+        { limit: 10 },
+        {
+          getNextPageParam: lastPage => lastPage.nextCursor,
+        },
+      )
+
+      const flattedList = useMemo(() => {
+        const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
+        return docsList.flat()
+      }, [data])
 
       return (
-        <AuthorsList authors={authors} block={block} isPending={isPending} />
+        <AuthorsList
+          authors={flattedList}
+          block={block}
+          isPending={isPending}
+          fetchNextPage={fetchNextPage}
+          isFetchingNextPage={isFetchingNextPage}
+          hasNextPage={hasNextPage}
+        />
       )
     }
   }

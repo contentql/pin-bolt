@@ -4,6 +4,8 @@ import { slateEditor } from '@payloadcms/richtext-slate'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import { ResetPassword } from '@/emails/reset-password'
+import { UserAccountVerification } from '@/emails/verify-email'
 import { blocks } from '@/payload/blocks/index'
 import { subscribersCollection } from '@/payload/collections/subscribers'
 
@@ -59,6 +61,27 @@ export default cqlConfig({
           },
         },
       ],
+      auth: {
+        verify: {
+          generateEmailHTML: ({ token, user }) => {
+            return UserAccountVerification({
+              actionLabel: 'verify your account',
+              buttonText: 'Verify Account',
+              userName: user.username,
+              image: user.avatar,
+              href: `${env.PAYLOAD_URL}/verify-email?token=${token}&id=${user.id}`,
+            })
+          },
+        },
+        forgotPassword: {
+          generateEmailHTML: args => {
+            return ResetPassword({
+              resetPasswordLink: `${env.PAYLOAD_URL}/reset-password?token=${args?.token}`,
+              userFirstName: args?.user.username,
+            })
+          },
+        },
+      },
     },
     subscribersCollection,
   ],

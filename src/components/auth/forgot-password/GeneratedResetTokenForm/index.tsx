@@ -1,11 +1,13 @@
 'use client'
 
-import { Input, LabelInputContainer } from '../../common/fields'
+import { LabelInputContainer } from '../../common/fields'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import { Alert, AlertDescription } from '@/components/common/Alert'
+import Button from '@/components/common/Button'
+import { Input } from '@/components/common/Input'
 import { trpc } from '@/trpc/client'
 import { GenerateTokenSchema } from '@/trpc/routers/auth/validator'
 
@@ -27,14 +29,7 @@ const GenerateResetTokenForm: React.FC = () => {
     isError: isGeneratePasswordError,
     error: generatePasswordError,
     isSuccess: isGeneratePasswordSuccess,
-  } = trpc.auth.forgotPassword.useMutation({
-    onSuccess: () => {
-      //   toast.success('Please check you mail!')
-    },
-    onError: () => {
-      //   toast.error('Error sending you mail, try again!')
-    },
-  })
+  } = trpc.auth.forgotPassword.useMutation({})
 
   const onSubmit = async (data: z.infer<typeof GenerateTokenSchema>) => {
     generateResetPasswordTokenMutation({
@@ -46,9 +41,9 @@ const GenerateResetTokenForm: React.FC = () => {
     <main
       id='content'
       role='main'
-      className='flex min-h-screen w-full items-center justify-center bg-base-100'>
+      className='bg-base-100 flex min-h-screen w-full items-center justify-center'>
       <div className='mx-auto w-full max-w-md drop-shadow-2xl  md:p-8'>
-        <div className='text-center'>
+        <div className=''>
           {isGeneratePasswordSuccess ? (
             <Alert variant='success' className='mb-12'>
               <AlertDescription>
@@ -62,53 +57,41 @@ const GenerateResetTokenForm: React.FC = () => {
               </AlertDescription>
             </Alert>
           ) : null}
-          <h1 className='block text-2xl font-bold text-base-content'>
-            Forgot password?
-          </h1>
-          <p className='mt-2 text-sm text-base-content/70'>
-            Remember your password?
-            <a
-              className='pl-1 font-medium text-base-content decoration-1 hover:underline'
-              href='/sign-in'>
-              SignIn here
-            </a>
+          <h1 className='mb-1 text-3xl font-semibold'>Forgot your password</h1>
+          <p className='mb-6 text-secondary'>
+            Forgot your password? Please enter your email we&apos;ll send you
+            reset link
           </p>
         </div>
 
         <div className='mt-10'>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='space-y-4'>
-              <div>
-                <LabelInputContainer className='mb-4'>
-                  <div className='inline-flex justify-between'>
-                    <label
-                      htmlFor='email'
-                      className='mb-2 ml-1 block text-sm font-bold text-base-content/70'>
-                      Email address
-                    </label>
-                    {errors.email && (
-                      <p
-                        className='mt-2 hidden text-xs text-error'
-                        id='email-error'>
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
-                  <Input
-                    {...register('email')}
-                    type='email'
-                    id='email'
-                    name='email'
-                    placeholder='jon@gmail.com'
-                  />
-                </LabelInputContainer>
-              </div>
-              <button
+            <div>
+              <LabelInputContainer className='mb-4'>
+                <label htmlFor='email' className=' block text-sm font-medium'>
+                  Email
+                </label>
+
+                <Input
+                  {...register('email')}
+                  type='email'
+                  id='email'
+                  name='email'
+                  placeholder='jon@gmail.com'
+                />
+
+                {errors?.email && (
+                  <p className='text-sm text-danger'>{errors.email.message}</p>
+                )}
+              </LabelInputContainer>
+
+              <Button
                 type='submit'
-                disabled={isGeneratePasswordPending}
-                className='mt-3 inline-flex w-full items-center justify-center gap-2 rounded-rounded-btn border border-transparent bg-primary px-4 py-3 text-sm font-semibold text-base-content transition-all hover:bg-primary-focus  disabled:cursor-not-allowed disabled:bg-opacity-50 '>
-                {isGeneratePasswordPending ? 'Sending...' : 'Send Reset Link'}
-              </button>
+                className='mb-2 w-full'
+                isLoading={isGeneratePasswordPending}
+                disabled={isGeneratePasswordPending}>
+                Send Reset Link
+              </Button>
             </div>
           </form>
         </div>

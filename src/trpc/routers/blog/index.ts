@@ -9,20 +9,35 @@ const payload = await getPayloadHMR({
 })
 
 export const blogRouter = router({
-  getAllBlogs: publicProcedure.query(async () => {
-    try {
-      const { docs } = await payload.find({
-        collection: 'blogs',
-        depth: 5,
-        draft: false,
-      })
+  getAllBlogs: publicProcedure
+    .input(
+      z.object({
+        cursor: z.number().optional(),
+        limit: z.number().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const { cursor = 1, limit = 10 } = input // Default page to 1 if not provided
 
-      return docs
-    } catch (error: any) {
-      console.log(error)
-      throw new Error(error.message)
-    }
-  }),
+      try {
+        const { docs, totalDocs } = await payload.find({
+          collection: 'blogs',
+          depth: 5,
+          draft: false,
+          limit,
+          page: cursor,
+        })
+
+        console.log({ totalDocs })
+
+        const hasNextPage = totalDocs > cursor * limit
+
+        return { docs, nextCursor: hasNextPage ? cursor + 1 : undefined }
+      } catch (error: any) {
+        console.log(error)
+        throw new Error(error.message)
+      }
+    }),
 
   getBlogBySlug: publicProcedure
     .input(

@@ -8,6 +8,7 @@ import {
   Hr,
   Html,
   Img,
+  Link,
   Preview,
   Row,
   Section,
@@ -15,21 +16,25 @@ import {
   render,
 } from '@react-email/components'
 
-interface ResetPasswordEmailProps {
-  userFirstName: string
-  resetPasswordLink: string
+interface UserEmailTemplateProps {
+  actionLabel: string
+  buttonText: string
+  userName: string
+  href: string
+  image: string
 }
 
-const baseUrl = env.PAYLOAD_URL
+export const VerifyEmailTemplate = ({
+  actionLabel,
 
-const ResetPasswordTemplate = ({
-  userFirstName,
-  resetPasswordLink,
-}: ResetPasswordEmailProps) => {
+  buttonText,
+  userName,
+  href,
+}: UserEmailTemplateProps) => {
   return (
     <Html>
       <Head />
-      <Preview>Reset your password</Preview>
+      <Preview>{actionLabel}</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section>
@@ -49,20 +54,22 @@ const ResetPasswordTemplate = ({
             <Hr style={hr} />
           </Section>
           <Section style={infoSection}>
-            <Text style={infoText}>Hello, {userFirstName}</Text>
+            <Text style={infoText}>Hello, {userName}</Text>
 
             <Text style={infoText}>
-              Someone recently requested a password change for your account. If
-              this was you, you can set a new password here:
+              Thank you for signing up! You are just one step away from
+              accessing your account. Please verify your email address to
+              complete the registration.
             </Text>
 
-            <Button href={resetPasswordLink} style={button}>
-              Rest password
+            <Button href={href} style={button}>
+              {buttonText}
             </Button>
 
-            <Text className='dark:text-zinc-300'>
-              If you don&apos;t want to change your password or didn&apos;t
-              request this, just ignore and delete this message.
+            <Text style={infoText}>
+              If the button above doesn’t work, copy and paste the following
+              link into your browser:
+              <Link href={href}>link</Link>
             </Text>
           </Section>
         </Container>
@@ -71,10 +78,8 @@ const ResetPasswordTemplate = ({
   )
 }
 
-export default ResetPasswordTemplate
-
-export const ResetPassword = (props: ResetPasswordEmailProps) =>
-  render(<ResetPasswordTemplate {...props} />, { pretty: true })
+export const UserAccountVerification = (props: UserEmailTemplateProps) =>
+  render(<VerifyEmailTemplate {...props} />, { pretty: true })
 
 const infoSection = {
   marginBottom: '24px',

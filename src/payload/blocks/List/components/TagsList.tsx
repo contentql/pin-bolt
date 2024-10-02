@@ -1,23 +1,49 @@
 import { Tag } from '@payload-types'
+import {
+  FetchNextPageOptions,
+  InfiniteQueryObserverResult,
+} from '@tanstack/react-query'
+import { TRPCClientErrorLike } from '@trpc/client'
 import Link from 'next/link'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
+import Button from '@/components/common/Button'
 import { Skeleton } from '@/components/common/Skeleton'
+import { tagRouter } from '@/trpc/routers/tag'
 import { useMetadata } from '@/utils/metadataContext'
 
 interface TagsType extends Tag {
   count: number
 }
 
+type PropsType = {
+  tags?: TagsType[]
+  title?: string
+  isPending?: boolean
+  fetchNextPage?: (options?: FetchNextPageOptions) => Promise<
+    InfiniteQueryObserverResult<
+      {
+        pages: {
+          docs: TagsType[]
+          nextCursor?: number | undefined
+        }[]
+        pageParams: (number | undefined)[]
+      },
+      TRPCClientErrorLike<typeof tagRouter>
+    >
+  >
+  isFetchingNextPage?: boolean
+  hasNextPage?: boolean
+}
+
 const TagsList = ({
   tags,
   title,
   isPending,
-}: {
-  tags?: TagsType[]
-  title?: string
-  isPending?: boolean
-}) => {
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+}: PropsType) => {
   const { redirectionLinks } = useMetadata()
 
   const link = redirectionLinks?.tagLink
@@ -59,8 +85,9 @@ const TagsList = ({
       )}
 
       <div className='grid grid-cols-2 gap-8 lg:grid-cols-4'>
-        {tagsList.length > 0
-          ? tagsList.map(tag => (
+        {tagsList.length > 0 ? (
+          <>
+            {tagsList.map(tag => (
               <Link
                 href={`${slicedSlug}${tag.slug}`}
                 className='group block cursor-pointer'
@@ -83,8 +110,24 @@ const TagsList = ({
                 </p>
                 <p className='line-clamp-3 text-secondary'>Posts {tag.count}</p>
               </Link>
-            ))
-          : []}
+            ))}
+
+            <div className='col-span-2 mt-4 flex justify-center lg:col-span-4'>
+              {fetchNextPage && hasNextPage && !isPending && (
+                <Button
+                  size='sm'
+                  disabled={isFetchingNextPage}
+                  isLoading={isFetchingNextPage}
+                  variant='outline'
+                  onClick={() => fetchNextPage()}>
+                  Load more
+                </Button>
+              )}
+            </div>
+          </>
+        ) : (
+          []
+        )}
       </div>
     </section>
   )

@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/common/Dropdown'
+import { trpc } from '@/trpc/client'
 import { getInitials } from '@/utils/getInitials'
 import { signOut } from '@/utils/signOut'
 
@@ -19,6 +20,14 @@ import Button from './common/Button'
 
 const ProfileDropdown = ({ user }: { user: User | null }) => {
   const router = useRouter()
+  const { data } = trpc.user.getUser.useQuery(
+    undefined,
+    user
+      ? {
+          initialData: { ...user, collection: 'users' },
+        }
+      : undefined,
+  )
 
   if (!user) {
     return (
@@ -28,18 +37,16 @@ const ProfileDropdown = ({ user }: { user: User | null }) => {
     )
   }
 
-  const { imageUrl, username, displayName, role } = user
-
   const userDetails = {
     url:
-      imageUrl && typeof imageUrl !== 'string'
+      data?.imageUrl && typeof data?.imageUrl !== 'string'
         ? {
-            src: imageUrl.sizes?.thumbnail?.url!,
-            alt: `${imageUrl?.alt}`,
+            src: data?.imageUrl.sizes?.thumbnail?.url!,
+            alt: `${data?.imageUrl?.alt}`,
           }
         : undefined,
-    name: displayName || username,
-    isAdmin: role.includes('admin'),
+    name: data?.displayName || data?.username || '',
+    isAdmin: (data?.role || [])?.includes('admin'),
   }
 
   const initials = getInitials(userDetails.name!)
@@ -77,7 +84,7 @@ const ProfileDropdown = ({ user }: { user: User | null }) => {
         </Link>
 
         {userDetails.isAdmin && (
-          <Link href='/admin'>
+          <Link href='/admin' target='_blank'>
             <DropdownMenuItem className='cursor-pointer'>
               <UserRoundCog size={16} className='mr-2' />
               Admin

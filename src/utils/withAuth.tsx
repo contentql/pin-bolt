@@ -37,8 +37,7 @@ const withAuth = <P extends object>(
     const user = await getCurrentUser(headersList)
 
     if (!user) {
-      redirect(options.redirectPath)
-      return null
+      return redirect(options.redirectPath)
     }
 
     return <WrappedComponent user={user} {...props} />

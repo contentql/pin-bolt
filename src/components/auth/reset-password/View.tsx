@@ -5,11 +5,7 @@ interface Props {
 }
 
 const ResetPasswordView: React.FC<Props> = ({ token }) => {
-  return (
-    <div>
-      <ResetPasswordForm token={token} />
-    </div>
-  )
+  return <ResetPasswordForm token={token} />
 }
 
 export default ResetPasswordView

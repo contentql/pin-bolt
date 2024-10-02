@@ -8,37 +8,53 @@ import { publicProcedure, router } from '@/trpc'
 const payload = await getPayloadHMR({ config: configPromise })
 
 export const authorRouter = router({
-  getAllAuthorsWithCount: publicProcedure.query(async () => {
-    try {
-      const { docs: authors } = await payload.find({
-        collection: 'users',
-        where: {
-          role: {
-            equals: 'author',
-          },
-        },
-      })
+  getAllAuthorsWithCount: publicProcedure
+    .input(
+      z.object({
+        cursor: z.number().optional(),
+        limit: z.number().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const { cursor = 1, limit = 10 } = input // Default page to 1 if not provided
 
-      const authorBlogCounts = await Promise.all(
-        authors.map(async author => {
-          const count = await payload.count({
-            collection: 'blogs',
-            where: {
-              'author.value': {
-                equals: author.id,
-              },
+      try {
+        const { docs: authors, totalDocs } = await payload.find({
+          collection: 'users',
+          where: {
+            role: {
+              equals: 'author',
             },
-          })
-          return { ...author, ...count }
-        }),
-      )
+          },
+          limit: limit,
+          page: cursor,
+        })
 
-      return authorBlogCounts
-    } catch (error: any) {
-      console.error(error)
-      throw new Error(error.message)
-    }
-  }),
+        const authorBlogCounts = await Promise.all(
+          authors.map(async author => {
+            const count = await payload.count({
+              collection: 'blogs',
+              where: {
+                'author.value': {
+                  equals: author.id,
+                },
+              },
+            })
+            return { ...author, ...count }
+          }),
+        )
+
+        const hasNextPage = totalDocs > cursor * limit
+
+        return {
+          docs: authorBlogCounts,
+          nextCursor: hasNextPage ? cursor + 1 : undefined,
+        }
+      } catch (error: any) {
+        console.error(error)
+        throw new Error(error.message)
+      }
+    }),
 
   getBlogsByAuthorName: publicProcedure
     .input(

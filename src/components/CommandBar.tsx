@@ -151,7 +151,7 @@ const CommandBar = () => {
         </div>
 
         {/* here hiding the description when no results found or during API loading */}
-        {!['No results Found!', 'Searching'].includes(item.name) && (
+        {!['No results Found!', 'Searching'].includes(name) && (
           <p className='overflow-hidden text-ellipsis text-nowrap text-sm text-secondary'>
             {subtitle}
           </p>
@@ -199,7 +199,7 @@ const CommandBar = () => {
               </div>
 
               {results && results.length > 0 ? (
-                <div className='ml-4 mt-2'>
+                <div className='mx-4 mt-2'>
                   <KBarResults
                     items={results}
                     onRender={({ item, active }) => {

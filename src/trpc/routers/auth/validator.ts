@@ -16,8 +16,8 @@ export const SignUpSchema = z.object({
 export const SignInSchema = z.object({
   email: z
     .string()
-    .min(1, { message: 'E-mail is required' })
-    .email({ message: 'E-mail is invalid' }),
+    .min(1, { message: 'Email is required' })
+    .email({ message: 'Email is invalid' }),
   password: z
     .string()
     .min(1, { message: 'Password is required' })
@@ -41,4 +41,5 @@ export const UnlockSchema = z.object({
 
 export const VerifyEmailSchema = z.object({
   token: z.string(),
+  userId: z.string(),
 })

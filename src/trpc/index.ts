@@ -48,7 +48,7 @@ export const userProcedure = t.procedure.use(isAuthenticated)
 export const adminProcedure = t.procedure
   .use(isAuthenticated)
   .use(async ({ ctx, next }) => {
-    if (ctx.user.role !== 'admin') {
+    if (!ctx.user.role.includes('admin')) {
       throw new TRPCError({
         code: 'UNAUTHORIZED',
         message: 'you are not an admin',

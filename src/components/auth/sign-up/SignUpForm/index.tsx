@@ -1,13 +1,16 @@
 'use client'
 
-import { Input, LabelInputContainer } from '../../common/fields'
+import { LabelInputContainer } from '../../common/fields'
 import { zodResolver } from '@hookform/resolvers/zod'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import slugify from 'slugify'
 import { toast } from 'sonner'
 
 import { Alert, AlertDescription } from '@/components/common/Alert'
+import Button from '@/components/common/Button'
+import { Input } from '@/components/common/Input'
 import { trpc } from '@/trpc/client'
 
 import { SignUpFormData, SignUpFormSchema } from './validator'
@@ -40,10 +43,10 @@ const SignUpForm: React.FC = () => {
     isError: isSignUpError,
     error: signUpError,
     isSuccess: isSignUpSuccess,
+    variables,
   } = trpc.auth.signUp.useMutation({
     onSuccess: () => {
       reset()
-      router.push('/profile')
     },
     onError: () => {
       toast.error('Unable to create an account, try again!')
@@ -51,15 +54,24 @@ const SignUpForm: React.FC = () => {
   })
 
   const onSubmit = async (data: SignUpFormData) => {
-    const randomNum = Math.floor(Math.random() * (24 - 1 + 1)) + 1
-    const imageUrl = `/images/avatar/avatar_${randomNum}.jpg`
-
     const { confirmPassword, ...userData } = data
 
     signUpMutation({
       ...userData,
-      imageUrl,
     })
+  }
+
+  if (isSignUpSuccess) {
+    return (
+      <div className='flex w-full items-center justify-center'>
+        <Alert variant='success' className='max-w-md'>
+          <AlertDescription>
+            A email has be sent to {variables.email}, Please check your mail to
+            login
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
   }
 
   return (
@@ -78,28 +90,18 @@ const SignUpForm: React.FC = () => {
             </AlertDescription>
           </Alert>
         ) : null}
-        <h1 className='mb-6 text-center text-3xl font-semibold text-base-content'>
-          Sign Up
-        </h1>
-        <h1 className='mb-6 text-center text-sm font-semibold text-base-content'>
-          Join to Our Community with all time access and free{' '}
-        </h1>
+        <h1 className=' mb-1 text-3xl font-semibold'>Sign Up</h1>
+        <p className='mb-6 text-secondary'>
+          Join our Community with all time access and free{' '}
+        </p>
 
         <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
           <div>
             <LabelInputContainer className='mb-4'>
-              <div className='inline-flex justify-between'>
-                <label
-                  htmlFor='username'
-                  className='block text-sm font-medium text-base-content/70'>
-                  Username
-                </label>
-                {errors?.username && (
-                  <p className='text-sm text-error'>
-                    {errors.username.message}
-                  </p>
-                )}
-              </div>
+              <label htmlFor='username' className='block text-sm font-medium'>
+                Username
+              </label>
+
               <Input
                 {...register('username', {
                   onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -116,23 +118,21 @@ const SignUpForm: React.FC = () => {
                 type='text'
                 id='username'
                 name='username'
-                placeholder='Doe'
+                placeholder='john-doe'
               />
+
+              {errors?.username && (
+                <p className='text-sm text-danger'>{errors.username.message}</p>
+              )}
             </LabelInputContainer>
           </div>
 
           <div>
             <LabelInputContainer className='mb-4'>
-              <div className='inline-flex justify-between'>
-                <label
-                  htmlFor='email'
-                  className='block text-sm font-medium text-base-content/70'>
-                  E-Mail
-                </label>
-                {errors?.email && (
-                  <p className='text-sm text-error'>{errors.email.message}</p>
-                )}
-              </div>
+              <label htmlFor='email' className='block text-sm font-medium'>
+                Email
+              </label>
+
               <Input
                 {...register('email')}
                 type='text'
@@ -140,22 +140,17 @@ const SignUpForm: React.FC = () => {
                 name='email'
                 placeholder='john.doe@example.com'
               />
+              {errors?.email && (
+                <p className='text-sm text-danger'>{errors.email.message}</p>
+              )}
             </LabelInputContainer>
           </div>
           <div>
-            <LabelInputContainer className='mb-8'>
-              <div className='inline-flex justify-between'>
-                <label
-                  htmlFor='password'
-                  className='block text-sm font-medium text-base-content/70'>
-                  Password
-                </label>
-                {errors?.password && (
-                  <p className='text-sm text-error'>
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
+            <LabelInputContainer className='mb-4'>
+              <label htmlFor='password' className='block text-sm font-medium'>
+                Password
+              </label>
+
               <Input
                 {...register('password')}
                 type='password'
@@ -163,22 +158,19 @@ const SignUpForm: React.FC = () => {
                 name='password'
                 placeholder='● ● ● ● ● ● ● ● ●'
               />
+              {errors?.password && (
+                <p className='text-sm text-danger'>{errors.password.message}</p>
+              )}
             </LabelInputContainer>
           </div>
           <div>
             <LabelInputContainer className='mb-8'>
-              <div className='inline-flex justify-between'>
-                <label
-                  htmlFor='confirmPassword'
-                  className='block text-sm font-medium text-base-content/70'>
-                  Confirm Password
-                </label>
-                {errors?.confirmPassword && (
-                  <p className='text-sm text-error'>
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
-              </div>
+              <label
+                htmlFor='confirmPassword'
+                className='block text-sm font-medium'>
+                Confirm Password
+              </label>
+
               <Input
                 {...register('confirmPassword')}
                 type='password'
@@ -186,23 +178,30 @@ const SignUpForm: React.FC = () => {
                 name='confirmPassword'
                 placeholder='● ● ● ● ● ● ● ● ●'
               />
+              {errors?.confirmPassword && (
+                <p className='text-sm text-danger'>
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </LabelInputContainer>
           </div>
           <div>
-            <button
+            <Button
               type='submit'
-              className='w-full rounded-rounded-btn bg-primary  p-2 text-base-content transition-all duration-500 hover:bg-primary-focus focus:outline-none disabled:cursor-not-allowed disabled:bg-opacity-50'
+              className='w-full'
+              isLoading={isSignUpPending}
               disabled={isSignUpPending}>
-              {isSignUpPending ? 'Creating account...' : 'Sign Up'}
-            </button>
+              Sign Up
+            </Button>
           </div>
         </form>
-        <div className='mt-4 text-center text-sm text-base-content/70'>
+
+        <div className='mt-8 text-center text-sm text-secondary'>
           <p>
             Already have an account?{' '}
-            <a href='/sign-in' className='text-base-content hover:underline'>
-              SignIn here
-            </a>
+            <Link href='/sign-in' className='text-primary hover:underline'>
+              Sign In
+            </Link>
           </p>
         </div>
       </div>

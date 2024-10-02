@@ -1,10 +1,8 @@
-import { env } from '@env'
 import configPromise from '@payload-config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { TRPCError } from '@trpc/server'
 import { cookies } from 'next/headers'
 
-import { sendResetPasswordEmail } from '@/components/auth/reset-password/ResetPasswordForm/sendResetPasswordEmail'
 import { publicProcedure, router } from '@/trpc'
 
 import {
@@ -12,6 +10,7 @@ import {
   ResetPasswordSchema,
   SignInSchema,
   SignUpSchema,
+  VerifyEmailSchema,
 } from './validator'
 
 const payload = await getPayloadHMR({
@@ -55,7 +54,7 @@ export const authRouter = router({
         if (usernameExists.totalDocs > 0) {
           throw new TRPCError({
             code: 'CONFLICT',
-            message: `${username} already exists`,
+            message: `username ${username} already exists`,
           })
         }
 
@@ -65,31 +64,12 @@ export const authRouter = router({
             username,
             email,
             password,
+            role: ['user'],
           },
           locale: undefined,
           fallbackLocale: undefined,
           overrideAccess: true,
-          disableVerificationEmail: true, // Set to false if you want to enable verification email
-        })
-
-        const loginResult = await payload.login({
-          collection: 'users',
-          data: {
-            email,
-            password,
-          },
-          depth: 2,
-          locale: undefined,
-          fallbackLocale: undefined,
-          overrideAccess: false,
-          showHiddenFields: true,
-        })
-        const cookieStore = cookies()
-        cookieStore.set('payload-token', loginResult.token || '', {
-          httpOnly: true,
-          secure: process.env.NODE_ENV !== 'development',
-          maxAge: 60 * 60 * 24 * 7,
-          path: '/',
+          disableVerificationEmail: false, // Set to false if you want to enable verification email
         })
 
         return result
@@ -120,6 +100,7 @@ export const authRouter = router({
           overrideAccess: false,
           showHiddenFields: true,
         })
+
         const cookieStore = cookies()
         cookieStore.set('payload-token', result.token || '', {
           httpOnly: true,
@@ -151,7 +132,7 @@ export const authRouter = router({
           },
         })
 
-        const { docs: users, totalDocs: usersCount } = await payload.find({
+        const { totalDocs: usersCount } = await payload.find({
           collection: 'users',
           where: {
             email: {
@@ -165,12 +146,6 @@ export const authRouter = router({
             code: 'NOT_FOUND',
             message: 'User not found',
           })
-        }
-
-        const user = users.at(0)
-
-        if (env.RESEND_SENDER_EMAIL && user?.username) {
-          await sendResetPasswordEmail(email, user?.username, token)
         }
 
         return { success: true, token }
@@ -250,4 +225,33 @@ export const authRouter = router({
   //         })
   //       }
   //     }),
+
+  verifyEmail: publicProcedure
+    .input(VerifyEmailSchema)
+    .query(async ({ input }) => {
+      const { token, userId } = input
+
+      try {
+        const result = await payload.verifyEmail({
+          collection: 'users',
+          token,
+        })
+
+        await payload.update({
+          collection: 'users',
+          id: userId,
+          data: {
+            emailVerified: new Date().toDateString(),
+          },
+        })
+
+        return { success: result }
+      } catch (error: any) {
+        console.error('Error verifying email:', error)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error.message,
+        })
+      }
+    }),
 })

@@ -11,13 +11,13 @@ export const SignUpFormSchema = z
       }),
     email: z
       .string()
-      .min(1, { message: 'E-mail is required' })
-      .email({ message: 'E-mail is invalid' }),
+      .min(1, { message: 'Email is required' })
+      .email({ message: 'Email is invalid' }),
     password: z
       .string()
-      .min(6, { message: 'Password must be at least 6 characters long' }),
+      .min(6, { message: 'Password needs at least 6 characters' }),
     confirmPassword: z.string().min(6, {
-      message: 'Confirm Password must be at least 6 characters long',
+      message: 'Confirm Password needs at least 6 characters',
     }),
     imageUrl: z.string().optional(),
   })
