@@ -1,39 +1,118 @@
 import { collectionSlug } from '@contentql/core'
 import configPromise from '@payload-config'
+import { Page } from '@payload-types'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { Ora } from 'ora'
+import path from 'path'
 
 const payload = await getPayloadHMR({ config: configPromise })
 
-export const seedSiteSettings = async () => {
+export const seedSiteSettings = async ({
+  authorDetailsLink,
+  tagDetailsLink,
+  blogDetailsLink,
+  authorPages,
+  blogsPage,
+  tagsPages,
+  spinner,
+}: {
+  authorDetailsLink: Page
+  tagDetailsLink: Page
+  blogDetailsLink: Page
+  spinner: Ora
+  tagsPages: Page
+  blogsPage: Page
+  authorPages: Page
+}) => {
+  spinner.start('Started creating site-settings...')
+
   try {
+    const ogImageUrl = await payload.create({
+      collection: 'media',
+      data: {
+        alt: 'og-image',
+      },
+      filePath: path.join(process.cwd(), '/public/images/seed/og-image.png'),
+    })
+
+    const faviconUrl = await payload.create({
+      collection: 'media',
+      data: {
+        alt: 'og-image',
+      },
+      filePath: path.join(process.cwd(), '/public/images/seed/bolt-logo.png'),
+    })
+
     const result = await payload.updateGlobal({
       slug: collectionSlug['site-settings'],
       data: {
         general: {
-          title: 'ContentQL Theme Template',
-          description: 'Create your theme by using the our template',
+          title: 'Bolt',
+          description: 'A Youtuber & Podcaster theme',
           keywords: ['ContentQL', 'Payload CMS', 'NextJS'],
-          // ! add favicon, og-image-url
-          faviconUrl: '',
-          ogImageUrl: '',
+          faviconUrl: faviconUrl.id,
+          ogImageUrl: ogImageUrl.id,
         },
         navbar: {
           logo: {
-            imageUrl: '',
-            description: 'ContentQL Logo',
+            imageUrl: faviconUrl.id,
+            description: 'Bolt Logo',
             height: 24,
             width: 24,
           },
           menuLinks: [
             {
+              group: false,
+              menuLink: {
+                type: 'reference',
+                label: '💎 Posts',
+                page: {
+                  relationTo: 'pages',
+                  value: blogsPage.id,
+                },
+              },
+
+              menuLinkGroup: {
+                groupLinks: [],
+              },
+            },
+            {
+              group: false,
+              menuLink: {
+                type: 'reference',
+                label: '👥 Team',
+                page: {
+                  relationTo: 'pages',
+                  value: authorPages.id,
+                },
+              },
+
+              menuLinkGroup: {
+                groupLinks: [],
+              },
+            },
+            {
+              group: false,
+              menuLink: {
+                type: 'reference',
+                label: '🔮 Categories',
+                page: {
+                  relationTo: 'pages',
+                  value: tagsPages.id,
+                },
+              },
+
+              menuLinkGroup: {
+                groupLinks: [],
+              },
+            },
+            {
               group: true,
               menuLink: {
-                type: 'custom',
-                newTab: true,
-                label: '',
+                type: 'reference',
               },
               menuLinkGroup: {
-                groupTitle: 'Learn',
+                groupTitle: '📖 Learn',
 
                 groupLinks: [
                   {
@@ -48,37 +127,19 @@ export const seedSiteSettings = async () => {
                     label: 'Twitter',
                     url: 'https://twitter.com',
                   },
-                  {
-                    type: 'reference',
-                    label: 'About',
-                    // ! add page-id here
-                    page: {
-                      relationTo: 'pages',
-                      value: '66ebd1b66b06e5c5dffd2c7b',
-                    },
-                  },
                 ],
               },
             },
-
             {
               group: false,
-
               menuLink: {
-                type: 'reference',
-                label: 'Home',
-
-                // ! add page-id here
-                page: {
-                  relationTo: 'pages',
-                  value: '66ebd1b66b06e5c5dffd2c7b',
-                },
+                type: 'custom',
+                label: '🗺️ Style Guide',
+                url: '/post/style-guide-all-supported-elements',
               },
-
               menuLinkGroup: {
                 groupLinks: [],
               },
-              id: '66ecd872fe8998361b64212c',
             },
           ],
         },
@@ -86,66 +147,62 @@ export const seedSiteSettings = async () => {
           logo: {
             height: 24,
             width: 24,
-            description: 'Content Creations made Simple',
-            // ! add image data here
-            imageUrl: '',
+            description: 'Youtuber & Podcaster',
+            imageUrl: faviconUrl.id,
           },
           copyright: '© 2024 all rights reserved',
           footerLinks: [
             {
               group: true,
               menuLink: {
-                type: 'custom',
-                newTab: true,
-                label: '',
+                type: 'reference',
               },
               menuLinkGroup: {
-                groupTitle: 'Learn',
+                groupTitle: '📚 Content',
 
                 groupLinks: [
                   {
-                    type: 'custom',
-                    newTab: true,
-                    label: 'Youtube',
-                    url: 'https://youtube.com',
-                  },
-                  {
-                    type: 'custom',
-                    newTab: true,
-                    label: 'Twitter',
-                    url: 'https://twitter.com',
+                    type: 'reference',
+                    label: 'Posts',
+                    page: {
+                      relationTo: 'pages',
+                      value: blogsPage.id,
+                    },
                   },
                   {
                     type: 'reference',
-                    label: 'About',
-                    // ! add page-id here
+                    label: 'Categories',
                     page: {
                       relationTo: 'pages',
-                      value: '66ebd1b66b06e5c5dffd2c7b',
+                      value: tagsPages.id,
                     },
                   },
                 ],
               },
             },
-
             {
-              group: false,
-
+              group: true,
               menuLink: {
                 type: 'reference',
-                label: 'Home',
-
-                // ! add page-id here
-                page: {
-                  relationTo: 'pages',
-                  value: '66ebd1b66b06e5c5dffd2c7b',
-                },
               },
-
               menuLinkGroup: {
-                groupLinks: [],
+                groupTitle: '🔗 Links',
+
+                groupLinks: [
+                  {
+                    type: 'custom',
+                    label: 'Youtube',
+                    newTab: true,
+                    url: 'https://youtube.com',
+                  },
+                  {
+                    type: 'custom',
+                    label: 'Podcast',
+                    newTab: true,
+                    url: 'https://spotify.com',
+                  },
+                ],
               },
-              id: '66ecd872fe8998361b64212c',
             },
           ],
           socialLinks: [
@@ -157,13 +214,28 @@ export const seedSiteSettings = async () => {
               platform: 'github',
               value: 'https://github.com/contentql',
             },
+            {
+              platform: 'twitter',
+              value: 'https://x.com',
+            },
+            {
+              platform: 'instagram',
+              value: 'https://instagram.com',
+            },
           ],
+        },
+        redirectionLinks: {
+          authorLink: authorDetailsLink.id,
+          blogLink: blogDetailsLink.id,
+          tagLink: tagDetailsLink.id,
         },
       },
     })
 
+    spinner.succeed('Successfully creating site-settings...')
     return result
   } catch (error) {
+    spinner.fail('Failed creating site-settings...')
     throw error
   }
 }

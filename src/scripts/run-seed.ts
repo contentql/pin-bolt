@@ -20,6 +20,7 @@ import { seedBlogDetailsPage } from '@/seed/blog-details-page'
 import { seedBlogs } from '@/seed/blogs'
 import { seedBlogsPage } from '@/seed/blogs-page'
 import { seedHomePage } from '@/seed/home-page'
+import { seedSiteSettings } from '@/seed/site-settings/seed'
 import { seedTagDetailsPage } from '@/seed/tag-details-page'
 import { seedTags } from '@/seed/tags'
 import { seedTagsPage } from '@/seed/tags-page'
@@ -111,20 +112,17 @@ const executeSeeding = async () => {
     })
     const authors = await seedAuthors(spinner)
     const tags = await seedTags(spinner)
-    const blogs = await seedBlogs({ tags, authors, spinner })
 
-    // await seedAndLog('Seeding Tag Details Page', seedTagDetailsPage, spinner)
-    // await seedAndLog('Seeding Tags', seedTags, spinner)
-    // await seedAndLog('Seeding Authors Page', seedAuthorsPage, spinner)
-    // await seedAndLog(
-    //   'Seeding Author Details Page',
-    //   seedAuthorDetailsPage,
-    //   spinner,
-    // )
-    // await seedAndLog('Seeding Authors', seedAuthors, spinner)
-    // await seedAndLog('Seeding Blogs Page', seedBlogsPage, spinner)
-    // await seedAndLog('Seeding Blog Details Page', seedBlogDetailsPage, spinner)
-    // await seedAndLog('Seeding Blogs', seedBlogs, spinner)
+    await seedBlogs({ tags, authors, spinner })
+    await seedSiteSettings({
+      authorDetailsLink: authorsDetailsPage,
+      blogDetailsLink: blogsDetailsPage,
+      tagDetailsLink: tagsDetailsPage,
+      spinner,
+      tagsPages: tagsPage,
+      blogsPage: blogsPage,
+      authorPages: authorsPage,
+    })
   } catch (error) {
     console.error(chalk.red('Error running seeds:'), error)
   } finally {

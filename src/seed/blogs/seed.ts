@@ -3,9 +3,171 @@ import { Tag, User } from '@payload-types'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { Ora } from 'ora'
 
-import { blogListData } from './data'
+import { blogListData, dynamicAccessBlogData, styleGuideBlogData } from './data'
 
 const payload = await getPayloadHMR({ config: configPromise })
+
+const createStyleGuideBlog = async ({
+  tags,
+  authors,
+}: {
+  tags: Tag[]
+  authors: User[]
+}) => {
+  const {
+    alt,
+    authorsList,
+    content,
+    contentAlt,
+    contentURL,
+    description,
+    posterURL,
+    slug,
+    tagsList,
+    title,
+  } = styleGuideBlogData
+
+  const posterImage = await payload.create({
+    collection: 'media',
+    data: {
+      alt,
+    },
+    filePath: posterURL,
+  })
+
+  const contentImage = await payload.create({
+    collection: 'media',
+    data: {
+      alt: contentAlt,
+    },
+    filePath: contentURL,
+  })
+
+  const styleGuideContent = content(contentImage.id)
+
+  const styleGuideAuthors = authorsList
+    .map(authorSlug => {
+      const sameAuthor = authors.find(author => author.username === authorSlug)
+
+      if (sameAuthor) {
+        return {
+          relationTo: 'users',
+          value: sameAuthor.id,
+        }
+      }
+    })
+    .filter(
+      (author): author is { relationTo: 'users'; value: string } => !!author,
+    )
+
+  const styleGuideTags = tagsList
+    .map(tagSlug => {
+      const sameTag = tags.find(tag => tag.slug === tagSlug)
+
+      if (sameTag) {
+        return {
+          relationTo: 'tags',
+          value: sameTag.id,
+        }
+      }
+    })
+    .filter((tag): tag is { relationTo: 'tags'; value: string } => !!tag)
+
+  await payload.create({
+    collection: 'blogs',
+    data: {
+      blogImage: posterImage.id,
+      content: styleGuideContent,
+      description,
+      slug,
+      title,
+      author: styleGuideAuthors,
+      tags: styleGuideTags,
+      _status: 'published',
+    },
+  })
+}
+
+const createDynamicAccessBlog = async ({
+  tags,
+  authors,
+}: {
+  tags: Tag[]
+  authors: User[]
+}) => {
+  const {
+    alt,
+    authorsList,
+    content,
+    contentAlt,
+    contentURL,
+    description,
+    posterURL,
+    slug,
+    tagsList,
+    title,
+  } = dynamicAccessBlogData
+
+  const posterImage = await payload.create({
+    collection: 'media',
+    data: {
+      alt,
+    },
+    filePath: posterURL,
+  })
+
+  const contentImage = await payload.create({
+    collection: 'media',
+    data: {
+      alt: contentAlt,
+    },
+    filePath: contentURL,
+  })
+
+  const dynamicAccessContent = content(contentImage.id)
+
+  const dynamicAccessAuthors = authorsList
+    .map(authorSlug => {
+      const sameAuthor = authors.find(author => author.username === authorSlug)
+
+      if (sameAuthor) {
+        return {
+          relationTo: 'users',
+          value: sameAuthor.id,
+        }
+      }
+    })
+    .filter(
+      (author): author is { relationTo: 'users'; value: string } => !!author,
+    )
+
+  const dynamicAccessTags = tagsList
+    .map(tagSlug => {
+      const sameTag = tags.find(tag => tag.slug === tagSlug)
+
+      if (sameTag) {
+        return {
+          relationTo: 'tags',
+          value: sameTag.id,
+        }
+      }
+    })
+    .filter((tag): tag is { relationTo: 'tags'; value: string } => !!tag)
+
+  await payload.create({
+    collection: 'blogs',
+    data: {
+      blogImage: posterImage.id,
+      content: dynamicAccessContent,
+      description,
+      slug,
+      title,
+      author: dynamicAccessAuthors,
+      tags: dynamicAccessTags,
+      _status: 'published',
+    },
+  })
+}
 
 const seed = async ({
   spinner,
@@ -19,6 +181,7 @@ const seed = async ({
   spinner.start(`Started creating blogs...`)
 
   try {
+    // creating blogs which don't have any images in middle
     for await (const blog of blogListData) {
       const {
         alt,
@@ -84,6 +247,10 @@ const seed = async ({
         },
       })
     }
+
+    await createStyleGuideBlog({ authors, tags })
+
+    await createDynamicAccessBlog({ authors, tags })
 
     spinner.succeed(`Successfully created blogs...`)
   } catch (error) {
