@@ -7,6 +7,7 @@ const ListConfig: Block = {
     singular: 'List Block',
     plural: 'List Blocks',
   },
+  imageURL: '/images/blocks/list-block.png',
   fields: [
     {
       name: 'title',

@@ -1,3 +1,4 @@
+import { isAdmin } from '../access'
 import { CustomCollectionConfig } from '@contentql/core'
 
 export const subscribersCollection: CustomCollectionConfig = {
@@ -11,4 +12,10 @@ export const subscribersCollection: CustomCollectionConfig = {
       hasMany: false,
     },
   ],
+  access: {
+    read: isAdmin,
+    update: isAdmin,
+    create: isAdmin,
+    delete: isAdmin,
+  },
 }

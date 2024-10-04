@@ -7,6 +7,7 @@ const NewsletterConfig: Block = {
     singular: 'Newsletter Block',
     plural: 'Newsletter Blocks',
   },
+  imageURL: '/images/blocks/newsletter-block.png',
   fields: [
     {
       type: 'text',

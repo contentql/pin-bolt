@@ -7,6 +7,7 @@ const HomeConfig: Block = {
     singular: 'Home Block',
     plural: 'Home Blocks',
   },
+  imageURL: '/images/blocks/hero-block.png',
   fields: [
     {
       name: 'heading',

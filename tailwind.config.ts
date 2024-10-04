@@ -64,9 +64,19 @@ const config: Config = {
           '0%': { filter: 'blur(16px)' },
           '100%': { filter: 'blur(0px)' },
         },
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
       },
       animation: {
         'image-blur': 'image-blur-frames 0.1s ease-in',
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },

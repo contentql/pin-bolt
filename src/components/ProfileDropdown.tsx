@@ -12,13 +12,26 @@ import {
   DropdownMenuTrigger,
 } from '@/components/common/Dropdown'
 import { trpc } from '@/trpc/client'
+import { GenerateMenuLinksType } from '@/utils/generateMenuLinks'
 import { getInitials } from '@/utils/getInitials'
 import { signOut } from '@/utils/signOut'
 
+import HamburgerMenu from './HamburgerMenu'
 import { Avatar, AvatarFallback, AvatarImage } from './common/Avatar'
 import Button from './common/Button'
 
-const ProfileDropdown = ({ user }: { user: User | null }) => {
+const variants = {
+  visible: { opacity: 1, scale: 1 },
+  hidden: { opacity: 0, scale: 0.5 },
+}
+
+const ProfileDropdown = ({
+  user,
+  navLinks,
+}: {
+  user: User | null
+  navLinks: GenerateMenuLinksType[]
+}) => {
   const router = useRouter()
   const { data } = trpc.user.getUser.useQuery(
     undefined,
@@ -28,14 +41,6 @@ const ProfileDropdown = ({ user }: { user: User | null }) => {
         }
       : undefined,
   )
-
-  if (!user) {
-    return (
-      <Link href='/sign-in'>
-        <Button size='sm'>Sign in</Button>
-      </Link>
-    )
-  }
 
   const userDetails = {
     url:
@@ -68,36 +73,55 @@ const ProfileDropdown = ({ user }: { user: User | null }) => {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className='flex items-center gap-1'>
-        <Avatar>
-          <AvatarImage src={userDetails.url?.src} />
-          <AvatarFallback className='text-sm'>{initials}</AvatarFallback>
-        </Avatar>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='z-[60] max-w-56' align='end'>
-        <Link href='/profile'>
-          <DropdownMenuItem className='cursor-pointer'>
-            <UserRound size={16} className='mr-2' />
-            Profile
-          </DropdownMenuItem>
-        </Link>
+    <>
+      {data ? (
+        <DropdownMenu>
+          <DropdownMenuTrigger className='hidden items-center gap-1 lg:flex'>
+            <Avatar>
+              <AvatarImage src={userDetails.url?.src} />
+              <AvatarFallback className='text-sm'>{initials}</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
 
-        {userDetails.isAdmin && (
-          <Link href='/admin' target='_blank'>
-            <DropdownMenuItem className='cursor-pointer'>
-              <UserRoundCog size={16} className='mr-2' />
-              Admin
+          <DropdownMenuContent className='z-[60] max-w-56' align='end'>
+            <Link href='/profile'>
+              <DropdownMenuItem className='cursor-pointer'>
+                <UserRound size={16} className='mr-2' />
+                Profile
+              </DropdownMenuItem>
+            </Link>
+
+            {userDetails.isAdmin && (
+              <Link href='/admin' target='_blank'>
+                <DropdownMenuItem className='cursor-pointer'>
+                  <UserRoundCog size={16} className='mr-2' />
+                  Admin
+                </DropdownMenuItem>
+              </Link>
+            )}
+
+            <DropdownMenuItem
+              className='cursor-pointer'
+              onClick={handleSignOut}>
+              <LogOut size={16} className='mr-2' />
+              Log out
             </DropdownMenuItem>
-          </Link>
-        )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Link href='/sign-in'>
+          <Button size='sm'>Sign in</Button>
+        </Link>
+      )}
 
-        <DropdownMenuItem className='cursor-pointer' onClick={handleSignOut}>
-          <LogOut size={16} className='mr-2' />
-          Log out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      <HamburgerMenu
+        data={data}
+        userDetails={userDetails}
+        handleSignOut={handleSignOut}
+        initials={initials}
+        navLinks={navLinks}
+      />
+    </>
   )
 }
 

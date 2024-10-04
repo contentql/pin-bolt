@@ -116,7 +116,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
   return (
     <>
       <section className='grid gap-16 lg:grid-cols-[auto_1fr]'>
-        <article className='prose-headings:font prose prose-purple dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:no-underline prose-a:after:content-["↗"] hover:prose-a:text-primary/90 hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:rounded prose-img:bg-secondary dark:prose-pre:bg-primary/10 [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded'>
+        <article className='prose-headings:font prose prose-purple dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:no-underline prose-a:after:content-["↗"] hover:prose-a:text-primary/90 hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:rounded dark:prose-pre:bg-primary/10 [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded'>
           <span
             className='not-prose cursor-pointer text-sm text-secondary'
             onClick={() => router.back()}>
@@ -202,7 +202,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
             <time>{format(blog.createdAt, 'LLL d, yyyy')}</time>
           </div>
 
-          <div className='not-prose relative mb-16 mt-8 aspect-square max-h-[30rem] w-full overflow-hidden rounded'>
+          <div className='not-prose relative mb-16 mt-8 aspect-video max-h-[30rem] w-full overflow-hidden rounded'>
             <Image
               src={imageURL.url}
               alt={imageURL.alt || `${blog.title} cover pic`}
