@@ -20,8 +20,6 @@ export async function generateMetadata({
 
     const metadata = pageData.meta
 
-    console.log({ pageData })
-
     if (metadata && Object.keys(metadata).length) {
       let ogImage = []
       const title = metadata.title
@@ -29,7 +27,7 @@ export async function generateMetadata({
 
       if (metadata.image && typeof metadata.image !== 'string') {
         ogImage.push({
-          url: metadata.image.sizes?.blogImageSize2?.url!,
+          url: metadata.image?.url!,
           height: 630,
           width: 1200,
           alt: `og image`,

@@ -45,7 +45,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
   const imageURL =
     typeof blog.blogImage !== 'string'
       ? {
-          src: blog.blogImage.sizes?.blogImageSize2?.url!,
+          src: blog.blogImage?.url!,
           alt: `${blog.blogImage.alt} `,
         }
       : undefined

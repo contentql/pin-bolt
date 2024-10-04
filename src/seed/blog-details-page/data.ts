@@ -6,13 +6,19 @@ export type BlogDetailsPageDataType = Omit<
 >
 
 export const blogDetailsPageData: BlogDetailsPageDataType = {
-  title: 'Blog Details',
+  title: 'post-details',
   isHome: false,
   _status: 'published',
   layout: [
     {
       blockType: 'Details',
       collectionSlug: 'blogs',
+    },
+    {
+      blockType: 'Newsletter',
+      heading: '🔔 Subscribe to our Newsletter',
+      description: 'Stay up to date with our latest news and products',
+      buttonText: 'Subscribe',
     },
   ],
 }

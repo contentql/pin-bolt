@@ -1,70 +1,63 @@
 import configPromise from '@payload-config'
 import { Tag } from '@payload-types'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { Ora } from 'ora'
 
-import { getRandomInt } from '@/utils/getRandomInt'
-
-import { TagDataType, tagsData, tagsImagesData } from './data'
+import { tagsData, tagsImagesData } from './data'
 
 const payload = await getPayloadHMR({ config: configPromise })
 
-const seed = async (): Promise<(string | Tag)[]> => {
+const seed = async (spinner: Ora) => {
+  spinner.start(`Started uploading tags images...`)
+
   try {
-    const imagesResult = await Promise.allSettled(
-      tagsImagesData.map(tagImageData =>
-        payload.create({
+    const tagImages: { id: string; name: string }[] = []
+    const tagList: Tag[] = []
+
+    // looping through images list uploading to media collection & pushing the result to tagImages array
+    for await (const details of tagsImagesData) {
+      const { alt, imageURL, name } = details
+
+      try {
+        const tagImage = await payload.create({
           collection: 'media',
           data: {
-            alt: tagImageData.alt,
+            alt,
           },
-          filePath: tagImageData.filePath,
-        }),
-      ),
-    )
+          filePath: imageURL,
+        })
 
-    const formattedImagesResult = imagesResult
-      .map(result =>
-        result.status === 'fulfilled'
-          ? result.value
-          : `Failed to seed: ${result.reason}`,
-      )
-      .filter(result => typeof result !== 'string')
-
-    const formattedTagsData: TagDataType[] = tagsData.map(tagData => {
-      const tagImageId = formattedImagesResult.at(
-        getRandomInt(0, formattedImagesResult.length - 1),
-      )?.id
-
-      return {
-        ...tagData,
-        tagImage: tagImageId!,
+        tagImages.push({ id: tagImage.id, name })
+      } catch (error) {
+        spinner.fail(`Failed tp upload tags images...`)
+        throw error
       }
-    })
+    }
+    spinner.succeed(`Completed uploading tag images...`)
 
-    const results = await Promise.allSettled(
-      formattedTagsData.map(tagData =>
-        payload.create({
+    spinner.succeed(`Started creating tags...`)
+    // lopping through authors creating authors with images and pushing the author details to usersList
+    for await (const details of tagsData) {
+      const imageId = tagImages.find(image => {
+        return image.name === details.slug
+      })
+
+      try {
+        const tag = await payload.create({
           collection: 'tags',
-          data: tagData,
-        }),
-      ),
-    )
+          data: { ...details, tagImage: imageId?.id ?? '' },
+          overrideAccess: true,
+        })
 
-    const formattedResults = results.map(result =>
-      result.status === 'fulfilled'
-        ? result.value
-        : `Failed to seed: ${result.reason}`,
-    )
-
-    const errors = formattedResults.filter(result => typeof result === 'string')
-
-    if (errors.length > 0) {
-      throw new Error(
-        `Seeding failed with the following errors:\n${errors.join('\n')}`,
-      )
+        tagList.push(tag)
+      } catch (error) {
+        spinner.fail(`Failed creating tags...`)
+        throw error
+      }
     }
 
-    return formattedResults
+    spinner.succeed(`Successfully created tags...`)
+    return tagList
   } catch (error) {
     throw error
   }

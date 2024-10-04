@@ -66,38 +66,6 @@ const dropDatabase = async (): Promise<boolean> => {
   }
 }
 
-// Function to execute the seeding process
-const executeSeeding = async (): Promise<void> => {
-  const spinner = ora({
-    text: 'Starting the seeding process...',
-    color: 'cyan',
-    spinner: 'dots',
-  }).start()
-
-  try {
-    await seedAndLog('Seeding Home Page', seedHomePage, spinner)
-    await seedAndLog('Seeding Tags Page', seedTagsPage, spinner)
-    await seedAndLog('Seeding Tag Details Page', seedTagDetailsPage, spinner)
-    await seedAndLog('Seeding Tags', seedTags, spinner)
-    await seedAndLog('Seeding Authors Page', seedAuthorsPage, spinner)
-    await seedAndLog(
-      'Seeding Author Details Page',
-      seedAuthorDetailsPage,
-      spinner,
-    )
-    await seedAndLog('Seeding Authors', seedAuthors, spinner)
-    await seedAndLog('Seeding Blogs Page', seedBlogsPage, spinner)
-    await seedAndLog('Seeding Blog Details Page', seedBlogDetailsPage, spinner)
-    await seedAndLog('Seeding Blogs', seedBlogs, spinner)
-  } catch (error) {
-    console.error(chalk.red('Error running seeds:'), error)
-  } finally {
-    spinner.stop()
-    console.log(chalk.green('Seeding completed.'))
-    process.exit(0)
-  }
-}
-
 // Function to log the seeding process with spinner and messages
 const seedAndLog = async <T>(
   message: string,
@@ -111,6 +79,58 @@ const seedAndLog = async <T>(
   } catch (error) {
     spinner.fail(`${message} ${chalk.red(figures.cross)} Failed.`)
     throw error
+  }
+}
+
+// Function to execute the seeding process
+const executeSeeding = async () => {
+  const spinner = ora({
+    text: 'Starting the seeding process...',
+    color: 'cyan',
+    spinner: 'dots',
+  }).start()
+
+  try {
+    const homePage = await seedHomePage(spinner)
+    const tagsPage = await seedTagsPage(spinner)
+    const tagsDetailsPage = await seedTagDetailsPage({
+      spinner,
+      id: tagsPage.id,
+    })
+
+    const blogsPage = await seedBlogsPage(spinner)
+    const blogsDetailsPage = await seedBlogDetailsPage({
+      spinner,
+      id: blogsPage.id,
+    })
+
+    const authorsPage = await seedAuthorsPage(spinner)
+    const authorsDetailsPage = await seedAuthorDetailsPage({
+      spinner,
+      id: authorsPage.id,
+    })
+    const authors = await seedAuthors(spinner)
+    const tags = await seedTags(spinner)
+    const blogs = await seedBlogs({ tags, authors, spinner })
+
+    // await seedAndLog('Seeding Tag Details Page', seedTagDetailsPage, spinner)
+    // await seedAndLog('Seeding Tags', seedTags, spinner)
+    // await seedAndLog('Seeding Authors Page', seedAuthorsPage, spinner)
+    // await seedAndLog(
+    //   'Seeding Author Details Page',
+    //   seedAuthorDetailsPage,
+    //   spinner,
+    // )
+    // await seedAndLog('Seeding Authors', seedAuthors, spinner)
+    // await seedAndLog('Seeding Blogs Page', seedBlogsPage, spinner)
+    // await seedAndLog('Seeding Blog Details Page', seedBlogDetailsPage, spinner)
+    // await seedAndLog('Seeding Blogs', seedBlogs, spinner)
+  } catch (error) {
+    console.error(chalk.red('Error running seeds:'), error)
+  } finally {
+    spinner.stop()
+    console.log(chalk.green('Seeding completed.'))
+    process.exit(0)
   }
 }
 

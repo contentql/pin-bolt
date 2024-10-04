@@ -6,7 +6,7 @@ export type TagDetailsPageDataType = Omit<
 >
 
 export const tagDetailsPageData: TagDetailsPageDataType = {
-  title: 'Tag Details',
+  title: 'category-details',
   isHome: false,
   _status: 'published',
   layout: [

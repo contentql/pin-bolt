@@ -6,7 +6,7 @@ export type authorDetailsPageDataType = Omit<
 >
 
 export const authorDetailsPageData: authorDetailsPageDataType = {
-  title: 'Authors Details',
+  title: 'team-details',
   isHome: false,
   _status: 'published',
   layout: [

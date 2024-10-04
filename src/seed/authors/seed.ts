@@ -1,18 +1,51 @@
 import configPromise from '@payload-config'
 import { User } from '@payload-types'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { Ora } from 'ora'
 
-import { authorsData } from './data'
+import { authorsData, authorsImageList } from './data'
 
 const payload = await getPayloadHMR({ config: configPromise })
 
-const seed = async (): Promise<(string | User)[]> => {
+const seed = async (spinner: Ora) => {
+  spinner.start(`Started uploading author images...`)
+
   try {
-    const results = await Promise.allSettled(
-      authorsData.map(authorData =>
-        payload.create({
+    const authorsImages: { id: string; name: string }[] = []
+    const usersList: User[] = []
+
+    // looping through images list uploading to media collection & pushing the result to authorsImages array
+    for await (const details of authorsImageList) {
+      const { alt, imageURL, name } = details
+
+      try {
+        const authorImage = await payload.create({
+          collection: 'media',
+          data: {
+            alt,
+          },
+          filePath: imageURL,
+        })
+
+        authorsImages.push({ id: authorImage.id, name })
+      } catch (error) {
+        spinner.fail(`Failed tp upload author images...`)
+        throw error
+      }
+    }
+    spinner.succeed(`Completed uploading author images...`)
+
+    spinner.succeed(`Started creating author accounts...`)
+    // lopping through authors creating authors with images and pushing the author details to usersList
+    for await (const details of authorsData) {
+      const imageId = authorsImages.find(image => {
+        return image.name === details.username
+      })
+
+      try {
+        const user = await payload.create({
           collection: 'users',
-          data: authorData,
+          data: { ...details, imageUrl: imageId?.id ?? '' },
           locale: undefined,
           fallbackLocale: undefined,
           overrideAccess: true,
@@ -20,25 +53,17 @@ const seed = async (): Promise<(string | User)[]> => {
           context: {
             preventRoleOverride: true,
           },
-        }),
-      ),
-    )
+        })
 
-    const formattedResults = results.map(result =>
-      result.status === 'fulfilled'
-        ? result.value
-        : `Failed to seed: ${result.reason}`,
-    )
-
-    const errors = formattedResults.filter(result => typeof result === 'string')
-
-    if (errors.length > 0) {
-      throw new Error(
-        `Seeding failed with the following errors:\n${errors.join('\n')}`,
-      )
+        usersList.push(user)
+      } catch (error) {
+        spinner.fail(`Failed creating author accounts...`)
+        throw error
+      }
     }
 
-    return formattedResults
+    spinner.succeed(`Successfully created author accounts...`)
+    return usersList
   } catch (error) {
     throw error
   }

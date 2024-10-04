@@ -2,65 +2,82 @@ import path from 'path'
 import { RequiredDataFromCollectionSlug } from 'payload'
 
 export type TagDataType = RequiredDataFromCollectionSlug<'tags'>
-export type TagImageType = {
-  alt: string
-  filePath: string
-}
 
 export const tagsData: TagDataType[] = [
   {
-    title: 'Welcome',
+    title: 'AI Insights',
     color: 'blue',
-    description: 'This is a welcome tag',
+    description: 'Stuff related to latest tech news🤯',
     tagImage: '',
     _status: 'published',
+    slug: 'ai-insights',
   },
 
   {
-    title: 'Management',
-    color: 'purple',
-    description: 'This is a Project Management tag',
+    title: 'Javascript',
+    color: 'yellow',
+    description: 'Best programming trips & tricks related to javascript🔥',
     tagImage: '',
     _status: 'published',
+    slug: 'javascript',
   },
   {
-    title: 'AI Insights',
-    color: 'indigo',
-    description: 'This is a AI Insights tag',
-    tagImage: '',
-    _status: 'published',
-  },
-  {
-    title: 'Enterprise',
+    title: 'Coding',
     color: 'green',
-    description: 'This is a Enterprise tag',
+    description: 'All tips and tricks related to coding🧑‍💻',
     tagImage: '',
     _status: 'published',
+    slug: 'coding',
+  },
+  {
+    title: 'Productivity',
+    color: 'purple',
+    description:
+      'This tag will help you find the productivity tools🛠️ i use everyday',
+    tagImage: '',
+    _status: 'published',
+    slug: 'productivity',
+  },
+  {
+    title: 'Youtube',
+    color: 'purple',
+    description: 'All the 💻tech tools to grow your youtube channel',
+    tagImage: '',
+    _status: 'published',
+    slug: 'youtube',
   },
 ]
-export const tagsImagesData: TagImageType[] = [
+
+export const tagsImagesData = [
   {
-    alt: 'Tag 1',
-    filePath: path.join(process.cwd(), '/public/images/seed/blog-1.jpg'),
+    alt: 'AI insights tag image',
+    imageURL: path.join(process.cwd(), '/public/images/seed/ai-tag.png'),
+    name: 'ai-insights',
   },
   {
-    alt: 'Tag 2',
-    filePath: path.join(process.cwd(), '/public/images/seed/blog-1.jpg'),
+    alt: 'Javascript tag image',
+    imageURL: path.join(
+      process.cwd(),
+      '/public/images/seed/javascript-tag.png',
+    ),
+    name: 'javascript',
   },
   {
-    alt: 'Tag 3',
-    filePath: path.join(process.cwd(), '/public/images/seed/blog-1.jpg'),
+    alt: 'Coding tag image',
+    imageURL: path.join(process.cwd(), '/public/images/seed/coding-tag.png'),
+    name: 'coding',
   },
   {
-    alt: 'Tag 4',
-    filePath: path.join(process.cwd(), '/public/images/seed/blog-1.jpg'),
+    alt: 'Productivity tag image',
+    imageURL: path.join(
+      process.cwd(),
+      '/public/images/seed/productivity-tag.png',
+    ),
+    name: 'productivity',
   },
   {
-    alt: 'Tag 5',
-    filePath: path.join(process.cwd(), '/public/images/seed/blog-1.jpg'),
-  },
-  {
-    alt: 'Tag 6',
-    filePath: path.join(process.cwd(), '/public/images/seed/blog-1.jpg'),
+    alt: 'Youtube tag image',
+    imageURL: path.join(process.cwd(), '/public/images/seed/youtube-tag.png'),
+    name: 'youtube',
   },
 ]

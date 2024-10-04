@@ -12,7 +12,7 @@ const Home: React.FC<HomeProps> = ({ params, ...block }) => {
     typeof block.image === 'string'
       ? undefined
       : {
-          url: block.image.sizes?.blogImageSize2?.url!,
+          url: block.image?.url!,
           alt: block.image.alt || 'Hero section image',
         }
 
