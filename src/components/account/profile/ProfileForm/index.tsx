@@ -255,7 +255,6 @@ const ProfileForm = ({ user }: { user: User }) => {
           <Textarea
             id='bio'
             name='bio'
-            placeholder='John'
             value={formData?.bio}
             onChange={handleOnChange}
           />

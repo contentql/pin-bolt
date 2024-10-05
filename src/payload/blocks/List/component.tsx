@@ -2,7 +2,7 @@
 
 import { Params } from '../types'
 import { ListType } from '@payload-types'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import { trpc } from '@/trpc/client'
 
@@ -30,10 +30,8 @@ const List: React.FC<ListProps> = ({ params, ...block }) => {
         },
       )
 
-      const flattedList = useMemo(() => {
-        const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
-        return docsList.flat()
-      }, [data])
+      const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
+      const flattedList = docsList.flat()
 
       return (
         <BlogsList
@@ -61,10 +59,8 @@ const List: React.FC<ListProps> = ({ params, ...block }) => {
         },
       )
 
-      const flattedList = useMemo(() => {
-        const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
-        return docsList.flat()
-      }, [data])
+      const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
+      const flattedList = docsList.flat()
 
       return (
         <TagsList
@@ -92,10 +88,8 @@ const List: React.FC<ListProps> = ({ params, ...block }) => {
         },
       )
 
-      const flattedList = useMemo(() => {
-        const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
-        return docsList.flat()
-      }, [data])
+      const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
+      const flattedList = docsList.flat()
 
       return (
         <AuthorsList

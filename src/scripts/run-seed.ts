@@ -6,11 +6,10 @@ import chalk from 'chalk'
 // ? To load environment variables from a .env file
 import 'dotenv/config'
 // ? For special characters (tick and cross) in output
-import figures from 'figures'
 // ? For MongoDB database operations
 import { MongoClient } from 'mongodb'
 // ? For displaying a loading spinner
-import ora, { Ora } from 'ora'
+import ora from 'ora'
 
 // ! For running shell commands (if needed for additional tasks)
 import { seedAuthorDetailsPage } from '@/seed/author-details-page'
@@ -67,22 +66,6 @@ const dropDatabase = async (): Promise<boolean> => {
   }
 }
 
-// Function to log the seeding process with spinner and messages
-const seedAndLog = async <T>(
-  message: string,
-  seedFunction: () => Promise<any>,
-  spinner: Ora,
-): Promise<void> => {
-  spinner.start(`${message}...`)
-  try {
-    await seedFunction()
-    spinner.succeed(`${message} ${chalk.green(figures.tick)} Done.`)
-  } catch (error) {
-    spinner.fail(`${message} ${chalk.red(figures.cross)} Failed.`)
-    throw error
-  }
-}
-
 // Function to execute the seeding process
 const executeSeeding = async () => {
   const spinner = ora({
@@ -92,7 +75,7 @@ const executeSeeding = async () => {
   }).start()
 
   try {
-    const homePage = await seedHomePage(spinner)
+    await seedHomePage(spinner)
     const tagsPage = await seedTagsPage(spinner)
     const tagsDetailsPage = await seedTagDetailsPage({
       spinner,

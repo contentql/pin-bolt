@@ -42,9 +42,6 @@ const SignInForm: React.FC = () => {
     onSuccess: () => {
       router.push('/profile')
     },
-    onError: () => {
-      reset()
-    },
   })
 
   const onSubmit = (data: z.infer<typeof SignInSchema>) => {

@@ -194,7 +194,7 @@ const CommandBar = () => {
 
                 <KBarSearch
                   defaultPlaceholder='Search'
-                  className='block w-full rounded-md border bg-inherit stroke-slate-600 py-2 pl-9  pr-3.5 text-secondary outline-none placeholder:text-secondary sm:text-sm sm:leading-6'
+                  className='block w-full rounded-md border border-input bg-inherit stroke-slate-600 py-2 pl-9  pr-3.5 text-secondary outline-none placeholder:text-secondary sm:text-sm sm:leading-6'
                 />
               </div>
 

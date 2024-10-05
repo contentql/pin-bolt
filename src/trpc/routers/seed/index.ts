@@ -1,6 +1,7 @@
 import configPromise from '@payload-config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { TRPCError } from '@trpc/server'
+import ora from 'ora'
 
 import { seedAuthorDetailsPage } from '@/seed/author-details-page'
 import { seedAuthors } from '@/seed/authors'
@@ -9,6 +10,7 @@ import { seedBlogDetailsPage } from '@/seed/blog-details-page'
 import { seedBlogs } from '@/seed/blogs'
 import { seedBlogsPage } from '@/seed/blogs-page'
 import { seedHomePage } from '@/seed/home-page'
+import { seedSiteSettings } from '@/seed/site-settings/seed'
 import { seedTagDetailsPage } from '@/seed/tag-details-page'
 import { seedTags } from '@/seed/tags'
 import { seedTagsPage } from '@/seed/tags-page'
@@ -18,24 +20,58 @@ const payload = await getPayloadHMR({ config: configPromise })
 
 export const seedRouter = router({
   runSeed: publicProcedure.mutation(async () => {
+    const spinner = ora({
+      text: 'Starting the seeding process...',
+      color: 'cyan',
+      spinner: 'dots',
+    }).start()
+
     try {
-      // Ensure that the seeding functions are called in the correct order.
-      // The blogs seeding depends on tags and authors being seeded first.
-      // Therefore, make sure to seed tags and authors before seeding blogs.
-      await seedHomePage()
-      await seedTagsPage()
-      await seedTagDetailsPage()
-      await seedTags() // Seed tags first
-      await seedAuthorsPage()
-      await seedAuthorDetailsPage()
-      await seedAuthors() // Then seed authors
-      await seedBlogsPage()
-      await seedBlogDetailsPage()
-      await seedBlogs() // Finally, seed blogs, which depend on tags and authors
+      const pages = await payload.count({
+        collection: 'pages',
+      })
+
+      // checking if pages are created skipping the seeding process
+      if (pages.totalDocs >= 1) {
+        return
+      }
+
+      await seedHomePage(spinner)
+      const tagsPage = await seedTagsPage(spinner)
+      const tagsDetailsPage = await seedTagDetailsPage({
+        spinner,
+        id: tagsPage.id,
+      })
+
+      const blogsPage = await seedBlogsPage(spinner)
+      const blogsDetailsPage = await seedBlogDetailsPage({
+        spinner,
+        id: blogsPage.id,
+      })
+
+      const authorsPage = await seedAuthorsPage(spinner)
+      const authorsDetailsPage = await seedAuthorDetailsPage({
+        spinner,
+        id: authorsPage.id,
+      })
+      const authors = await seedAuthors(spinner)
+      const tags = await seedTags(spinner)
+
+      await seedBlogs({ tags, authors, spinner })
+      await seedSiteSettings({
+        authorDetailsLink: authorsDetailsPage,
+        blogDetailsLink: blogsDetailsPage,
+        tagDetailsLink: tagsDetailsPage,
+        spinner,
+        tagsPages: tagsPage,
+        blogsPage: blogsPage,
+        authorPages: authorsPage,
+      })
 
       return { success: true }
     } catch (error: any) {
       console.error('Error seeding:', error)
+
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
         message: error.message,

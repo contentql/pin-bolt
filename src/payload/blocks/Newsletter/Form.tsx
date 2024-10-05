@@ -36,6 +36,7 @@ const Form = ({
       {
         onSuccess: data => {
           toast.success('Successfully subscribed!')
+          reset()
         },
         onError: error => {
           toast.error('Failed to subscribe, please try again!')

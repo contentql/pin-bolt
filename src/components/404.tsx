@@ -1,37 +1,40 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 import { trpc } from '@/trpc/client'
 
 import Button from './common/Button'
 
 const PageNotFound: React.FC = () => {
-  const [loading, setLoading] = useState(false)
-
   const pathname = usePathname()
-  const router = useRouter()
 
-  const { mutate: runSeedMutation } = trpc.seed.runSeed.useMutation({
-    onMutate: () => {
-      setLoading(true)
-    },
+  const { mutate: runSeedMutation, isPending } = trpc.seed.runSeed.useMutation({
     onSuccess: () => {
-      // ! router.refresh() is not working as expected.
       window.location.reload()
-    },
-    onSettled: () => {
-      setLoading(false)
     },
   })
 
-  // ! Implement SSE to display messages related to seeding in the ui
-  const seedData = () => {
-    runSeedMutation()
+  if (pathname === '/') {
+    return (
+      <section className='flex min-h-screen flex-col items-center justify-center'>
+        <h1 className='text-4xl font-semibold'>Welcome to ⚡Bolt Theme</h1>
+
+        <p className='my-4 p-2'>
+          Click below👇 to instantly load demo content-blogs, authors, tags, and
+          pages
+        </p>
+
+        <Button
+          isLoading={isPending}
+          disabled={isPending}
+          onClick={() => runSeedMutation()}>
+          Load Demo Data
+        </Button>
+      </section>
+    )
   }
 
   return (
@@ -131,121 +134,13 @@ const PageNotFound: React.FC = () => {
       </div>
 
       <p className='my-4 p-2'>Looks like your lost!</p>
-      {pathname === '/' ? (
-        loading ? (
-          <>
-            <div className='absolute left-0 top-0 w-full'>
-              <div className='bg-pink-100 h-1.5 w-full overflow-hidden'>
-                <div className='origin-left-right animate-progress h-full w-full bg-[#45a6e9]'></div>
-              </div>
-            </div>
-            <motion.div
-              className='mt-4 rounded-lg border border-gray-300 bg-white p-4 shadow-lg dark:border-slate-700 dark:bg-slate-800'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5 }}>
-              <AnimatePresence mode='wait'>
-                <motion.div
-                  key='seeding-status'
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.5 }}
-                  className='text-lg font-bold'>
-                  <div
-                    aria-label='Loading...'
-                    role='status'
-                    className='flex items-center justify-center space-x-2'>
-                    <svg
-                      className='h-6 w-6 animate-spin stroke-gray-500'
-                      viewBox='0 0 256 256'>
-                      <line
-                        x1='128'
-                        y1='32'
-                        x2='128'
-                        y2='64'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='24'></line>
-                      <line
-                        x1='195.9'
-                        y1='60.1'
-                        x2='173.3'
-                        y2='82.7'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='24'></line>
-                      <line
-                        x1='224'
-                        y1='128'
-                        x2='192'
-                        y2='128'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='24'></line>
-                      <line
-                        x1='195.9'
-                        y1='195.9'
-                        x2='173.3'
-                        y2='173.3'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='24'></line>
-                      <line
-                        x1='128'
-                        y1='224'
-                        x2='128'
-                        y2='192'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='24'></line>
-                      <line
-                        x1='60.1'
-                        y1='195.9'
-                        x2='82.7'
-                        y2='173.3'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='24'></line>
-                      <line
-                        x1='32'
-                        y1='128'
-                        x2='64'
-                        y2='128'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='24'></line>
-                      <line
-                        x1='60.1'
-                        y1='60.1'
-                        x2='82.7'
-                        y2='82.7'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='24'></line>
-                    </svg>
-                    <span className='text-sm'>Loading...</span>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </motion.div>
-          </>
-        ) : (
-          <button
-            onClick={() => seedData()}
-            className='rounded border border-[#45a6e9] bg-transparent px-4 py-2 text-[#45a6e9] shadow hover:border-transparent hover:bg-[#45a6e9] hover:text-white hover:shadow-lg'>
-            Load demo data
-          </button>
-        )
-      ) : (
-        <Link href='/'>
-          <Button variant='outline'>
-            <ArrowLeft size={16} />
-            Back to home
-          </Button>
-        </Link>
-      )}
+
+      <Link href='/'>
+        <Button variant='outline'>
+          <ArrowLeft size={16} />
+          Back to home
+        </Button>
+      </Link>
     </section>
   )
 }

@@ -28,8 +28,6 @@ export const blogRouter = router({
           page: cursor,
         })
 
-        console.log({ totalDocs })
-
         const hasNextPage = totalDocs > cursor * limit
 
         return { docs, nextCursor: hasNextPage ? cursor + 1 : undefined }
@@ -56,8 +54,6 @@ export const blogRouter = router({
             },
           },
         })
-
-        console.log({ docs })
 
         return docs.at(0)
       } catch (error: any) {

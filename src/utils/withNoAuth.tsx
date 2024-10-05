@@ -6,7 +6,7 @@ import { ComponentType, ReactElement } from 'react'
 import { getCurrentUser } from '@/utils/getCurrentUser'
 
 interface UserProps {
-  user: User
+  user: User | null
 }
 
 interface WithNoAuthOptions {
@@ -39,8 +39,7 @@ const withNoAuth = <P extends object>(
     const user = await getCurrentUser(headersList)
 
     if (user) {
-      redirect(options.redirectPath)
-      return null
+      return redirect(options.redirectPath)
     }
 
     return <WrappedComponent user={user} {...props} />
