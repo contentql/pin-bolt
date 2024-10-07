@@ -1,8 +1,15 @@
 import Image from 'next/image'
 
-const Logo: React.FC = () => {
+const Logo = () => {
   return (
-    <div className='flex items-center gap-2 text-xl font-bold'>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        fontSize: '1.25rem',
+        fontWeight: 700,
+      }}>
       <Image
         src={'/images/contentql-logo.png'}
         width={40}
