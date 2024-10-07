@@ -1,16 +1,17 @@
-import { NextPage } from 'next'
 import { redirect } from 'next/navigation'
 
 import VerifyEmail from '@/components/auth/verify-email/VerifyEmail'
 import withNoAuth from '@/utils/withNoAuth'
 
-interface PageProps {
-  searchParams: Record<string, string>
-}
+const VerifyEmailPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>
+}) => {
+  const params = await searchParams
 
-const VerifyEmailPage: NextPage<PageProps> = ({ searchParams }) => {
-  const token = searchParams?.token || null
-  const userId = searchParams?.id || null
+  const token = params?.token || null
+  const userId = params?.id || null
 
   if (!token || !userId) {
     redirect('/sign-in')

@@ -35,7 +35,7 @@ const withNoAuth = <P extends object>(
   const ComponentWithNoAuth = async (
     props: P,
   ): Promise<ReactElement | null> => {
-    const headersList = headers()
+    const headersList = await headers()
     const user = await getCurrentUser(headersList)
 
     if (user) {
