@@ -17,12 +17,13 @@ export async function generateMetadata(): Promise<Metadata> {
     const ogImageUrl =
       typeof generalSettings.ogImageUrl === 'string'
         ? generalSettings.ogImageUrl
-        : generalSettings.ogImageUrl.sizes?.blogImageSize3?.url!
+        : generalSettings.ogImageUrl?.url!
 
     const title = {
       default: generalSettings.title,
       template: `%s | ${generalSettings.title}`,
     }
+
     const description = generalSettings.description
     const ogImage = [
       {

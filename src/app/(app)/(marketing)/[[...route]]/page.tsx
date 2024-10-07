@@ -1,4 +1,7 @@
+import { env } from '@env'
+import configPromise from '@payload-config'
 import { Page as PageType } from '@payload-types'
+import { getPayloadHMR } from '@payloadcms/next/utilities'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
@@ -6,6 +9,10 @@ import RenderBlocks from '@/payload/blocks/RenderBlocks'
 import { serverClient } from '@/trpc/serverClient'
 
 export const dynamic = 'force-dynamic'
+
+const payload = await getPayloadHMR({
+  config: configPromise,
+})
 
 export async function generateMetadata({
   params,
@@ -20,7 +27,28 @@ export async function generateMetadata({
       path: route,
     })
 
-    const metadata = pageData.meta
+    let metadata = pageData.meta
+
+    const block = pageData.layout
+      ?.filter(block => block.blockType === 'Details')
+      ?.at(0)
+
+    // checking for dynamic page
+    if (pageData?.isDynamic && block?.collectionSlug) {
+      const { docs } = await payload.find({
+        collection: block?.collectionSlug,
+        where: {
+          slug: {
+            equals: route.at(-1),
+          },
+        },
+        depth: 5,
+      })
+
+      const doc = docs?.at(0)
+
+      metadata = doc?.meta
+    }
 
     if (metadata && Object.keys(metadata).length) {
       let ogImage = []
@@ -39,6 +67,8 @@ export async function generateMetadata({
       return {
         title,
         description,
+        // we're appending the http|https int the env variable
+        metadataBase: env.NEXT_PUBLIC_PUBLIC_URL as unknown as URL,
         openGraph: {
           title,
           description,

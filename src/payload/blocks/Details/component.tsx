@@ -77,14 +77,15 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
       } = trpc.author.getAuthorByName.useQuery({
         authorName: params?.at(-1)!,
       })
-      const { data: authorBlogs } = trpc.author.getBlogsByAuthorName.useQuery(
-        {
-          authorName: params?.at(-1)!,
-        },
-        {
-          enabled: !!author, // calling the blogs based on the author details
-        },
-      )
+      const { data: authorBlogs, isPending: blogsLoading } =
+        trpc.author.getBlogsByAuthorName.useQuery(
+          {
+            authorName: params?.at(-1)!,
+          },
+          {
+            enabled: !!author, // calling the blogs based on the author details
+          },
+        )
 
       // if author not found showing 404
       if (!author && !isFetching && !isPending) {
@@ -96,7 +97,13 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
       }
 
       if (author) {
-        return <AuthorDetails author={author} blogsData={authorBlogs} />
+        return (
+          <AuthorDetails
+            author={author}
+            blogsData={authorBlogs}
+            blogsLoading={blogsLoading}
+          />
+        )
       }
     }
   }

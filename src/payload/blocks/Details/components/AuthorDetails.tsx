@@ -1,3 +1,4 @@
+import BlogCardLoading from '../../List/components/BlogCardLoading'
 import BlogsList from '../../List/components/BlogsList'
 import { Blog, User } from '@payload-types'
 import Link from 'next/link'
@@ -10,9 +11,14 @@ import NoPostsFound from './NoPostsFound'
 interface AuthorDetailsProps {
   blogsData?: Blog[]
   author: User
+  blogsLoading: boolean
 }
 
-const AuthorDetails: React.FC<AuthorDetailsProps> = ({ blogsData, author }) => {
+const AuthorDetails: React.FC<AuthorDetailsProps> = ({
+  blogsData,
+  author,
+  blogsLoading,
+}) => {
   const authorDetails = {
     image:
       typeof author.imageUrl !== 'string'
@@ -65,10 +71,20 @@ const AuthorDetails: React.FC<AuthorDetailsProps> = ({ blogsData, author }) => {
         </div>
       </div>
 
-      {blogsData ? (
-        <BlogsList title='Posts' blogs={blogsData} />
+      {blogsLoading ? (
+        <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
+          {[1, 2, 3].map(i => (
+            <BlogCardLoading key={i} />
+          ))}
+        </div>
       ) : (
-        <NoPostsFound />
+        <>
+          {blogsData ? (
+            <BlogsList title='Posts' blogs={blogsData} />
+          ) : (
+            <NoPostsFound />
+          )}
+        </>
       )}
     </>
   )
