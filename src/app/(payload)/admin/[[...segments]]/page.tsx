@@ -6,12 +6,12 @@ import config from '@payload-config'
 import { RootPage } from '@payloadcms/next/views'
 
 type Args = {
-  params: {
+  params: Promise<{
     segments: string[]
-  }
-  searchParams: {
+  }>
+  searchParams: Promise<{
     [key: string]: string | string[]
-  }
+  }>
 }
 
 const Page = ({ params, searchParams }: Args) =>

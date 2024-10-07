@@ -11,11 +11,11 @@ export interface Config {
     users: UserAuthOperations;
   };
   collections: {
-    users: User;
-    tags: Tag;
-    blogs: Blog;
-    media: Media;
     pages: Page;
+    blogs: Blog;
+    tags: Tag;
+    media: Media;
+    users: User;
     subscribers: Subscriber;
     search: Search;
     'payload-locked-documents': PayloadLockedDocument;
@@ -50,145 +50,6 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: string;
-  displayName?: string | null;
-  username?: string | null;
-  imageUrl?: (string | null) | Media;
-  role: ('admin' | 'author' | 'user')[];
-  emailVerified?: string | null;
-  socialLinks?:
-    | {
-        platform:
-          | 'website'
-          | 'facebook'
-          | 'instagram'
-          | 'twitter'
-          | 'linkedin'
-          | 'youtube'
-          | 'tiktok'
-          | 'pinterest'
-          | 'snapchat'
-          | 'reddit'
-          | 'tumblr'
-          | 'whatsapp'
-          | 'telegram'
-          | 'github'
-          | 'medium'
-          | 'quora'
-          | 'discord';
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  bio?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  _verified?: boolean | null;
-  _verificationToken?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: string;
-  alt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    blogImageSize2?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    blogImageSize3?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: string;
-  tagImage: string | Media;
-  title: string;
-  description: string;
-  slug?: string | null;
-  color?: ('blue' | 'gray' | 'red' | 'green' | 'yellow' | 'indigo' | 'purple' | 'pink') | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "blogs".
- */
-export interface Blog {
-  id: string;
-  blogImage: string | Media;
-  title: string;
-  description: string;
-  tags?:
-    | {
-        relationTo: 'tags';
-        value: string | Tag;
-      }[]
-    | null;
-  author?:
-    | {
-        relationTo: 'users';
-        value: string | User;
-      }[]
-    | null;
-  content: {
-    [k: string]: unknown;
-  }[];
-  slug?: string | null;
-  publishOn?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -237,6 +98,51 @@ export interface HomeType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    blogImageSize2?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    blogImageSize3?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "DetailsType".
  */
 export interface DetailsType {
@@ -267,6 +173,115 @@ export interface NewsletterType {
   id?: string | null;
   blockName?: string | null;
   blockType: 'Newsletter';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blogs".
+ */
+export interface Blog {
+  id: string;
+  blogImage: string | Media;
+  title: string;
+  description: string;
+  tags?:
+    | {
+        relationTo: 'tags';
+        value: string | Tag;
+      }[]
+    | null;
+  author?:
+    | {
+        relationTo: 'users';
+        value: string | User;
+      }[]
+    | null;
+  content: {
+    [k: string]: unknown;
+  }[];
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+  };
+  slug?: string | null;
+  publishOn?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: string;
+  tagImage: string | Media;
+  title: string;
+  description: string;
+  color?: ('blue' | 'gray' | 'red' | 'green' | 'yellow' | 'indigo' | 'purple' | 'pink') | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+  };
+  slug?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: string;
+  displayName?: string | null;
+  username: string;
+  imageUrl?: (string | null) | Media;
+  role: ('admin' | 'author' | 'user')[];
+  emailVerified?: string | null;
+  socialLinks?:
+    | {
+        platform:
+          | 'website'
+          | 'facebook'
+          | 'instagram'
+          | 'twitter'
+          | 'linkedin'
+          | 'youtube'
+          | 'tiktok'
+          | 'pinterest'
+          | 'snapchat'
+          | 'reddit'
+          | 'tumblr'
+          | 'whatsapp'
+          | 'telegram'
+          | 'github'
+          | 'medium'
+          | 'quora'
+          | 'discord';
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    image?: (string | null) | Media;
+  };
+  bio?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  _verified?: boolean | null;
+  _verificationToken?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -310,24 +325,24 @@ export interface PayloadLockedDocument {
   id: string;
   document?:
     | ({
-        relationTo: 'users';
-        value: string | User;
-      } | null)
-    | ({
-        relationTo: 'tags';
-        value: string | Tag;
+        relationTo: 'pages';
+        value: string | Page;
       } | null)
     | ({
         relationTo: 'blogs';
         value: string | Blog;
       } | null)
     | ({
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
         relationTo: 'media';
         value: string | Media;
       } | null)
     | ({
-        relationTo: 'pages';
-        value: string | Page;
+        relationTo: 'users';
+        value: string | User;
       } | null)
     | ({
         relationTo: 'subscribers';

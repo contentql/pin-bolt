@@ -10,7 +10,7 @@ import { MetadataProvider } from '@/utils/metadataContext'
 const MarketingLayout = async ({ children }: { children: React.ReactNode }) => {
   const metadata = await serverClient.siteSettings.getSiteSettings()
 
-  const headersList = headers()
+  const headersList = await headers()
   const user = await getCurrentUser(headersList)
 
   return (
