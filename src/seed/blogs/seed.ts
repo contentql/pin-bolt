@@ -84,6 +84,11 @@ const createStyleGuideBlog = async ({
       author: styleGuideAuthors,
       tags: styleGuideTags,
       _status: 'published',
+      meta: {
+        title,
+        description,
+        image: posterImage.id,
+      },
     },
   })
 }
@@ -165,6 +170,11 @@ const createDynamicAccessBlog = async ({
       author: dynamicAccessAuthors,
       tags: dynamicAccessTags,
       _status: 'published',
+      meta: {
+        title,
+        description,
+        image: posterImage.id,
+      },
     },
   })
 }
@@ -244,6 +254,11 @@ const seed = async ({
           author: filteredAuthors,
           tags: filteredTags,
           _status: 'published',
+          meta: {
+            description,
+            title,
+            image: image.id,
+          },
         },
       })
     }

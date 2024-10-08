@@ -22,7 +22,7 @@ const RenderBlocks: React.FC<RenderBlocksProps> = ({
   // Fetch the page data using path
   const { data: pageData, isLoading: isPageLoading } =
     trpc.page.getPageData.useQuery(
-      { path: params },
+      { path: params.route },
       { initialData: pageInitialData },
     )
 

@@ -25,7 +25,7 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
         isPending,
         isFetching,
       } = trpc.blog.getBlogBySlug.useQuery({
-        slug: params?.at(-1),
+        slug: params?.route?.at(-1),
       })
 
       if (isPending) {
@@ -50,7 +50,7 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
         isPending,
         isFetching,
       } = trpc.tag.getBlogs.useQuery({
-        tagSlug: params?.at(-1)!,
+        tagSlug: params?.route?.at(-1)!,
       })
 
       const tagDetails = (blogs?.tagData || [])?.at(0)
@@ -75,12 +75,12 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
         isPending,
         isFetching,
       } = trpc.author.getAuthorByName.useQuery({
-        authorName: params?.at(-1)!,
+        authorName: params?.route?.at(-1)!,
       })
       const { data: authorBlogs, isPending: blogsLoading } =
         trpc.author.getBlogsByAuthorName.useQuery(
           {
-            authorName: params?.at(-1)!,
+            authorName: params?.route?.at(-1)!,
           },
           {
             enabled: !!author, // calling the blogs based on the author details

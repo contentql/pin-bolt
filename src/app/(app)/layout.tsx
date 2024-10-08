@@ -35,6 +35,8 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     ]
 
+    console.log(env.NEXT_PUBLIC_PUBLIC_URL, { ogImageUrl })
+
     return {
       title,
       description,

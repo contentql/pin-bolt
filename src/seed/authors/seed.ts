@@ -45,7 +45,15 @@ const seed = async (spinner: Ora) => {
       try {
         const user = await payload.create({
           collection: 'users',
-          data: { ...details, imageUrl: imageId?.id ?? '' },
+          data: {
+            ...details,
+            imageUrl: imageId?.id ?? '',
+            meta: {
+              title: details.displayName,
+              description: details.bio,
+              image: imageId?.id ?? '',
+            },
+          },
           locale: undefined,
           fallbackLocale: undefined,
           overrideAccess: true,

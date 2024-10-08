@@ -100,7 +100,7 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
     return (
       <RenderBlocks
         pageInitialData={pageData as PageType}
-        params={resolvedParams.route}
+        params={resolvedParams}
       />
     )
   } catch (error) {

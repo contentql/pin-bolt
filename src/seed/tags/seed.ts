@@ -45,7 +45,15 @@ const seed = async (spinner: Ora) => {
       try {
         const tag = await payload.create({
           collection: 'tags',
-          data: { ...details, tagImage: imageId?.id ?? '' },
+          data: {
+            ...details,
+            tagImage: imageId?.id ?? '',
+            meta: {
+              title: details.title,
+              description: details.description,
+              image: imageId?.id,
+            },
+          },
           overrideAccess: true,
         })
 

@@ -1,6 +1,8 @@
 // This is just to consolidate all the existing blocks and their respective JSX components
 // Always prefer to individually import the required block or JSX in other parts of your application
 // Importing the block components and its configurations
+import { DisqusComments } from '@contentql/core/client'
+
 import { Details, DetailsConfig } from './Details'
 import { Home, HomeConfig } from './Home'
 import { List, ListConfig } from './List'
@@ -13,6 +15,7 @@ export const blocksJSX = {
   Details,
   List,
   Newsletter,
+  DisqusComments,
 }
 
 // Exporting an array that consolidates all block configurations

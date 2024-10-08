@@ -1,1 +1,1 @@
-export type Params = string[]
+export type Params = { route: string[] }
