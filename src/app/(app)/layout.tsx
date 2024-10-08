@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 
 import '@/app/(app)/globals.css'
+import GoogleAdSense from '@/components/GoogleAdSense'
 import Provider from '@/trpc/Provider'
 import { serverClient } from '@/trpc/serverClient'
 
@@ -86,11 +87,13 @@ export default async function RootLayout({
       </head>
       <body
         className={`${GeistSans.className} ${GeistMono.variable} antialiased`}>
-        {/* <LivePreviewListener /> */}
         <Provider>{children}</Provider>
 
         {/* Sonnar toast library */}
         <Toaster richColors theme='dark' />
+
+        {/* added google-adSense  */}
+        <GoogleAdSense adSenseId={metadata.monetization?.adSenseId ?? ''} />
       </body>
     </html>
   )

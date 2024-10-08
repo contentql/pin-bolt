@@ -130,6 +130,24 @@ export default cqlConfig({
                 },
               ],
             },
+            {
+              label: 'Monetization',
+              name: 'monetization',
+              fields: [
+                {
+                  name: 'adSenseId',
+                  type: 'text',
+                  label: 'Google AdSense',
+                  admin: {
+                    description:
+                      'Add the publisher-id from Google AdSense Console',
+                  },
+                },
+              ],
+              admin: {
+                hidden: true,
+              },
+            },
           ],
         },
       ],

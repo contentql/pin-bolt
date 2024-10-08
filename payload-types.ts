@@ -509,6 +509,9 @@ export interface SiteSetting {
     authorLink?: (string | null) | Page;
     tagLink?: (string | null) | Page;
   };
+  monetization?: {
+    adSenseId?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
