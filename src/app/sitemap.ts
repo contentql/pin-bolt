@@ -12,6 +12,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     depth: 0,
   })
 
+  console.log({ pages, payloadURL: env.PAYLOAD_URL })
+
   const sitemapObject: MetadataRoute.Sitemap = pages.map(page => ({
     url: `${env.PAYLOAD_URL}${page.path}`,
     lastModified: new Date(page.updatedAt),

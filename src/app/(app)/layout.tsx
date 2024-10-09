@@ -34,13 +34,17 @@ export async function generateMetadata(): Promise<Metadata> {
       },
     ]
 
-    console.log(env.NEXT_PUBLIC_PUBLIC_URL, { ogImageUrl })
+    console.log({
+      ogImageUrl,
+      publicURL: env.NEXT_PUBLIC_PUBLIC_URL,
+      payloadURL: env.PAYLOAD_URL,
+    })
 
     return {
       title,
       description,
       // we're appending the http|https int the env variable
-      metadataBase: env.NEXT_PUBLIC_PUBLIC_URL as unknown as URL,
+      metadataBase: env.PAYLOAD_URL as unknown as URL,
       openGraph: {
         title,
         description,
