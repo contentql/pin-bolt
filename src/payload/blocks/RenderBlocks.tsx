@@ -1,6 +1,5 @@
 'use client'
 
-import { env } from '@env'
 import { Page } from '@payload-types'
 import { useLivePreview } from '@payloadcms/live-preview-react'
 import React from 'react'
@@ -19,6 +18,7 @@ const RenderBlocks: React.FC<RenderBlocksProps> = ({
   pageInitialData,
   params,
 }) => {
+  const url = typeof window !== 'undefined' ? window.location.origin : ''
   // Fetch the page data using path
   const { data: pageData, isLoading: isPageLoading } =
     trpc.page.getPageData.useQuery(
@@ -29,7 +29,7 @@ const RenderBlocks: React.FC<RenderBlocksProps> = ({
   // Fetch page data for live preview
   const { data: livePreviewData } = useLivePreview<Page | undefined>({
     initialData: undefined,
-    serverURL: env.NEXT_PUBLIC_PUBLIC_URL,
+    serverURL: url,
     depth: 2,
   })
 

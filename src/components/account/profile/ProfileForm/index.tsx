@@ -211,7 +211,16 @@ const ProfileForm = ({ user }: { user: User }) => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant='outline'>Cancel</Button>
+              <Button
+                variant='outline'
+                onClick={() => {
+                  setOpen(false)
+                  URL.revokeObjectURL(userImageURL)
+                  setUserImage(undefined)
+                  setUserImageURL('')
+                }}>
+                Cancel
+              </Button>
               <Button
                 disabled={!userImage || uploadingImage || isUpdateUserPending}
                 isLoading={uploadingImage || isUpdateUserPending}
