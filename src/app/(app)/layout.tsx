@@ -5,7 +5,6 @@ import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 
 import '@/app/(app)/globals.css'
-import GoogleAdSense from '@/components/GoogleAdSense'
 import Provider from '@/trpc/Provider'
 import { serverClient } from '@/trpc/serverClient'
 
@@ -86,6 +85,16 @@ export default async function RootLayout({
       <head>
         {/* added a explicit link tag because favicon is coming from site-settings */}
         <link rel='icon' type='image/x-icon' href={faviconUrl} />
+
+        {/* added google-adSense  */}
+        {process.env.NODE_ENV === 'production' &&
+          metadata?.monetization?.adSenseId && (
+            <script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-${metadata?.monetization?.adSenseId}`}
+              crossOrigin='anonymous'
+            />
+          )}
       </head>
       <body
         className={`${GeistSans.className} ${GeistMono.variable} antialiased`}>
@@ -93,9 +102,6 @@ export default async function RootLayout({
 
         {/* Sonnar toast library */}
         <Toaster richColors theme='dark' />
-
-        {/* added google-adSense  */}
-        <GoogleAdSense adSenseId={metadata.monetization?.adSenseId ?? ''} />
       </body>
     </html>
   )
