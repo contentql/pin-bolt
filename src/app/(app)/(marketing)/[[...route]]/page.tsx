@@ -34,7 +34,11 @@ export async function generateMetadata({
       ?.at(0)
 
     // checking for dynamic page
-    if (pageData?.isDynamic && block?.collectionSlug) {
+    if (
+      pageData?.isDynamic &&
+      block?.collectionSlug &&
+      block?.collectionSlug !== 'users'
+    ) {
       const { docs } = await payload.find({
         collection: block?.collectionSlug,
         where: {
@@ -47,7 +51,7 @@ export async function generateMetadata({
 
       const doc = docs?.at(0)
 
-      metadata = doc?.meta
+      metadata = doc?.meta || {}
     }
 
     if (metadata && Object.keys(metadata).length) {
