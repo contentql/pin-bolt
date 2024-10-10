@@ -48,11 +48,6 @@ const seed = async (spinner: Ora) => {
           data: {
             ...details,
             imageUrl: imageId?.id ?? '',
-            meta: {
-              title: details.displayName,
-              description: details.bio,
-              image: imageId?.id ?? '',
-            },
           },
           locale: undefined,
           fallbackLocale: undefined,

@@ -49,8 +49,23 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
     },
     elementTransforms: {
       ...payloadSlateToHtmlConfig.elementTransforms,
+      upload: ({ node }) => {
+        // for video returning video element
+        if (node && node?.value) {
+          const mimeType = node?.value?.mimeType ?? ''
+          if (mimeType.includes('video')) {
+            return new Element('video', {
+              src: node?.value?.url,
+              controls: 'true',
+            })
+          }
+        }
+
+        return payloadSlateToHtmlConfig.elementTransforms.upload({ node })
+      },
     },
   })
+
   const purifiedHtml = DOMPurify.sanitize(html, {
     ADD_ATTR: ['target'], // Allow the "target" attribute
     ADD_TAGS: ['iframe'], // You can also add other tags if needed (optional)
@@ -116,7 +131,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
   return (
     <>
       <section className='grid gap-16 lg:grid-cols-[auto_1fr]'>
-        <article className='prose-headings:font prose prose-purple dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:no-underline prose-a:after:content-["↗"] hover:prose-a:text-primary/90 hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:rounded dark:prose-pre:bg-primary/10 [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded'>
+        <article className='prose-headings:font prose prose-purple dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:no-underline prose-a:after:content-["↗"] hover:prose-a:text-primary/90 hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:rounded prose-video:w-full dark:prose-pre:bg-primary/10 [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded'>
           <span
             className='not-prose cursor-pointer text-sm text-secondary'
             onClick={() => router.back()}>

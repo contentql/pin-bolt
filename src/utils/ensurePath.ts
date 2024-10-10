@@ -18,9 +18,8 @@
  */
 export const ensurePath = (path: string): string => {
   // Trim any leading and trailing slashes, then add a single leading slash
-  const defaultPath = path ?? ''
 
-  const formattedPath = `/${defaultPath.trim().replace(/^\/|\/$/g, '')}/`
+  const formattedPath = `/${path.trim().replace(/^\/|\/$/g, '')}/`
 
   // Replace any duplicate slashes within the path
   return formattedPath.replace(/\/+/g, '/')

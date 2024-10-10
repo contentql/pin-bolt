@@ -275,11 +275,6 @@ export interface User {
         id?: string | null;
       }[]
     | null;
-  meta?: {
-    title?: string | null;
-    description?: string | null;
-    image?: (string | null) | Media;
-  };
   bio?: string | null;
   updatedAt: string;
   createdAt: string;

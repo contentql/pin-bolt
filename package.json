@@ -16,11 +16,12 @@
     "format": "prettier . --check",
     "format:fix": "prettier . --write",
     "run:seed": "pnpx tsx ./src/scripts/run-seed.ts",
-    "email": "email dev --dir src/emails"
+    "email": "email dev --dir src/emails",
+    "yalc:contentql/core": "yalc add @contentql/core && yalc link @contentql/core"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@contentql/core": "^0.2.7",
+    "@contentql/core": "^0.2.8",
     "@hookform/resolvers": "^3.4.0",
     "@payloadcms/live-preview-react": "3.0.0-beta.111",
     "@payloadcms/next": "3.0.0-beta.111",

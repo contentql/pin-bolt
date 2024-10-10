@@ -4,7 +4,7 @@ import { Page } from '@payload-types'
 import { useLivePreview } from '@payloadcms/live-preview-react'
 import React from 'react'
 
-import { blocksJSX } from '@/payload/blocks'
+import { blocksJSX } from '@/payload/blocks/blocks'
 import { trpc } from '@/trpc/client'
 
 import { Params } from './types'
