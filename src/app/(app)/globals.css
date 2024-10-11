@@ -106,3 +106,7 @@
 body[data-scroll-locked] #main-header {
   padding-right: var(--removed-body-scroll-bar-size);
 }
+
+img {
+  object-fit: cover;
+}

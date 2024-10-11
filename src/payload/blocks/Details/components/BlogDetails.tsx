@@ -130,8 +130,8 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
 
   return (
     <>
-      <section className='grid gap-16 lg:grid-cols-[auto_1fr]'>
-        <article className='prose-headings:font prose prose-purple dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:no-underline prose-a:after:content-["↗"] hover:prose-a:text-primary/90 hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:rounded prose-video:w-full dark:prose-pre:bg-primary/10 [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded'>
+      <section className='grid w-full gap-16 lg:grid-cols-[auto_1fr]'>
+        <article className='prose-headings:font prose prose-purple overflow-x-hidden dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:no-underline prose-a:after:content-["↗"] hover:prose-a:text-primary/90 hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:rounded prose-video:w-full dark:prose-pre:bg-primary/10 [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded'>
           <span
             className='not-prose cursor-pointer text-sm text-secondary'
             onClick={() => router.back()}>
@@ -269,7 +269,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
                 )
               })}
 
-            <div className='flex items-center justify-between'>
+            <div className='mt-10 flex items-center justify-between'>
               <p className='text-secondary'>Share: </p>
 
               <ShareList url={window.location.href} />

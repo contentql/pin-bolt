@@ -1,12 +1,12 @@
 'use client'
 
 import { SiteSetting } from '@payload-types'
-import React, { createContext, useContext } from 'react'
+import React, { createContext, use, useState } from 'react'
 
 const MetadataContext = createContext<SiteSetting | null>(null)
 
 export const useMetadata = () => {
-  const context = useContext(MetadataContext)
+  const context = use(MetadataContext)
   if (!context) {
     throw new Error('useMetadata must be used within a MetadataProvider')
   }
@@ -20,8 +20,10 @@ export const MetadataProvider = ({
   metadata: SiteSetting
   children: React.ReactNode
 }) => {
+  const [metadataState] = useState(metadata)
+
   return (
-    <MetadataContext.Provider value={metadata}>
+    <MetadataContext.Provider value={metadataState}>
       {children}
     </MetadataContext.Provider>
   )

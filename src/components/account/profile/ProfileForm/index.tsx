@@ -91,8 +91,6 @@ const ProfileForm = ({ user }: { user: User }) => {
       Object.entries(formData).filter(([key, value]) => Boolean(value)),
     )
 
-    console.log({ sanitizedData })
-
     if (
       sanitizedData.password &&
       sanitizedData.password !== sanitizedData.confirmPassword

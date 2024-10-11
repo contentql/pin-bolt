@@ -2,6 +2,20 @@ import { withPayload } from '@payloadcms/next/withPayload'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/admin/login',
+        destination: '/sign-in',
+        permanent: false,
+      },
+      {
+        source: '/admin/create-first-user',
+        destination: '/sign-up',
+        permanent: false,
+      },
+    ]
+  },
   outputFileTracingIncludes: {
     '/public': ['./public/**/*'],
   },
@@ -10,7 +24,6 @@ const nextConfig = {
   },
   output: 'standalone',
   reactStrictMode: true,
-  transpilePackages: ['geist'],
   compiler: {
     // removeConsole: process.env.NODE_ENV !== 'development', // Remove console.log in production
   },

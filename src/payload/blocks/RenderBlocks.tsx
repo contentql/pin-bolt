@@ -19,6 +19,7 @@ const RenderBlocks: React.FC<RenderBlocksProps> = ({
   params,
 }) => {
   const url = typeof window !== 'undefined' ? window.location.origin : ''
+
   // Fetch the page data using path
   const { data: pageData, isLoading: isPageLoading } =
     trpc.page.getPageData.useQuery(
