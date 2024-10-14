@@ -85,7 +85,7 @@
     "@types/node": "^20.14.9",
     "@types/node-schedule": "^2.1.7",
     "@types/nprogress": "^0.2.3",
-    "@types/react": "npm:types-react-dom@19.0.0-rc.1",
+    "@types/react": "npm:types-react@19.0.0-rc.1",
     "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
