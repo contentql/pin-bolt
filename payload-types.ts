@@ -517,6 +517,7 @@ export interface SiteSetting {
   };
   monetization?: {
     adSenseId?: string | null;
+    measurementId?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
