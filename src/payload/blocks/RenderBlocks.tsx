@@ -21,11 +21,10 @@ const RenderBlocks: React.FC<RenderBlocksProps> = ({
   const url = typeof window !== 'undefined' ? window.location.origin : ''
 
   // Fetch the page data using path
-  const { data: pageData, isLoading: isPageLoading } =
-    trpc.page.getPageData.useQuery(
-      { path: params.route },
-      { initialData: pageInitialData },
-    )
+  const { data: pageData } = trpc.page.getPageData.useQuery(
+    { path: params.route },
+    { initialData: pageInitialData },
+  )
 
   // Fetch page data for live preview
   const { data: livePreviewData } = useLivePreview<Page | undefined>({

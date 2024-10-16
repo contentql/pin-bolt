@@ -4,6 +4,7 @@
 import { DetailsConfig } from './Details'
 import { HomeConfig } from './Home'
 import { ListConfig } from './List'
+import { MembershipConfig } from './Memebership'
 import { NewsletterConfig } from './Newsletter'
 
 // Exporting an object that maps block names (as keys) to their corresponding JSX components (as values)
@@ -11,4 +12,10 @@ import { NewsletterConfig } from './Newsletter'
 
 // Exporting an array that consolidates all block configurations
 // This array is useful for registering or iterating over all blocks and their configurations in one place
-export const blocks = [HomeConfig, DetailsConfig, ListConfig, NewsletterConfig]
+export const blocks = [
+  HomeConfig,
+  DetailsConfig,
+  ListConfig,
+  NewsletterConfig,
+  MembershipConfig,
+]

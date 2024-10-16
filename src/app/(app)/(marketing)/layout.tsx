@@ -6,6 +6,7 @@ import Navbar from '@/components/Navbar'
 import { serverClient } from '@/trpc/serverClient'
 import { getCurrentUser } from '@/utils/getCurrentUser'
 import { MetadataProvider } from '@/utils/metadataContext'
+import { UserContextProvider } from '@/utils/userContext'
 
 const MarketingLayout = async ({ children }: { children: React.ReactNode }) => {
   const metadata = await serverClient.siteSettings.getSiteSettings()
@@ -15,12 +16,14 @@ const MarketingLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <MetadataProvider metadata={metadata}>
-      <div className='grid min-h-screen w-full grid-rows-[1fr_auto]'>
-        <Navbar metadata={metadata} user={user} />
-        <main className='container my-20'>{children}</main>
-        <Footer metadata={metadata} />
-        <Branding />
-      </div>
+      <UserContextProvider user={user ?? ''}>
+        <div className='grid min-h-screen w-full grid-rows-[1fr_auto]'>
+          <Navbar metadata={metadata} user={user} />
+          <main className='container my-20 overflow-x-hidden'>{children}</main>
+          <Footer metadata={metadata} />
+          <Branding />
+        </div>
+      </UserContextProvider>
     </MetadataProvider>
   )
 }

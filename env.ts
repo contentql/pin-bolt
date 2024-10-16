@@ -24,6 +24,8 @@ export const env = createEnv({
     RESEND_SENDER_EMAIL: z.string().email(),
     RESEND_SENDER_NAME: z.string().min(1),
     SUBSCRIPTION_PLAN: z.string(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
   },
   client: {
     NEXT_PUBLIC_PUBLIC_URL: z.string().url(),
@@ -47,5 +49,7 @@ export const env = createEnv({
     RESEND_SENDER_EMAIL: process.env.RESEND_SENDER_EMAIL,
     RESEND_SENDER_NAME: process.env.RESEND_SENDER_NAME,
     SUBSCRIPTION_PLAN: process.env.SUBSCRIPTION_PLAN,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   },
 })

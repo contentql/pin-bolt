@@ -200,4 +200,9 @@ export default cqlConfig({
       ],
     },
   }),
+
+  membershipPluginOptions: {
+    secretKey: env.STRIPE_SECRET_KEY,
+    webhookSecretKey: env.STRIPE_WEBHOOK_SECRET,
+  },
 })

@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@contentql/core": "^0.3.0",
+    "@contentql/core": "file:.yalc/@contentql/core",
     "@hookform/resolvers": "^3.4.0",
     "@payloadcms/live-preview-react": "3.0.0-beta.111",
     "@payloadcms/next": "3.0.0-beta.111",

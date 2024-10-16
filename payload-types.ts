@@ -18,6 +18,9 @@ export interface Config {
     users: User;
     subscribers: Subscriber;
     search: Search;
+    orders: Order;
+    cards: Card;
+    subscriptionPlans: SubscriptionPlan;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -58,7 +61,7 @@ export interface UserAuthOperations {
 export interface Page {
   id: string;
   title: string;
-  layout?: (HomeType | DetailsType | ListType | NewsletterType | DisqusCommentsType)[] | null;
+  layout?: (HomeType | DetailsType | ListType | NewsletterType | MembershipType | DisqusCommentsType)[] | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -176,6 +179,42 @@ export interface NewsletterType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MembershipType".
+ */
+export interface MembershipType {
+  title: string;
+  planList: {
+    plan?: (string | null) | SubscriptionPlan;
+    popular?: boolean | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'Membership';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscriptionPlans".
+ */
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  price: number;
+  description?: string | null;
+  features?:
+    | {
+        feature?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  stripeProductId?: string | null;
+  stripePriceId?: string | null;
+  stripePaymentLink?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "DisqusCommentsType".
  */
 export interface DisqusCommentsType {
@@ -276,6 +315,13 @@ export interface User {
       }[]
     | null;
   bio?: string | null;
+  stripe_customer_code?: string | null;
+  user_plan?: ('free' | 'pro' | 'enterprise') | null;
+  stripe_subscription_id?: string | null;
+  last_billed_date?: string | null;
+  plan_end_date?: string | null;
+  subscription_status?: string | null;
+  wallet?: number | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -325,6 +371,49 @@ export interface Search {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  user?: (string | null) | User;
+  amount?: number | null;
+  currency?: string | null;
+  status?: string | null;
+  invoiceId?: string | null;
+  invoiceUrl?: string | null;
+  invoicePdf?: string | null;
+  products?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  userEmail?: string | null;
+  paymentError?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cards".
+ */
+export interface Card {
+  id: string;
+  name: string;
+  paymentMethodId: string;
+  user?: {
+    relationTo: 'users';
+    value: string | User;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -357,6 +446,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'search';
         value: string | Search;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
+      } | null)
+    | ({
+        relationTo: 'cards';
+        value: string | Card;
+      } | null)
+    | ({
+        relationTo: 'subscriptionPlans';
+        value: string | SubscriptionPlan;
       } | null);
   globalSlug?: string | null;
   user: {
