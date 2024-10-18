@@ -24,12 +24,10 @@ const TextArea: React.FC<
     >
   }
 > = ({ name, label, width, register, required: requiredFromProps, errors }) => {
-  console.log('errors', errors)
-
   return (
     <Width width={width as number}>
       <div className='flex flex-col gap-2'>
-        <label className='text-md font-semibold capitalize text-neutral-content/60'>
+        <label className='text-md text-neutral-content/60 font-semibold capitalize'>
           {label}
         </label>
         <Textarea

@@ -16,7 +16,6 @@ interface FormProps extends FormType {
   params: Params
 }
 const FormBlock: React.FC<FormProps> = ({ params, ...block }) => {
-  console.log('blocks', block)
   const router = useRouter()
   const {
     title,
@@ -98,7 +97,6 @@ const FormBlock: React.FC<FormProps> = ({ params, ...block }) => {
         field: name,
         value: value !== undefined && value !== null ? value.toString() : '',
       }))
-    console.log('form data', data, dataToSend)
     newFormSubmit({ id: id, data: dataToSend })
   }
 

@@ -9,7 +9,6 @@ import { ContactPageData } from './data'
 const payload = await getPayloadHMR({ config: configPromise })
 
 const seed = async ({ spinner, forms }: { spinner: Ora; forms: Form[] }) => {
-  console.log('forms', forms?.at(0))
   spinner.start(`Started created contact-page...`)
 
   const ContactPageResult: RequiredDataFromCollectionSlug<'pages'> = {
