@@ -6,6 +6,7 @@ import { siteSettingsRouter } from '@/trpc/routers/site-settings'
 import { tagRouter } from '@/trpc/routers/tag'
 
 import { authRouter } from './auth'
+import { formRouter } from './form'
 import { searchRouter } from './search'
 import { seedRouter } from './seed'
 import { subscriberRouter } from './subscribe'
@@ -23,6 +24,7 @@ export const appRouter = router({
   // this is used for global search
   search: searchRouter,
   subscribe: subscriberRouter,
+  form: formRouter,
 })
 
 export type AppRouter = typeof appRouter
