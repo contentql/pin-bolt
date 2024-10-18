@@ -62,7 +62,11 @@ const AuthorsList: React.FC<AuthorsListProps> = ({
         {authors ? (
           <>
             {authors.map((author, index) => (
-              <AuthorCard key={index} author={author} authorLink={authorLink} />
+              <AuthorCard
+                key={index}
+                author={author}
+                authorLink={authorLink?.value}
+              />
             ))}
 
             <div className='mt-4 flex justify-center sm:col-span-2 lg:col-span-4'>

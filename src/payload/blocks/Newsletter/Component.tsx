@@ -1,10 +1,11 @@
 'use client'
 
+import Form from '../Form/Components/Form'
 import { NewsletterType } from '@payload-types'
 
-import Form from './Form'
+const Newsletter = ({ heading, description, form }: NewsletterType) => {
+  const newsletterForm = form && typeof form !== 'string' ? form : undefined
 
-const Newsletter = ({ heading, description, buttonText }: NewsletterType) => {
   return (
     <div className='relative isolate overflow-hidden rounded border bg-popover px-6 py-24 sm:rounded-3xl sm:px-24'>
       <h2 className='mx-auto max-w-2xl text-center text-3xl font-semibold tracking-tight sm:text-4xl'>
@@ -13,10 +14,13 @@ const Newsletter = ({ heading, description, buttonText }: NewsletterType) => {
       <p className='mx-auto mt-2 max-w-xl text-center text-lg leading-8 text-secondary'>
         {description}
       </p>
-      <Form
-        buttonText={buttonText}
-        className='mx-auto mt-10 max-w-md gap-x-4'
-      />
+
+      {newsletterForm ? (
+        <div className='mx-auto mt-8 w-full max-w-md'>
+          <Form form={newsletterForm} className='[&>button]:w-full' />
+        </div>
+      ) : null}
+
       <svg
         viewBox='0 0 1024 1024'
         aria-hidden='true'

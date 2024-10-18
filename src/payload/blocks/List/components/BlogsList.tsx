@@ -65,9 +65,9 @@ const BlogsList: React.FC<BlogsListProps> = ({
               <BlogCard
                 blog={blog}
                 key={blog.id}
-                authorLink={authorLink}
-                blogLink={blogLink}
-                tagLink={tagLink}
+                authorLink={authorLink?.value}
+                blogLink={blogLink?.value}
+                tagLink={tagLink?.value}
               />
             ))}
 

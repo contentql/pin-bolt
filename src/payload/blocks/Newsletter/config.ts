@@ -20,10 +20,10 @@ const NewsletterConfig: Block = {
       required: true,
     },
     {
-      type: 'text',
-      name: 'buttonText',
-      required: true,
-      defaultValue: 'Subscribe',
+      type: 'relationship',
+      name: 'form',
+      relationTo: 'forms',
+      hasMany: false,
     },
   ],
 }

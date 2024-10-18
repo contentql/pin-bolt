@@ -63,6 +63,28 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
 
         return payloadSlateToHtmlConfig.elementTransforms.upload({ node })
       },
+      link: ({ node, children = [] }) => {
+        const attrs: { [key: string]: string } = {}
+        if (node.linkType) {
+          attrs['data-link-type'] = node.linkType
+        }
+        if (node.newTab) {
+          attrs.target = '_blank'
+        }
+
+        attrs['data-disable-nprogress'] = 'true'
+
+        return new Element(
+          'a',
+          Object.assign(
+            {
+              href: node.url,
+            },
+            attrs,
+          ),
+          children,
+        )
+      },
     },
   })
 
@@ -125,7 +147,9 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
   const authorLink = redirectionLinks ? redirectionLinks.authorLink : undefined
 
   const userSlug =
-    authorLink && typeof authorLink !== 'string' ? authorLink.path! : ''
+    authorLink?.value && typeof authorLink.value !== 'string'
+      ? authorLink.value.path!
+      : ''
   const slicedUserSlug = userSlug ? userSlug.split('[')[0] : ''
 
   return (
@@ -147,7 +171,9 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
                 }
 
                 const tagSlug =
-                  tagLink && typeof tagLink !== 'string' ? tagLink.path! : ''
+                  tagLink?.value && typeof tagLink.value !== 'string'
+                    ? tagLink.value.path!
+                    : ''
                 const slicedTagSlug = tagSlug ? tagSlug.split('[')[0] : ''
 
                 return (

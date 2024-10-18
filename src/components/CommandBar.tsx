@@ -15,7 +15,7 @@ import {
   useRegisterActions,
 } from 'kbar'
 import { Hash, Search, UserRound } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar'
 import { ReactElement, useState } from 'react'
 
 import { trpc } from '@/trpc/client'
@@ -75,7 +75,10 @@ const CommandBar = () => {
 
                 const link = linkMap[section]
 
-                const slug = link && typeof link !== 'string' ? link.path! : ''
+                const slug =
+                  link?.value && typeof link.value !== 'string'
+                    ? link.value.path!
+                    : ''
                 const slicedSlug = slug ? slug.split('[')[0] : ''
 
                 if (slug) {
