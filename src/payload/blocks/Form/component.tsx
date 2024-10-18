@@ -74,6 +74,7 @@ const FormBlock: React.FC<FormProps> = ({ params, ...block }) => {
     formState: { errors },
     control,
     setValue,
+    reset,
   } = formMethod
 
   const { mutate: newFormSubmit, isPending: isFormSubmissionPending } =
@@ -85,6 +86,7 @@ const FormBlock: React.FC<FormProps> = ({ params, ...block }) => {
           if (redirectUrl) router.push(redirectUrl)
         } else if (confirmationType === 'message' && confirmationMessage)
           toast.success('Form successfully submitted')
+        reset()
       },
       onError: () => {
         toast.error('Failed to submit Form, try again.')
