@@ -46,9 +46,12 @@ export const seedRouter = router({
       })
 
       const blogsPage = await seedBlogsPage(spinner)
+      const forms = await seedForm(spinner)
+
       const blogsDetailsPage = await seedBlogDetailsPage({
         spinner,
         id: blogsPage.id,
+        forms,
       })
 
       const authorsPage = await seedAuthorsPage(spinner)
@@ -56,7 +59,7 @@ export const seedRouter = router({
         spinner,
         id: authorsPage.id,
       })
-      const forms = await seedForm(spinner)
+
       const authors = await seedAuthors(spinner)
       const tags = await seedTags(spinner)
 

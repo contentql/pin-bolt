@@ -15,11 +15,5 @@ export const blogDetailsPageData: BlogDetailsPageDataType = {
       blockType: 'Details',
       collectionSlug: 'blogs',
     },
-    {
-      blockType: 'Newsletter',
-      heading: '🔔 Subscribe to our Newsletter',
-      description: 'Stay up to date with our latest news and products',
-      buttonText: 'Subscribe',
-    },
   ],
 }

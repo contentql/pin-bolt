@@ -47,7 +47,8 @@ const TagsList = ({
   const { redirectionLinks } = useMetadata()
 
   const link = redirectionLinks?.tagLink
-  const slug = link && typeof link !== 'string' ? link.path! : ''
+  const slug =
+    link?.value && typeof link.value !== 'string' ? link.value.path! : ''
   const slicedSlug = slug ? slug.split('[')[0] : ''
 
   const tagsList = tags

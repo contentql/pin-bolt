@@ -47,13 +47,18 @@ const CheckboxField: React.FC<
 
   return (
     <Width width={width as number}>
-      <div className='flex flex-row items-start gap-2 text-start'>
+      <div className='flex flex-row items-center gap-2 text-start'>
         <Checkbox
+          id={label ?? ''}
           {...register(name, { required: requiredFromProps as boolean })}
           checked={checkedValue}
           onCheckedChange={(checked: boolean) => setValue(name, checked)}
         />
-        <label className='text-md text-neutral-content/60'>{label}</label>
+        <label
+          className='text-md text-neutral-content/60'
+          htmlFor={label ?? ''}>
+          {label}
+        </label>
       </div>
       {requiredFromProps && errors[name] && (
         <p className=' text-md mt-2 text-red-500'>

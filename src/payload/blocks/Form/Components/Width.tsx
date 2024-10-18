@@ -15,7 +15,7 @@ function getWidth(width: number) {
   else return 'w-[calc(100%-16px)]'
 }
 const Width: React.FC<WidthProps> = ({ children, width }) => {
-  return <div className={cn(getWidth(width))}>{children}</div>
+  return <div className={cn(`flex-grow ${getWidth(width)}`)}>{children}</div>
 }
 
 export default Width

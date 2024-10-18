@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url'
 import { ResetPassword } from '@/emails/reset-password'
 import { UserAccountVerification } from '@/emails/verify-email'
 import { blocks } from '@/payload/blocks/index'
-import { subscribersCollection } from '@/payload/collections/subscribers'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -83,7 +82,6 @@ export default cqlConfig({
         },
       },
     },
-    subscribersCollection,
   ],
 
   globals: [

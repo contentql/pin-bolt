@@ -16,7 +16,6 @@ export interface Config {
     tags: Tag;
     media: Media;
     users: User;
-    subscribers: Subscriber;
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
@@ -171,24 +170,10 @@ export interface ListType {
 export interface NewsletterType {
   heading: string;
   description: string;
-  buttonText: string;
+  form?: (string | null) | Form;
   id?: string | null;
   blockName?: string | null;
   blockType: 'Newsletter';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FormType".
- */
-export interface FormType {
-  title: string;
-  form: {
-    relationTo: 'forms';
-    value: string | Form;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'FormBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -317,6 +302,20 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FormType".
+ */
+export interface FormType {
+  title: string;
+  form: {
+    relationTo: 'forms';
+    value: string | Form;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'FormBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "DisqusCommentsType".
  */
 export interface DisqusCommentsType {
@@ -432,16 +431,6 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "subscribers".
- */
-export interface Subscriber {
-  id: string;
-  email: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
@@ -507,10 +496,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
-      } | null)
-    | ({
-        relationTo: 'subscribers';
-        value: string | Subscriber;
       } | null)
     | ({
         relationTo: 'forms';

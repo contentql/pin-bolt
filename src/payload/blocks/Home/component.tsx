@@ -1,4 +1,3 @@
-import Form from '../Newsletter/Form'
 import { Params } from '../types'
 import { HomeType } from '@payload-types'
 import Image from 'next/image'
@@ -21,15 +20,6 @@ const Home: React.FC<HomeProps> = ({ params, ...block }) => {
       <div className='max-w-lg space-y-3 text-balance'>
         <h1 className='text-2xl font-semibold md:text-5xl'>{block.heading}</h1>
         <p className='text-secondary md:text-xl'>{block?.subHeading}</p>
-
-        {block.subscribeField && (
-          <div className='pt-12'>
-            <p className='mb-2 text-sm text-secondary'>
-              Subscribe to newsletter to get latest updates
-            </p>
-            <Form buttonText='Subscribe' />
-          </div>
-        )}
       </div>
 
       <div className='relative aspect-square w-full max-w-lg overflow-hidden rounded bg-secondary'>

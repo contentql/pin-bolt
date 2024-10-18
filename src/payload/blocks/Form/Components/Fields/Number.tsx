@@ -26,12 +26,16 @@ const Number: React.FC<
 > = ({ name, label, width, register, required: requiredFromProps, errors }) => {
   return (
     <Width width={width as number}>
-      <div className='flex flex-col gap-2'>
-        <label className='text-md text-neutral-content/60 font-semibold capitalize'>
+      <div className='flex flex-col gap-1'>
+        <label
+          className='block text-sm font-medium capitalize'
+          htmlFor={label ?? ''}>
           {label}
         </label>
+
         <Input
           type='number'
+          id={label ?? ''}
           {...register(name, { required: requiredFromProps as boolean })}
         />
         {requiredFromProps && errors[name] && (

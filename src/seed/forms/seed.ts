@@ -10,6 +10,7 @@ const payload = await getPayloadHMR({ config: configPromise })
 const seed = async (spinner: Ora) => {
   spinner.start(`Started creating forms...`)
   const formsList: Form[] = []
+
   try {
     // lopping through authors creating authors with images and pushing the author details to usersList
     for await (const formData of formsData) {

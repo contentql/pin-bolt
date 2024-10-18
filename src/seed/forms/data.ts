@@ -242,4 +242,37 @@ export const formsData: FormsDataType[] = [
       },
     ],
   },
+  {
+    title: 'Newsletter Form',
+    fields: [
+      {
+        blockType: 'text',
+        name: 'firstName',
+        label: 'First Name',
+        required: true,
+        blockName: 'First Name',
+        width: 100,
+      },
+
+      {
+        blockType: 'email',
+        name: 'email',
+        label: 'Email',
+        required: true,
+        blockName: 'Email',
+        width: 100,
+      },
+    ],
+    submitButtonLabel: 'Subscribe',
+    confirmationType: 'message',
+    confirmationMessage: [
+      {
+        children: [
+          {
+            text: 'Thanks for Subscribing!',
+          },
+        ],
+      },
+    ],
+  },
 ]

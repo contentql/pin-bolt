@@ -10,17 +10,11 @@ export const ContactPageData: ContactPageDataType = {
   layout: [
     {
       blockType: 'FormBlock',
-      title: 'Have a Question? Contact Us',
+      title: 'Have a Question🤔? Contact Us',
       form: {
         relationTo: 'forms',
         value: '',
       },
-    },
-    {
-      blockType: 'Newsletter',
-      heading: '🔔 Subscribe to our Newsletter',
-      description: 'Stay up to date with our latest news and products',
-      buttonText: 'Subscribe',
     },
   ],
 }

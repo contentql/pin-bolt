@@ -58,10 +58,9 @@ const SelectField: React.FC<
 }) => {
   return (
     <Width width={width as number}>
-      <div className='flex flex-col gap-2'>
-        <label className='text-md font-semibold capitalize text-neutral-content/80'>
-          {label}
-        </label>
+      <div className='flex flex-col gap-1'>
+        <label className='block text-sm font-medium capitalize'>{label}</label>
+
         <Select onValueChange={value => setValue(name, value)}>
           <SelectTrigger className='w-full flex-shrink-0'>
             <SelectValue

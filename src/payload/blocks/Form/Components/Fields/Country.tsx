@@ -51,10 +51,9 @@ const Country: React.FC<
     trpc?.form?.getAllCountries.useQuery()
   return (
     <Width width={width as number}>
-      <div className='flex flex-col gap-2'>
-        <label className='text-md text-neutral-content/60 font-semibold capitalize'>
-          {label}
-        </label>
+      <div className='flex flex-col gap-1'>
+        <label className='block text-sm font-medium capitalize'>{label}</label>
+
         <Select onValueChange={value => setValue(name, value)}>
           <SelectTrigger className='w-full flex-shrink-0'>
             <SelectValue
