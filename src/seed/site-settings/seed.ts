@@ -14,6 +14,7 @@ export const seedSiteSettings = async ({
   authorPages,
   blogsPage,
   tagsPages,
+  contactPage,
   spinner,
 }: {
   authorDetailsLink: Page
@@ -23,6 +24,7 @@ export const seedSiteSettings = async ({
   tagsPages: Page
   blogsPage: Page
   authorPages: Page
+  contactPage: Page
 }) => {
   spinner.start('Started creating site-settings...')
 
@@ -84,6 +86,21 @@ export const seedSiteSettings = async ({
                 page: {
                   relationTo: 'pages',
                   value: authorPages.id,
+                },
+              },
+
+              menuLinkGroup: {
+                groupLinks: [],
+              },
+            },
+            {
+              group: false,
+              menuLink: {
+                type: 'reference',
+                label: '☎️ Contact',
+                page: {
+                  relationTo: 'pages',
+                  value: contactPage.id,
                 },
               },
 
@@ -225,9 +242,18 @@ export const seedSiteSettings = async ({
           ],
         },
         redirectionLinks: {
-          authorLink: authorDetailsLink.id,
-          blogLink: blogDetailsLink.id,
-          tagLink: tagDetailsLink.id,
+          authorLink: {
+            relationTo: 'pages',
+            value: authorDetailsLink.id,
+          },
+          blogLink: {
+            relationTo: 'pages',
+            value: blogDetailsLink.id,
+          },
+          tagLink: {
+            relationTo: 'pages',
+            value: tagDetailsLink.id,
+          },
         },
       },
     })

@@ -1,4 +1,5 @@
 import configPromise from '@payload-config'
+import { Form } from '@payload-types'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { Ora } from 'ora'
 
@@ -7,26 +8,25 @@ import { formsData } from './data'
 const payload = await getPayloadHMR({ config: configPromise })
 
 const seed = async (spinner: Ora) => {
-  spinner.start(`Started uploading form fields...`)
-
+  spinner.start(`Started creating forms...`)
+  const formsList: Form[] = []
   try {
     // lopping through authors creating authors with images and pushing the author details to usersList
-    for await (const details of formsData) {
+    for await (const formData of formsData) {
       try {
-        const forms = await payload.create({
+        const form = await payload.create({
           collection: 'forms',
-          data: {
-            ...details,
-          },
+          data: formData,
         })
+        formsList?.push(form)
       } catch (error) {
-        spinner.fail(`Failed creating author accounts...`)
+        spinner.fail(`Failed creating Forms...`)
         throw error
       }
     }
 
-    spinner.succeed(`Successfully created author accounts...`)
-    return { status: 'contact form creation success' }
+    spinner.succeed(`Successfully created Forms...`)
+    return formsList
   } catch (error) {
     throw error
   }

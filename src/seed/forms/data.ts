@@ -51,7 +51,7 @@ export const formsData: FormsDataType[] = [
       {
         blockType: 'text',
         name: 'subject',
-        label: 'subject',
+        label: 'Subject',
         required: true,
         blockName: 'Subject',
         width: 100,
@@ -82,7 +82,7 @@ export const formsData: FormsDataType[] = [
           {
             children: [
               {
-                text: 'Dear {{firstname}}',
+                text: 'Dear {{firstName}}',
               },
             ],
           },
@@ -188,7 +188,7 @@ export const formsData: FormsDataType[] = [
                 type: 'li',
                 children: [
                   {
-                    text: 'Subject:{{subject}}',
+                    text: 'Subject: {{subject}}',
                   },
                 ],
               },
