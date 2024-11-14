@@ -5,8 +5,6 @@ import type { Metadata, Viewport } from 'next'
 import { Toaster } from 'sonner'
 
 import '@/app/(app)/globals.css'
-import GoogleAdsense from '@/components/GoogleAdsense'
-import GoogleAnalytics from '@/components/GoogleAnalytics'
 import Provider from '@/trpc/Provider'
 import { serverClient } from '@/trpc/serverClient'
 
@@ -88,8 +86,8 @@ export default async function RootLayout({
         {/* added a explicit link tag because favicon is coming from site-settings */}
         <link rel='icon' type='image/x-icon' href={faviconUrl} />
 
-        <GoogleAdsense metadata={metadata} />
-        <GoogleAnalytics metadata={metadata} />
+        {/* <GoogleAdsense metadata={metadata} /> */}
+        {/* <GoogleAnalytics metadata={metadata} /> */}
       </head>
       <body
         className={`${GeistSans.className} ${GeistMono.variable} antialiased`}>
