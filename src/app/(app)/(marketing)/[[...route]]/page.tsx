@@ -1,14 +1,11 @@
 import { env } from '@env'
 import configPromise from '@payload-config'
-import { Page as PageType } from '@payload-types'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-import RenderBlocks from '@/payload/blocks/RenderBlocks'
+import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
-
-export const dynamic = 'force-dynamic'
 
 const payload = await getPayloadHMR({
   config: configPromise,
@@ -102,10 +99,20 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
     })
 
     return (
-      <RenderBlocks
-        pageInitialData={pageData as PageType}
-        params={resolvedParams}
-      />
+      <div className='relative space-y-20'>
+        {pageData?.layout
+          ? pageData?.layout?.map((block, index) => {
+              // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
+              const Block = blocksJSX[block.blockType] as React.FC<any>
+
+              if (Block) {
+                return <Block {...block} params={resolvedParams} key={index} />
+              }
+
+              return <h3 key={block.id}>Block does not exist </h3>
+            })
+          : null}
+      </div>
     )
   } catch (error) {
     console.error('Error: Page not found')
