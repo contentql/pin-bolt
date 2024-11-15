@@ -33,14 +33,20 @@ const ProfileDropdown = ({
   navLinks: GenerateMenuLinksType[]
 }) => {
   const router = useRouter()
-  const { data } = trpc.user.getUser.useQuery(
-    undefined,
-    user
+  const { data } = trpc.user.getUser.useQuery(undefined, {
+    ...(user
       ? {
           initialData: { ...user, collection: 'users' },
         }
-      : undefined,
-  )
+      : {}),
+    retry: (retryCount, response) => {
+      if (response.data?.httpStatus === 401) {
+        return false
+      }
+
+      return retryCount <= 2
+    },
+  })
 
   const userDetails = {
     url:

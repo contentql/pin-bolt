@@ -2,6 +2,7 @@ import { env } from '@env'
 import configPromise from '@payload-config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import type { Metadata } from 'next'
+import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
 
 import { blocksJSX } from '@/payload/blocks/blocks'
@@ -16,13 +17,19 @@ export async function generateMetadata({
 }: {
   params: Promise<{ route: string[] }>
 }): Promise<Metadata | {}> {
-  const { route } = await params
+  const { route = [] } = await params
+  // Cache the getPageData function
+  const cachedGetPageData = unstable_cache(
+    async (path: string[]) => {
+      return await serverClient.page.getPageData({ path })
+    },
+    ['page-data', ...route],
+    { revalidate: 60 }, // Revalidate every 60 seconds
+  )
 
   try {
     // calling the site-settings to get all the data
-    const pageData = await serverClient.page.getPageData({
-      path: route,
-    })
+    const pageData = await cachedGetPageData(route)
 
     let metadata = pageData.meta
 
@@ -92,11 +99,17 @@ export async function generateMetadata({
 
 const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
   const resolvedParams = await params
+  // Cache the getPageData function
+  const cachedGetPageData = unstable_cache(
+    async (path: string[]) => {
+      return await serverClient.page.getPageData({ path: path || [] })
+    },
+    ['page-data', ...(resolvedParams.route || [])],
+    { revalidate: 60 }, // Revalidate every 60 seconds
+  )
 
   try {
-    const pageData = await serverClient.page.getPageData({
-      path: resolvedParams.route,
-    })
+    const pageData = await cachedGetPageData(resolvedParams.route || [])
 
     return (
       <div className='relative space-y-20'>

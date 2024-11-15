@@ -154,7 +154,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
 
   return (
     <>
-      <section className='grid w-full gap-16 lg:grid-cols-[auto_1fr]'>
+      <section className='grid w-full gap-16 lg:grid-cols-[1fr_minmax(auto,18rem)]'>
         <article className='prose-headings:font prose prose-purple w-full overflow-x-hidden dark:prose-invert lg:prose-xl prose-headings:font-semibold prose-a:text-primary prose-a:no-underline prose-a:after:content-["↗"] hover:prose-a:text-primary/90 hover:prose-a:underline prose-blockquote:border-primary prose-blockquote:bg-primary/10 prose-blockquote:py-4 prose-img:w-full prose-img:rounded prose-video:w-full dark:prose-pre:bg-primary/10 [&_iframe]:aspect-video [&_iframe]:w-full [&_iframe]:rounded'>
           <span
             className='not-prose cursor-pointer text-sm text-secondary'
