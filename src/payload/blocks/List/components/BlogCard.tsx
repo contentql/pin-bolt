@@ -109,6 +109,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
             src={imageURL.src}
             fill
             alt={imageURL.alt}
+            sizes='700px'
             className='animate-image-blur object-cover transition-transform duration-500 hover:scale-110'
           />
         )}

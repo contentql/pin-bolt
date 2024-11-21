@@ -2,8 +2,8 @@ import { env } from '@env'
 import configPromise from '@payload-config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import type { Metadata } from 'next'
-import { unstable_cache } from 'next/cache'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
@@ -18,18 +18,10 @@ export async function generateMetadata({
   params: Promise<{ route: string[] }>
 }): Promise<Metadata | {}> {
   const { route = [] } = await params
-  // Cache the getPageData function
-  const cachedGetPageData = unstable_cache(
-    async (path: string[]) => {
-      return await serverClient.page.getPageData({ path })
-    },
-    ['page-data', ...route],
-    { revalidate: 60 }, // Revalidate every 60 seconds
-  )
 
   try {
     // calling the site-settings to get all the data
-    const pageData = await cachedGetPageData(route)
+    const pageData = await serverClient.page.getPageData({ path: route })
 
     let metadata = pageData.meta
 
@@ -98,37 +90,37 @@ export async function generateMetadata({
 }
 
 const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
-  const resolvedParams = await params
-  // Cache the getPageData function
-  const cachedGetPageData = unstable_cache(
-    async (path: string[]) => {
-      return await serverClient.page.getPageData({ path: path || [] })
-    },
-    ['page-data', ...(resolvedParams.route || [])],
-    { revalidate: 60 }, // Revalidate every 60 seconds
-  )
+  const resolvedParams = (await params).route
 
   try {
-    const pageData = await cachedGetPageData(resolvedParams.route || [])
+    const pageData = await serverClient.page.getPageData({
+      path: resolvedParams || [],
+    })
 
     return (
-      <div className='relative space-y-20'>
-        {pageData?.layout
-          ? pageData?.layout?.map((block, index) => {
-              // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
-              const Block = blocksJSX[block.blockType] as React.FC<any>
+      <Suspense fallback={null}>
+        <div className='relative space-y-20'>
+          {pageData?.layout?.map((block, index) => {
+            // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
+            const Block = blocksJSX[block.blockType] as React.FC<any>
 
-              if (Block) {
-                return <Block {...block} params={resolvedParams} key={index} />
-              }
+            if (Block) {
+              return (
+                <Block
+                  {...block}
+                  params={{ route: resolvedParams }}
+                  key={index}
+                />
+              )
+            }
 
-              return <h3 key={block.id}>Block does not exist </h3>
-            })
-          : null}
-      </div>
+            return <h3 key={block.id}>Block does not exist </h3>
+          })}
+        </div>
+      </Suspense>
     )
   } catch (error) {
-    console.error('Error: Page not found')
+    console.error('Error: Page not found', error)
     notFound()
   }
 }
