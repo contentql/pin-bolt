@@ -2,7 +2,7 @@
 
 import { Page } from '@payload-types'
 import { useLivePreview } from '@payloadcms/live-preview-react'
-import React from 'react'
+import React, { Suspense } from 'react'
 
 import { blocksJSX } from '@/payload/blocks/blocks'
 import { trpc } from '@/trpc/client'
@@ -38,18 +38,20 @@ const RenderBlocks: React.FC<RenderBlocksProps> = ({
   const dataToUse = livePreviewData?.layout || pageData?.layout
 
   return (
-    <div className='relative space-y-20'>
-      {dataToUse?.map((block, index) => {
-        // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
-        const Block = blocksJSX[block.blockType] as React.FC<any>
+    <Suspense fallback={null}>
+      <div className='relative space-y-20'>
+        {dataToUse?.map((block, index) => {
+          // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
+          const Block = blocksJSX[block.blockType] as React.FC<any>
 
-        if (Block) {
-          return <Block {...block} params={params} key={index} />
-        }
+          if (Block) {
+            return <Block {...block} params={params} key={index} />
+          }
 
-        return <h3 key={block.id}>Block does not exist </h3>
-      })}
-    </div>
+          return <h3 key={block.id}>Block does not exist </h3>
+        })}
+      </div>
+    </Suspense>
   )
 }
 
