@@ -3,8 +3,10 @@ import configPromise from '@payload-config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
-import RenderBlocks from '@/payload/blocks/RenderBlocks'
+// import RenderBlocks from '@/payload/blocks/RenderBlocks'
+import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
 
 const payload = await getPayloadHMR({
@@ -97,30 +99,30 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
     })
 
     return (
-      // <Suspense fallback={null}>
-      // <div className='relative space-y-20'>
-      //   {pageData?.layout?.map((block, index) => {
-      //     // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
-      //     const Block = blocksJSX[block.blockType] as React.FC<any>
+      <Suspense fallback={null}>
+        <div className='relative space-y-20'>
+          {pageData?.layout?.map((block, index) => {
+            // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
+            const Block = blocksJSX[block.blockType] as React.FC<any>
 
-      //     if (Block) {
-      //       return (
-      //         <Block
-      //           {...block}
-      //           params={{ route: resolvedParams }}
-      //           key={index}
-      //         />
-      //       )
-      //     }
+            if (Block) {
+              return (
+                <Block
+                  {...block}
+                  params={{ route: resolvedParams }}
+                  key={index}
+                />
+              )
+            }
 
-      //     return <h3 key={block.id}>Block does not exist </h3>
-      //   })}
-      // </div>
-      <RenderBlocks
-        pageInitialData={pageData}
-        params={{ route: resolvedParams }}
-      />
-      // </Suspense>
+            return <h3 key={block.id}>Block does not exist </h3>
+          })}
+        </div>
+      </Suspense>
+      // <RenderBlocks
+      //   pageInitialData={pageData}
+      //   params={{ route: resolvedParams }}
+      // />
     )
   } catch (error) {
     console.error('Error: Page not found', error)
