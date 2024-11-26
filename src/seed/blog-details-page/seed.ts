@@ -13,7 +13,7 @@ const seed = async ({
   forms,
 }: {
   spinner: Ora
-  id: string
+  id: number
   forms: Form[]
 }) => {
   spinner.start(`Started created blogs-details-page...`)

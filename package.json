@@ -17,12 +17,15 @@
     "format:fix": "prettier . --write",
     "run:seed": "pnpx tsx ./src/scripts/run-seed.ts",
     "email": "email dev --dir src/emails",
-    "yalc:contentql/core": "yalc add @contentql/core && yalc link @contentql/core"
+    "yalc:contentql/core": "yalc add @contentql/core && yalc link @contentql/core",
+    "postinstall": "pnpx tsx ./src/scripts/sync-database.ts"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@contentql/core": "^0.3.3",
+    "@contentql/core": "^0.3.5",
     "@hookform/resolvers": "^3.4.0",
+    "@libsql/client": "^0.14.0",
+    "@payloadcms/db-sqlite": "3.0.0-beta.111",
     "@payloadcms/live-preview-react": "3.0.0-beta.111",
     "@payloadcms/next": "3.0.0-beta.111",
     "@payloadcms/plugin-seo": "3.0.0-beta.111",

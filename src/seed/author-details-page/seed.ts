@@ -6,7 +6,7 @@ import { authorDetailsPageData } from './data'
 
 const payload = await getPayloadHMR({ config: configPromise })
 
-const seed = async ({ spinner, id }: { spinner: Ora; id: string }) => {
+const seed = async ({ spinner, id }: { spinner: Ora; id: number }) => {
   spinner.start(`Started created author-details-page...`)
 
   try {

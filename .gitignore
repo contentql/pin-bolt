@@ -38,3 +38,6 @@ next-env.d.ts
 
 .yalc
 yalc*
+
+payload-lite.db
+payload-lite.db-*

@@ -6,7 +6,7 @@ import { tagDetailsPageData } from './data'
 
 const payload = await getPayloadHMR({ config: configPromise })
 
-const seed = async ({ spinner, id }: { spinner: Ora; id: string }) => {
+const seed = async ({ spinner, id }: { spinner: Ora; id: number }) => {
   spinner.start(`Started creating tags-details-page...`)
 
   try {

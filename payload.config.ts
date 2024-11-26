@@ -1,5 +1,6 @@
 import { collectionSlug, cqlConfig } from '@contentql/core'
 import { env } from '@env'
+import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -26,7 +27,15 @@ export default cqlConfig({
   baseURL: env.PAYLOAD_URL,
 
   secret: env.PAYLOAD_SECRET,
-  dbURL: env.DATABASE_URI,
+
+  db: sqliteAdapter({
+    client: {
+      url: process.env.VERCEL ? env.DATABASE_URI : 'file:./payload-lite.db',
+      syncUrl: process.env.VERCEL ? undefined : env.DATABASE_URI,
+      syncInterval: process.env.VERCEL ? undefined : 60,
+      authToken: env.DATABASE_SECRET,
+    },
+  }),
 
   s3: {
     accessKeyId: env.S3_ACCESS_KEY_ID,
@@ -58,6 +67,16 @@ export default cqlConfig({
           admin: {
             description: 'This bio will be shown in the authors details page',
           },
+        },
+        {
+          name: 'role',
+          type: 'select',
+          options: [
+            {
+              label: 'Demo',
+              value: 'demo',
+            },
+          ],
         },
       ],
       auth: {
