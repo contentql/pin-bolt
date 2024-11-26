@@ -18,7 +18,7 @@
     "run:seed": "pnpx tsx ./src/scripts/run-seed.ts",
     "email": "email dev --dir src/emails",
     "yalc:contentql/core": "yalc add @contentql/core && yalc link @contentql/core",
-    "postinstall": "pnpx tsx ./src/scripts/sync-database.ts"
+    "postinstall": "npx tsx ./src/scripts/sync-database.ts"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
