@@ -23,7 +23,7 @@
     "@clack/prompts": "^0.7.0",
     "@contentql/core": "^0.3.5",
     "@hookform/resolvers": "^3.4.0",
-    "@libsql/client": "^0.14.0",
+    "@libsql/client": "0.6.2",
     "@payloadcms/db-sqlite": "3.0.0-beta.111",
     "@payloadcms/live-preview-react": "3.0.0-beta.111",
     "@payloadcms/next": "3.0.0-beta.111",
@@ -83,7 +83,6 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@libsql/client": "^0.14.0",
     "@tailwindcss/typography": "^0.5.13",
     "@types/node": "^20.14.9",
     "@types/node-schedule": "^2.1.7",
