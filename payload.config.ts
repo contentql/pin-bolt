@@ -29,10 +29,16 @@ export default cqlConfig({
   secret: env.PAYLOAD_SECRET,
 
   db: sqliteAdapter({
+    // client: {
+    //   url: process.env.VERCEL ? env.DATABASE_URI : 'file:./payload-lite.db',
+    //   syncUrl: process.env.VERCEL ? undefined : env.DATABASE_URI,
+    //   syncInterval: process.env.VERCEL ? undefined : 60,
+    //   authToken: env.DATABASE_SECRET,
+    // },
     client: {
-      url: process.env.VERCEL ? env.DATABASE_URI : 'file:./payload-lite.db',
-      syncUrl: process.env.VERCEL ? undefined : env.DATABASE_URI,
-      syncInterval: process.env.VERCEL ? undefined : 60,
+      url: env.DATABASE_URI,
+      // syncUrl: env.DATABASE_URI,
+      // syncInterval: process.env.VERCEL ? undefined : 60,
       authToken: env.DATABASE_SECRET,
     },
   }),
