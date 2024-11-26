@@ -23,7 +23,7 @@
     "@clack/prompts": "^0.7.0",
     "@contentql/core": "^0.3.5",
     "@hookform/resolvers": "^3.4.0",
-    "@libsql/client": "0.6.2",
+    "@libsql/client": "0.4.3",
     "@payloadcms/db-sqlite": "3.0.0-beta.111",
     "@payloadcms/live-preview-react": "3.0.0-beta.111",
     "@payloadcms/next": "3.0.0-beta.111",

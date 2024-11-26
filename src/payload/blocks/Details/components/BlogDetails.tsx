@@ -95,7 +95,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
 
   const imageURL =
     typeof blog?.blogImage === 'object'
-      ? { url: 'blog?.blogImage?.url!', alt: 'blog?.blogImage?.alt ' }
+      ? { url: blog?.blogImage?.url!, alt: blog?.blogImage?.alt }
       : { url: '', alt: '' }
 
   const tags = blog.tags
