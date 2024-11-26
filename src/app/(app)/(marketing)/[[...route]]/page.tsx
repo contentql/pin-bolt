@@ -9,6 +9,8 @@ import { Suspense } from 'react'
 import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
 
+export const runtime = 'nodejs'
+
 const payload = await getPayloadHMR({
   config: configPromise,
 })
