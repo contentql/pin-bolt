@@ -48,13 +48,13 @@ const TagsList = ({
 
   const link = redirectionLinks?.tagLink
   const slug =
-    link?.value && typeof link.value !== 'string' ? link.value.path! : ''
+    link?.value && typeof link.value === 'object' ? link.value.path! : ''
   const slicedSlug = slug ? slug.split('[')[0] : ''
 
   const tagsList = tags
     ? tags.map(details => {
         const image =
-          typeof details.tagImage !== 'string'
+          typeof details.tagImage === 'object'
             ? {
                 url: details.tagImage.url!,
                 alt: details.tagImage.alt || `${details.title} tag image`,

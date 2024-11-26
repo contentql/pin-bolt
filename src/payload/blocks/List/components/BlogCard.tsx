@@ -32,7 +32,7 @@ const formatAvatarName = (names: string[]): string => {
   return `${nameList.join(' & ')} & ${firstNameList.length - 2} Others`
 }
 
-type LinkType = (string | null) | Page
+type LinkType = (number | null) | Page
 
 type BlogCardType = {
   blog: Blog
@@ -43,7 +43,7 @@ type BlogCardType = {
 
 const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
   const imageURL =
-    typeof blog.blogImage !== 'string'
+    typeof blog.blogImage === 'object'
       ? {
           src: blog.blogImage?.url!,
           alt: `${blog.blogImage.alt} `,
@@ -51,12 +51,12 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
       : undefined
 
   const blogSlug =
-    blogLink && typeof blogLink !== 'string' ? blogLink.path! : ''
+    blogLink && typeof blogLink === 'object' ? blogLink.path! : ''
   const slicedBlogSlug = blogSlug ? blogSlug.split('[')[0] : ''
 
   const tags = blog.tags
     ? blog.tags.map(({ value }) => {
-        if (typeof value !== 'string') {
+        if (typeof value === 'object') {
           return {
             title: value.title,
             color: value.color || 'purple',
@@ -68,7 +68,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
 
   const userDetails = blog.author
     ? blog.author.map(({ value }) => {
-        if (typeof value !== 'string') {
+        if (typeof value === 'object') {
           const {
             displayName,
             username,
@@ -78,7 +78,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
           } = value
 
           const url =
-            imageUrl && typeof imageUrl !== 'string'
+            imageUrl && typeof imageUrl === 'object'
               ? {
                   src: imageUrl.sizes?.thumbnail?.url!,
                   alt: `${imageURL?.alt}`,
@@ -127,7 +127,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                 }
 
                 const tagSlug =
-                  tagLink && typeof tagLink !== 'string' ? tagLink.path! : ''
+                  tagLink && typeof tagLink === 'object' ? tagLink.path! : ''
                 const slicedTagSlug = tagSlug ? tagSlug.split('[')[0] : ''
 
                 return (
@@ -166,7 +166,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
               }
 
               const userSlug =
-                authorLink && typeof authorLink !== 'string'
+                authorLink && typeof authorLink === 'object'
                   ? authorLink.path!
                   : ''
               const slicedUserSlug = userSlug ? userSlug.split('[')[0] : ''

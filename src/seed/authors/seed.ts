@@ -11,7 +11,7 @@ const seed = async (spinner: Ora) => {
   spinner.start(`Started uploading author images...`)
 
   try {
-    const authorsImages: { id: string; name: string }[] = []
+    const authorsImages: { id: number; name: string }[] = []
     const usersList: User[] = []
 
     // looping through images list uploading to media collection & pushing the result to authorsImages array
@@ -47,7 +47,7 @@ const seed = async (spinner: Ora) => {
           collection: 'users',
           data: {
             ...details,
-            imageUrl: imageId?.id ?? '',
+            imageUrl: imageId?.id,
           },
           locale: undefined,
           fallbackLocale: undefined,

@@ -21,10 +21,10 @@ const AuthorDetails: React.FC<AuthorDetailsProps> = ({
 }) => {
   const authorDetails = {
     image:
-      typeof author.imageUrl !== 'string'
+      typeof author.imageUrl === 'object'
         ? {
-            url: author.imageUrl?.url!,
-            alt: author.imageUrl?.alt,
+            url: 'author.imageUrl?.url!',
+            alt: 'author.imageUrl?.alt',
           }
         : undefined,
     name: author.displayName || author.username,

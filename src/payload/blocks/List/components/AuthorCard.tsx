@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 
-type LinkType = (string | null) | Page
+type LinkType = (number | null) | Page
 
 type AuthorCardType = {
   author: User
@@ -12,12 +12,12 @@ type AuthorCardType = {
 
 const AuthorCard = ({ author, authorLink }: AuthorCardType) => {
   const slug =
-    authorLink && typeof authorLink !== 'string' ? authorLink.path! : ''
+    authorLink && typeof authorLink === 'object' ? authorLink.path! : ''
   const slicedSlug = slug ? slug.split('[')[0] : ''
 
   const authorDetails = {
     image:
-      typeof author.imageUrl !== 'string'
+      typeof author.imageUrl === 'object'
         ? {
             url: author.imageUrl?.url!,
             alt: author.imageUrl?.alt,

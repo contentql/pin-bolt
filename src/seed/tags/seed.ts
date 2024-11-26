@@ -11,7 +11,7 @@ const seed = async (spinner: Ora) => {
   spinner.start(`Started uploading tags images...`)
 
   try {
-    const tagImages: { id: string; name: string }[] = []
+    const tagImages: { id: number; name: string }[] = []
     const tagList: Tag[] = []
 
     // looping through images list uploading to media collection & pushing the result to tagImages array
@@ -47,7 +47,7 @@ const seed = async (spinner: Ora) => {
           collection: 'tags',
           data: {
             ...details,
-            tagImage: imageId?.id ?? '',
+            ...(imageId?.id ? { tagImage: imageId?.id } : {}),
             meta: {
               title: details.title,
               description: details.description,

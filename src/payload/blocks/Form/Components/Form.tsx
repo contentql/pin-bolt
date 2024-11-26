@@ -104,7 +104,10 @@ const Form = ({
   }
 
   return (
-    <form id={id} onSubmit={handleSubmit(onsubmit)} className={className}>
+    <form
+      id={id.toString()}
+      onSubmit={handleSubmit(onsubmit)}
+      className={className}>
       <div className='flex w-full flex-wrap gap-4 sm:gap-6'>
         {fields &&
           fields?.map((field, index) => {

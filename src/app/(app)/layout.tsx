@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const generalSettings = metadata?.general
 
     const ogImageUrl =
-      typeof generalSettings?.ogImageUrl === 'string'
+      typeof generalSettings?.ogImageUrl !== 'object'
         ? generalSettings?.ogImageUrl
         : generalSettings?.ogImageUrl?.url!
 
@@ -44,12 +44,12 @@ export async function generateMetadata(): Promise<Metadata> {
       openGraph: {
         title,
         description,
-        images: ogImage,
+        images: typeof ogImage === 'string' ? ogImage : '',
       },
       twitter: {
         title,
         description,
-        images: ogImage,
+        images: typeof ogImage === 'string' ? ogImage : '',
       },
       keywords: generalSettings.keywords,
     }
@@ -80,7 +80,7 @@ export default async function RootLayout({
   const faviconUrl =
     typeof generalSettings?.faviconUrl === 'string'
       ? generalSettings?.faviconUrl
-      : generalSettings?.faviconUrl?.url!
+      : 'generalSettings?.faviconUrl?.url!'
 
   return (
     <html lang='en' className='dark'>

@@ -50,7 +50,7 @@ const ProfileDropdown = ({
 
   const userDetails = {
     url:
-      data?.imageUrl && typeof data?.imageUrl !== 'string'
+      data?.imageUrl && typeof data?.imageUrl === 'object'
         ? {
             src: data?.imageUrl.sizes?.thumbnail?.url!,
             alt: `${data?.imageUrl?.alt}`,

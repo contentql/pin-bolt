@@ -612,7 +612,7 @@ export const styleGuideBlogData = {
     '/public/images/seed/blog-style-guide-content.jpg',
   ),
   contentAlt: 'A boy near sea shore',
-  content: (id: string) => [
+  content: (id: number) => [
     {
       children: [
         {
@@ -1085,7 +1085,7 @@ export const dynamicAccessBlogData = {
     process.cwd(),
     '/public/images/seed/blog-dynamic-access-profile.avif',
   ),
-  content: (id: string) => [
+  content: (id: number) => [
     {
       children: [
         {

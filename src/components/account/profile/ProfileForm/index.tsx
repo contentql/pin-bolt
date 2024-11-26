@@ -106,7 +106,7 @@ const ProfileForm = ({ user }: { user: User }) => {
 
   const userDetails = {
     url:
-      imageUrl && typeof imageUrl !== 'string'
+      imageUrl && typeof imageUrl === 'object'
         ? {
             src: imageUrl.sizes?.thumbnail?.url!,
             alt: `${imageUrl?.alt}`,

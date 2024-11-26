@@ -11,7 +11,7 @@ interface FormProps extends FormType {
 }
 const FormBlock: React.FC<FormProps> = ({ params, ...block }) => {
   const form =
-    block?.form?.value && typeof block?.form?.value !== 'string'
+    block?.form?.value && typeof block?.form?.value === 'object'
       ? block?.form?.value
       : undefined
 

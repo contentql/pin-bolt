@@ -4,7 +4,7 @@ import Form from '../Form/Components/Form'
 import { NewsletterType } from '@payload-types'
 
 const Newsletter = ({ heading, description, form }: NewsletterType) => {
-  const newsletterForm = form && typeof form !== 'string' ? form : undefined
+  const newsletterForm = form && typeof form === 'object' ? form : undefined
 
   return (
     <div className='relative isolate overflow-hidden rounded border bg-popover px-6 py-24 sm:rounded-3xl sm:px-24'>

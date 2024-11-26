@@ -13,7 +13,7 @@ export const ContactPageData: ContactPageDataType = {
       title: 'Have a Question🤔? Contact Us',
       form: {
         relationTo: 'forms',
-        value: '',
+        value: 0,
       },
     },
   ],

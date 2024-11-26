@@ -12,7 +12,7 @@ interface TagDetailsProps {
 const TagDetails: React.FC<TagDetailsProps> = ({ tagDetails, blogs }) => {
   const tag = {
     image:
-      typeof tagDetails.tagImage !== 'string'
+      typeof tagDetails.tagImage === 'object'
         ? {
             url: tagDetails.tagImage?.url!,
             alt: tagDetails.tagImage?.alt || `${tagDetails.title} tag image`,

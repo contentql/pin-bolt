@@ -94,17 +94,17 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
   })
 
   const imageURL =
-    typeof blog?.blogImage !== 'string'
-      ? { url: blog?.blogImage?.url!, alt: blog?.blogImage?.alt }
+    typeof blog?.blogImage === 'object'
+      ? { url: 'blog?.blogImage?.url!', alt: 'blog?.blogImage?.alt ' }
       : { url: '', alt: '' }
 
   const tags = blog.tags
     ? blog.tags.map(({ value }) => {
-        if (typeof value !== 'string') {
+        if (typeof value === 'object') {
           return {
-            title: value.title,
-            color: value.color || 'purple',
-            slug: value.slug!,
+            title: 'value.title',
+            color: 'purple',
+            slug: 'value.slug!',
           }
         }
       })
@@ -112,7 +112,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
 
   const userDetails = blog.author
     ? blog.author.map(({ value }) => {
-        if (typeof value !== 'string') {
+        if (typeof value === 'object') {
           const {
             displayName,
             username,
@@ -122,9 +122,9 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
           } = value
 
           const url =
-            imageUrl && typeof imageUrl !== 'string'
+            imageUrl && typeof imageUrl === 'object'
               ? {
-                  src: imageUrl.sizes?.thumbnail?.url!,
+                  src: 'imageUrl.sizes?.thumbnail?.url!',
                   alt: `${imageURL?.alt}`,
                 }
               : undefined
@@ -147,7 +147,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
   const authorLink = redirectionLinks ? redirectionLinks.authorLink : undefined
 
   const userSlug =
-    authorLink?.value && typeof authorLink.value !== 'string'
+    authorLink?.value && typeof authorLink.value === 'object'
       ? authorLink.value.path!
       : ''
   const slicedUserSlug = userSlug ? userSlug.split('[')[0] : ''
@@ -171,7 +171,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
                 }
 
                 const tagSlug =
-                  tagLink?.value && typeof tagLink.value !== 'string'
+                  tagLink?.value && typeof tagLink.value === 'object'
                     ? tagLink.value.path!
                     : ''
                 const slicedTagSlug = tagSlug ? tagSlug.split('[')[0] : ''

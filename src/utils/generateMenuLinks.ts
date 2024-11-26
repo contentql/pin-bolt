@@ -61,7 +61,7 @@ export const generateMenuLinks = (
             ({ label, newTab, type, page, url }) => {
               let pageLink = ''
 
-              if (typeof page?.value !== 'string') {
+              if (typeof page?.value === 'object') {
                 pageLink = page?.value.path!
               }
 
@@ -78,7 +78,7 @@ export const generateMenuLinks = (
     else if (menuLink) {
       let pageLink = ''
 
-      if (typeof menuLink?.page?.value !== 'string') {
+      if (typeof menuLink?.page?.value === 'object') {
         pageLink = menuLink.page?.value.path!
       }
 

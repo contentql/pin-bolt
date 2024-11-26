@@ -60,7 +60,7 @@ const CommandBar = () => {
             | 'authors'
 
           return {
-            id: result.id,
+            id: result.id.toString(),
             name: result.parsedValues?.title || '',
             subtitle: result.parsedValues?.description || '',
             perform: () => {
@@ -76,7 +76,7 @@ const CommandBar = () => {
                 const link = linkMap[section]
 
                 const slug =
-                  link?.value && typeof link.value !== 'string'
+                  link?.value && typeof link.value === 'object'
                     ? link.value.path!
                     : ''
                 const slicedSlug = slug ? slug.split('[')[0] : ''

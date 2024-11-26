@@ -8,7 +8,7 @@ interface HomeProps extends HomeType {
 
 const Home: React.FC<HomeProps> = ({ params, ...block }) => {
   const imageURL =
-    typeof block.image === 'string'
+    typeof block.image !== 'object'
       ? undefined
       : {
           url: block.image?.url!,

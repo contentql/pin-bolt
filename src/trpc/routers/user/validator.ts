@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const UpdateProfileImageSchema = z.object({
-  imageUrl: z.string(),
+  imageUrl: z.number(),
 })
 
 export const UpdateUserSchema = z.object({
@@ -9,5 +9,5 @@ export const UpdateUserSchema = z.object({
   password: z.string().min(6).optional(),
   confirmPassword: z.string().min(6).optional(),
   bio: z.string().optional(),
-  imageUrl: z.string().optional(),
+  imageUrl: z.number().optional(),
 })
