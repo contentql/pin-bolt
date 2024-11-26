@@ -12,8 +12,10 @@ const PageNotFound: React.FC = () => {
   const pathname = usePathname()
 
   const { mutate: runSeedMutation, isPending } = trpc.seed.runSeed.useMutation({
-    onSuccess: () => {
-      window.location.reload()
+    onSuccess: data => {
+      console.log({ data })
+
+      // window.location.reload()
     },
   })
 
