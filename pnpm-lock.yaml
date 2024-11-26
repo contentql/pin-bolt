@@ -24,9 +24,6 @@ importers:
       '@libsql/client':
         specifier: 0.14.0
         version: 0.14.0
-      '@libsql/darwin-arm64':
-        specifier: 0.5.0-pre.2
-        version: 0.5.0-pre.2
       '@payloadcms/db-sqlite':
         specifier: 3.0.0-beta.111
         version: 3.0.0-beta.111(payload@3.0.0-beta.111(graphql@16.9.0)(monaco-editor@0.52.0)(react-dom@19.0.0-rc-3edc000d-20240926(react@19.0.0-rc-3edc000d-20240926))(react@19.0.0-rc-3edc000d-20240926)(typescript@5.6.3))(react@19.0.0-rc-3edc000d-20240926)(types-react@19.0.0-rc.1)
@@ -201,6 +198,16 @@ importers:
       zod:
         specifier: ^3.23.8
         version: 3.23.8
+    optionalDependencies:
+      '@libsql/darwin-arm64':
+        specifier: ^0.5.0-pre.2
+        version: 0.5.0-pre.2
+      '@libsql/linux-x64-gnu':
+        specifier: ^0.5.0-pre.2
+        version: 0.5.0-pre.2
+      '@libsql/linux-x64-musl':
+        specifier: ^0.5.0-pre.2
+        version: 0.5.0-pre.2
     devDependencies:
       '@tailwindcss/typography':
         specifier: ^0.5.13
@@ -7143,7 +7150,8 @@ snapshots:
   '@libsql/darwin-arm64@0.4.7':
     optional: true
 
-  '@libsql/darwin-arm64@0.5.0-pre.2': {}
+  '@libsql/darwin-arm64@0.5.0-pre.2':
+    optional: true
 
   '@libsql/darwin-x64@0.3.19':
     optional: true
