@@ -80,6 +80,7 @@ jobs:
           platforms: linux/amd64
           build-args: |
             DATABASE_URI=${{ secrets.DATABASE_URI }}
+            DATABASE_SECRET=${{ secrets.DATABASE_SECRET }}
             PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
             NEXT_PUBLIC_PUBLIC_URL=${{ secrets.NEXT_PUBLIC_PUBLIC_URL }}
             PAYLOAD_URL=${{ secrets.PAYLOAD_URL }}
