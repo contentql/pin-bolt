@@ -34,13 +34,9 @@ const cloneSeedDB = () => {
   })
 }
 
-if (!process.env.VERCEL) {
-  try {
-    await client.sync()
-    cloneSeedDB()
-  } catch (error) {
-    console.log({ error })
-  }
-} else {
-  console.warn('Skipping sync of seed.db')
+try {
+  await client.sync()
+  cloneSeedDB()
+} catch (error) {
+  console.log({ error })
 }
