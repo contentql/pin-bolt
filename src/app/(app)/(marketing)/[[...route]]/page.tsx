@@ -9,15 +9,16 @@ import { Suspense } from 'react'
 import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
 
-const payload = await getPayloadHMR({
-  config: configPromise,
-})
+export const revalidate = 60
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ route: string[] }>
 }): Promise<Metadata | {}> {
+  const payload = await getPayloadHMR({
+    config: configPromise,
+  })
   const { route = [] } = await params
 
   try {
@@ -88,6 +89,22 @@ export async function generateMetadata({
     // in error case returning empty object
     return {}
   }
+}
+
+export async function generateStaticParams() {
+  const allPagesData = await serverClient.page.getAllPages()
+
+  // console.log(allPagesData)
+
+  // return allPagesData.map(page => ({
+  //   route: page.path,
+  // }))
+
+  return [
+    { route: ['posts'] },
+    { route: ['team'] },
+    { route: ['post', 'dynamic-access-in-javascript'] },
+  ]
 }
 
 const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
