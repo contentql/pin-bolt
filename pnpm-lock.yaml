@@ -200,7 +200,7 @@ importers:
         version: 3.23.8
     optionalDependencies:
       '@libsql/darwin-arm64':
-        specifier: ^0.5.0-pre.2
+        specifier: 0.5.0-pre.2
         version: 0.5.0-pre.2
       '@libsql/linux-x64-gnu':
         specifier: ^0.5.0-pre.2

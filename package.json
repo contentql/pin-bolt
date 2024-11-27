@@ -17,7 +17,8 @@
     "format:fix": "prettier . --write",
     "run:seed": "pnpx tsx ./src/scripts/run-seed.ts",
     "email": "email dev --dir src/emails",
-    "yalc:contentql/core": "yalc add @contentql/core && yalc link @contentql/core"
+    "yalc:contentql/core": "yalc add @contentql/core && yalc link @contentql/core",
+    "postinstall": "npx tsx ./src/scripts/libsql-package.ts"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
@@ -100,7 +101,7 @@
     "typescript": "^5.4.5"
   },
   "optionalDependencies": {
-    "@libsql/darwin-arm64": "^0.5.0-pre.2",
+    "@libsql/darwin-arm64": "0.5.0-pre.2",
     "@libsql/linux-x64-gnu": "^0.5.0-pre.2",
     "@libsql/linux-x64-musl": "^0.5.0-pre.2"
   },
