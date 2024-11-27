@@ -66,7 +66,7 @@ ENV SUBSCRIPTION_PLAN=$SUBSCRIPTION_PLAN
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm &&  pnpm i @libsql/linux-x64-musl && pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
@@ -80,6 +80,8 @@ ENV NODE_ENV production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+
+RUN corepack enable pnpm &&  pnpm i @libsql/linux-x64-musl
 
 COPY --from=builder /app/public ./public
 
