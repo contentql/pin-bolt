@@ -2,6 +2,7 @@ import configPromise from '@payload-config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { TRPCError, initTRPC } from '@trpc/server'
 import { NextRequest } from 'next/server'
+import superjson from 'superjson'
 
 export const createTRPCContext = (req: NextRequest) => {
   return {
@@ -15,7 +16,9 @@ const payload = await getPayloadHMR({
 
 const t = initTRPC
   .context<Partial<Awaited<ReturnType<typeof createTRPCContext>>>>()
-  .create({})
+  .create({
+    transformer: superjson,
+  })
 
 const isAuthenticated = t.middleware(async ({ ctx, next }) => {
   // ! isAuthenticated middleware should not be used in static generation related api calls

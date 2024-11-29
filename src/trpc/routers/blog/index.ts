@@ -1,5 +1,6 @@
 import configPromise from '@payload-config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 
 import { publicProcedure, router } from '@/trpc'
@@ -55,7 +56,13 @@ export const blogRouter = router({
           },
         })
 
-        return docs.at(0)
+        const blog = docs.at(0)
+
+        if (!blog) {
+          throw new TRPCError({ message: 'No blog found!', code: 'NOT_FOUND' })
+        }
+
+        return blog
       } catch (error: any) {
         console.log(error)
         throw new Error(error.message)

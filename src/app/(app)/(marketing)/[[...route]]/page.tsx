@@ -1,13 +1,16 @@
 import { env } from '@env'
 import configPromise from '@payload-config'
+import { DetailsType, ListType } from '@payload-types'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { dehydrate } from '@tanstack/react-query'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Suspense } from 'react'
 
+import ReactQueryHydrate from '@/components/ReactQueryHydrate'
 // import RenderBlocks from '@/payload/blocks/RenderBlocks'
 import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
+import { createSSRHelper } from '@/trpc/ssr'
 
 export const revalidate = 60
 
@@ -109,14 +112,102 @@ export async function generateStaticParams() {
 
 const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
   const resolvedParams = (await params).route
+  const helpers = await createSSRHelper()
+
+  const listPrefetch: {
+    [key in NonNullable<ListType['collectionSlug']>]: undefined | Promise<void>
+  } = {
+    blogs: helpers.blog.getAllBlogs.prefetchInfinite({
+      limit: 10,
+    }),
+    users: helpers.author.getAllAuthorsWithCount.prefetchInfinite({
+      limit: 10,
+    }),
+    tags: helpers.tag.getAllTags.prefetchInfinite({
+      limit: 10,
+    }),
+  }
+
+  const detailsPrefetch: {
+    [key in NonNullable<DetailsType['collectionSlug']>]:
+      | undefined
+      | Promise<void>
+  } = {
+    blogs: helpers.blog.getBlogBySlug.prefetch({
+      slug: resolvedParams?.at(-1)!,
+    }),
+    tags: helpers.tag.getBlogs.prefetch({
+      tagSlug: resolvedParams?.at(-1)!,
+    }),
+    users: helpers.author.getBlogsByAuthorName.prefetch({
+      authorName: resolvedParams?.at(-1)!,
+    }),
+  }
 
   try {
     const pageData = await serverClient.page.getPageData({
       path: resolvedParams || [],
     })
 
+    const layoutData = pageData.layout ?? []
+
+    if (layoutData.length) {
+      for await (const block of layoutData) {
+        switch (block.blockType) {
+          case 'List':
+            if (block.collectionSlug) {
+              const selectedListPrefetch = listPrefetch[block.collectionSlug]
+
+              if (selectedListPrefetch) {
+                await selectedListPrefetch
+              }
+            }
+            break
+          case 'Details':
+            if (block.collectionSlug) {
+              const selectedDetailsPrefetch =
+                detailsPrefetch[block.collectionSlug]
+              if (selectedDetailsPrefetch) {
+                await selectedDetailsPrefetch
+              }
+            }
+            break
+        }
+      }
+    }
+
+    const dehydratedState = dehydrate(helpers.queryClient)
+
+    // const blocks = Array.isArray(pageData.layout)
+    //   ? pageData.layout.filter(
+    //       individualBlock => individualBlock.blockType === 'List',
+    //     )
+    //   : undefined
+
+    //   let data
+
+    // switch (block?.collectionSlug) {
+    //   case 'blogs': {
+    //     data = await serverClient.blog.getBlogBySlug({
+    //       slug: resolvedParams?.at(-1)!,
+    //     })
+    //   }
+
+    //   case 'tags': {
+    //     data = await serverClient.tag.getBlogs({
+    //       tagSlug: resolvedParams?.at(-1)!,
+    //     })
+    //   }
+
+    //   case 'users': {
+    //     data = await serverClient.author.getAuthorByName({
+    //       authorName: resolvedParams?.at(-1)!,
+    //     })
+    //   }
+    // }
+
     return (
-      <Suspense fallback={null}>
+      <ReactQueryHydrate state={dehydratedState}>
         <div className='relative space-y-20'>
           {pageData?.layout?.map((block, index) => {
             // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
@@ -135,11 +226,7 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
             return <h3 key={block.id}>Block does not exist </h3>
           })}
         </div>
-      </Suspense>
-      // <RenderBlocks
-      //   pageInitialData={pageData}
-      //   params={{ route: resolvedParams }}
-      // />
+      </ReactQueryHydrate>
     )
   } catch (error) {
     console.error('Error: Page not found', error)

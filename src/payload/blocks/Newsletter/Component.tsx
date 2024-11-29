@@ -1,5 +1,3 @@
-'use client'
-
 import Form from '../Form/Components/Form'
 import { NewsletterType } from '@payload-types'
 

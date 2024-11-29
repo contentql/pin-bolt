@@ -102,9 +102,9 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
     ? blog.tags.map(({ value }) => {
         if (typeof value === 'object') {
           return {
-            title: 'value.title',
+            title: value.title,
             color: 'purple',
-            slug: 'value.slug!',
+            slug: value.slug!,
           }
         }
       })
@@ -124,7 +124,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
           const url =
             imageUrl && typeof imageUrl === 'object'
               ? {
-                  src: 'imageUrl.sizes?.thumbnail?.url!',
+                  src: imageUrl.sizes?.thumbnail?.url!,
                   alt: `${imageURL?.alt}`,
                 }
               : undefined
@@ -258,7 +258,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
           <div className='not-prose mt-8 flex items-center justify-end gap-6 lg:hidden'>
             <p className='text-secondary'>Share: </p>
 
-            <ShareList url={window.location.href} />
+            <ShareList />
           </div>
         </article>
 
@@ -299,7 +299,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
             <div className='mt-10 flex items-center justify-between'>
               <p className='text-secondary'>Share: </p>
 
-              <ShareList url={window.location.href} />
+              <ShareList />
             </div>
           </div>
         </div>

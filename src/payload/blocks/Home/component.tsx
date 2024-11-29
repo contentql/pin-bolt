@@ -28,6 +28,7 @@ const Home: React.FC<HomeProps> = ({ params, ...block }) => {
             src={imageURL.url}
             className='h-full w-full animate-image-blur object-cover object-center'
             fill
+            sizes='900px'
             alt={imageURL.alt}
           />
         )}

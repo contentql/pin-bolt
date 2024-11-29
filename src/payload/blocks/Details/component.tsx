@@ -70,33 +70,25 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
     }
 
     case 'users': {
-      const {
-        data: author,
-        isPending,
-        isFetching,
-      } = trpc.author.getAuthorByName.useQuery({
-        authorName: params?.route?.at(-1)!,
-      })
       const { data: authorBlogs, isPending: blogsLoading } =
-        trpc.author.getBlogsByAuthorName.useQuery(
-          {
-            authorName: params?.route?.at(-1)!,
-          },
-          {
-            enabled: !!author, // calling the blogs based on the author details
-          },
-        )
+        trpc.author.getBlogsByAuthorName.useQuery({
+          authorName: params?.route?.at(-1)!,
+        })
 
-      // if author not found showing 404
-      if (!author && !isFetching && !isPending) {
-        return notFound()
-      }
+      const author = Array.isArray(authorBlogs?.[0]?.author)
+        ? authorBlogs?.[0]?.author.filter(({ value }) => {
+            return (
+              typeof value === 'object' &&
+              value.username === params?.route?.at(-1)!
+            )
+          })[0]?.value
+        : undefined
 
-      if (isPending) {
+      if (blogsLoading) {
         return <AuthorDetailsLoading />
       }
 
-      if (author) {
+      if (typeof author === 'object') {
         return (
           <AuthorDetails
             author={author}

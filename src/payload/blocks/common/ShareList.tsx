@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 import {
   FacebookLogo,
@@ -7,8 +10,13 @@ import {
   WhatsappLogo,
 } from '@/components/SVG'
 
-const ShareList = ({ url }: { url: string }) => {
+const ShareList = () => {
+  const [url, setURL] = useState('')
   const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 0
+
+  useEffect(() => {
+    setURL(window.location.href)
+  }, [])
 
   return (
     <div className='flex items-center gap-4'>

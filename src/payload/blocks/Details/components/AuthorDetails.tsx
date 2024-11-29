@@ -11,7 +11,7 @@ import NoPostsFound from './NoPostsFound'
 interface AuthorDetailsProps {
   blogsData?: Blog[]
   author: User
-  blogsLoading: boolean
+  blogsLoading?: boolean
 }
 
 const AuthorDetails: React.FC<AuthorDetailsProps> = ({
@@ -23,8 +23,8 @@ const AuthorDetails: React.FC<AuthorDetailsProps> = ({
     image:
       typeof author.imageUrl === 'object'
         ? {
-            url: 'author.imageUrl?.url!',
-            alt: 'author.imageUrl?.alt',
+            url: author.imageUrl?.url!,
+            alt: author.imageUrl?.alt,
           }
         : undefined,
     name: author.displayName || author.username,
