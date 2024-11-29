@@ -17,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
     const generalSettings = metadata?.general
 
     const ogImageUrl =
-      typeof generalSettings?.ogImageUrl !== 'object'
-        ? generalSettings?.ogImageUrl
-        : generalSettings?.ogImageUrl?.url!
+      typeof generalSettings?.ogImageUrl === 'object'
+        ? generalSettings?.ogImageUrl?.url!
+        : '/images/seed/og-image.png'
 
     const title = {
       default: generalSettings?.title,
@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
     const description = generalSettings?.description
     const ogImage = [
       {
-        url: ogImageUrl,
+        url: `${ogImageUrl}`,
         height: 630,
         width: 1200,
         alt: `og image`,
@@ -44,12 +44,12 @@ export async function generateMetadata(): Promise<Metadata> {
       openGraph: {
         title,
         description,
-        images: typeof ogImage === 'string' ? ogImage : '',
+        images: ogImage,
       },
       twitter: {
         title,
         description,
-        images: typeof ogImage === 'string' ? ogImage : '',
+        images: ogImage,
       },
       keywords: generalSettings.keywords,
     }
@@ -78,19 +78,19 @@ export default async function RootLayout({
   const generalSettings = metadata?.general
 
   const faviconUrl =
-    typeof generalSettings?.faviconUrl === 'string'
-      ? generalSettings?.faviconUrl
-      : 'generalSettings?.faviconUrl?.url!'
+    typeof generalSettings?.faviconUrl === 'object'
+      ? generalSettings?.faviconUrl?.url!
+      : '/favicon.ico'
 
   return (
     <html lang='en' className='dark'>
       <head>
-        {/* added a explicit link tag because favicon is coming from site-settings */}
         <link rel='icon' type='image/x-icon' href={faviconUrl} />
 
         <GoogleAdsense metadata={metadata} />
         <GoogleAnalytics metadata={metadata} />
       </head>
+
       <body
         className={`${GeistSans.className} ${GeistMono.variable} antialiased`}>
         <Provider>{children}</Provider>

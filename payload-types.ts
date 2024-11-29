@@ -389,7 +389,7 @@ export interface User {
   displayName?: string | null;
   username: string;
   imageUrl?: (number | null) | Media;
-  role: ('admin' | 'author' | 'user' | 'demo')[];
+  role: ('admin' | 'author' | 'user')[];
   emailVerified?: string | null;
   socialLinks?:
     | {

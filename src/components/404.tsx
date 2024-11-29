@@ -12,10 +12,8 @@ const PageNotFound: React.FC = () => {
   const pathname = usePathname()
 
   const { mutate: runSeedMutation, isPending } = trpc.seed.runSeed.useMutation({
-    onSuccess: data => {
-      console.log({ data })
-
-      // window.location.reload()
+    onSuccess: () => {
+      window.location.reload()
     },
   })
 
@@ -33,7 +31,9 @@ const PageNotFound: React.FC = () => {
         <Button
           isLoading={isPending}
           disabled={isPending}
-          onClick={() => runSeedMutation()}>
+          onClick={() => {
+            runSeedMutation()
+          }}>
           Load Demo Data
         </Button>
       </section>

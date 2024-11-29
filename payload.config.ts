@@ -66,16 +66,6 @@ export default cqlConfig({
             description: 'This bio will be shown in the authors details page',
           },
         },
-        {
-          name: 'role',
-          type: 'select',
-          options: [
-            {
-              label: 'Demo',
-              value: 'demo',
-            },
-          ],
-        },
       ],
       auth: {
         verify: {

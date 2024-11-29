@@ -22,6 +22,7 @@ export async function generateMetadata({
   const payload = await getPayloadHMR({
     config: configPromise,
   })
+
   const { route = [] } = await params
 
   try {
@@ -57,12 +58,21 @@ export async function generateMetadata({
 
     if (metadata && Object.keys(metadata).length) {
       let ogImage = []
-      const title = metadata.title
-      const description = metadata.description
+      const title = metadata.title ?? ''
+      const description = metadata.description ?? ''
 
-      if (metadata.image && typeof metadata.image === 'object') {
+      const titleAndDescription = {
+        ...(title ? { title } : {}),
+        ...(description ? { description } : {}),
+      }
+
+      if (
+        metadata.image &&
+        typeof metadata.image === 'object' &&
+        metadata.image?.url
+      ) {
         ogImage.push({
-          url: metadata.image?.url!,
+          url: metadata.image.url,
           height: 630,
           width: 1200,
           alt: `og image`,
@@ -70,18 +80,15 @@ export async function generateMetadata({
       }
 
       return {
-        title,
-        description,
+        ...titleAndDescription,
         // we're appending the http|https int the env variable
         metadataBase: env.PAYLOAD_URL as unknown as URL,
         openGraph: {
-          title,
-          description,
+          ...titleAndDescription,
           images: ogImage,
         },
         twitter: {
-          title,
-          description,
+          ...titleAndDescription,
           images: ogImage,
         },
       }
