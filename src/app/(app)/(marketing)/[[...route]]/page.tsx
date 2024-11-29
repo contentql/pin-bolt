@@ -141,13 +141,13 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
       | Promise<void>
   } = {
     blogs: helpers.blog.getBlogBySlug.prefetch({
-      slug: resolvedParams?.at(-1)!,
+      slug: resolvedParams?.at(-1) ?? '',
     }),
     tags: helpers.tag.getBlogs.prefetch({
-      tagSlug: resolvedParams?.at(-1)!,
+      tagSlug: resolvedParams?.at(-1) ?? '',
     }),
     users: helpers.author.getBlogsByAuthorName.prefetch({
-      authorName: resolvedParams?.at(-1)!,
+      authorName: resolvedParams?.at(-1) ?? '',
     }),
   }
 
@@ -184,34 +184,6 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
     }
 
     const dehydratedState = dehydrate(helpers.queryClient)
-
-    // const blocks = Array.isArray(pageData.layout)
-    //   ? pageData.layout.filter(
-    //       individualBlock => individualBlock.blockType === 'List',
-    //     )
-    //   : undefined
-
-    //   let data
-
-    // switch (block?.collectionSlug) {
-    //   case 'blogs': {
-    //     data = await serverClient.blog.getBlogBySlug({
-    //       slug: resolvedParams?.at(-1)!,
-    //     })
-    //   }
-
-    //   case 'tags': {
-    //     data = await serverClient.tag.getBlogs({
-    //       tagSlug: resolvedParams?.at(-1)!,
-    //     })
-    //   }
-
-    //   case 'users': {
-    //     data = await serverClient.author.getAuthorByName({
-    //       authorName: resolvedParams?.at(-1)!,
-    //     })
-    //   }
-    // }
 
     return (
       <ReactQueryHydrate state={dehydratedState}>
