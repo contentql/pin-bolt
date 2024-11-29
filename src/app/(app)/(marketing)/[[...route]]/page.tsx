@@ -45,7 +45,7 @@ export async function generateMetadata({
         collection: block?.collectionSlug,
         where: {
           slug: {
-            equals: route.at(-1),
+            equals: route.at(-1) ?? '',
           },
         },
         depth: 5,
