@@ -10,7 +10,22 @@ const payload = await getPayloadHMR({
 })
 
 export const blogRouter = router({
-  getAllBlogs: publicProcedure
+  getAllBlogs: publicProcedure.query(async () => {
+    try {
+      const { docs } = await payload.find({
+        collection: 'blogs',
+        depth: 5,
+        draft: false,
+      })
+
+      return docs
+    } catch (error: any) {
+      console.log(error)
+      throw new Error(error.message)
+    }
+  }),
+
+  getPaginatedBlogs: publicProcedure
     .input(
       z.object({
         cursor: z.number().optional(),

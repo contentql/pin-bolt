@@ -10,7 +10,6 @@
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
-    "ci": "payload migrate && pnpm build",
     "generate:types": "payload generate:types",
     "generate:importMap": "payload generate:importMap",
     "format": "prettier . --check",

@@ -12,6 +12,8 @@ import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
 import { createSSRHelper } from '@/trpc/ssr'
 
+type StaticRoute = { route: string | string[] | null }
+
 export const revalidate = 60
 
 export async function generateMetadata({
@@ -101,20 +103,61 @@ export async function generateMetadata({
   }
 }
 
-export async function generateStaticParams() {
+const staticGenerationMapping = {
+  blogs: serverClient.blog.getAllBlogs(),
+  tags: serverClient.tag.getAllTags(),
+  users: serverClient.author.getAllAuthors(),
+} as const
+
+export async function generateStaticParams(): Promise<StaticRoute[]> {
   const allPagesData = await serverClient.page.getAllPages()
+  const staticParams: StaticRoute[] = []
 
-  // console.log(allPagesData)
+  for (const page of allPagesData) {
+    if (!page) {
+      continue // Skip invalid pages
+    }
 
-  // return allPagesData.map(page => ({
-  //   route: page.path,
-  // }))
+    // If the route is dynamic (contains `[`)
+    if (page?.path?.includes('[') && page.layout) {
+      const blockData = page.layout.find(block => block.blockType === 'Details')
 
-  return [
-    { route: ['posts'] },
-    { route: ['team'] },
-    { route: ['post', 'dynamic-access-in-javascript'] },
-  ]
+      // If it has a Details block with a valid collectionSlug
+      if (blockData?.blockType === 'Details' && blockData.collectionSlug) {
+        const slug = blockData.collectionSlug
+
+        // Fetch all slugs for the given collection (e.g., blogs, tags, users)
+        const data = await staticGenerationMapping[slug]
+
+        if (data && Array.isArray(data)) {
+          let path = ''
+          for (const item of data) {
+            if ('username' in item) {
+              path = item.username
+            } else if ('slug' in item) {
+              path = `${item.slug}`
+            }
+
+            // Dynamically replace `[parameter]` with actual slug
+            const dynamicPath = page.path.replace(/\[(.*?)\]/, path)
+
+            staticParams.push({
+              route: dynamicPath.split('/').filter(Boolean),
+            })
+          }
+        }
+        continue
+      }
+    }
+
+    // Statics (non-dynamic paths)
+    const nonDynamicPath = page?.path?.split('/').filter(Boolean)[0]
+    if (nonDynamicPath) {
+      staticParams.push({ route: [nonDynamicPath] })
+    }
+  }
+
+  return staticParams
 }
 
 const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
@@ -124,13 +167,13 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
   const listPrefetch: {
     [key in NonNullable<ListType['collectionSlug']>]: undefined | Promise<void>
   } = {
-    blogs: helpers.blog.getAllBlogs.prefetchInfinite({
+    blogs: helpers.blog.getPaginatedBlogs.prefetchInfinite({
       limit: 10,
     }),
     users: helpers.author.getAllAuthorsWithCount.prefetchInfinite({
       limit: 10,
     }),
-    tags: helpers.tag.getAllTags.prefetchInfinite({
+    tags: helpers.tag.getPaginatedTags.prefetchInfinite({
       limit: 10,
     }),
   }
@@ -143,7 +186,7 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
     blogs: helpers.blog.getBlogBySlug.prefetch({
       slug: resolvedParams?.at(-1) ?? '',
     }),
-    tags: helpers.tag.getBlogs.prefetch({
+    tags: helpers.tag.getBlogsByTag.prefetch({
       tagSlug: resolvedParams?.at(-1) ?? '',
     }),
     users: helpers.author.getBlogsByAuthorName.prefetch({

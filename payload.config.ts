@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url'
 
 import { ResetPassword } from '@/emails/reset-password'
 import { UserAccountVerification } from '@/emails/verify-email'
-import { migrations } from '@/migrations'
 import { blocks } from '@/payload/blocks/index'
 
 const filename = fileURLToPath(import.meta.url)
@@ -36,8 +35,6 @@ export default cqlConfig({
       url: isUnderdevelopment ? 'file:./payload-lite.db' : env.DATABASE_URI,
       authToken: isUnderdevelopment ? undefined : env.DATABASE_SECRET,
     },
-
-    prodMigrations: migrations,
   }),
 
   s3: {

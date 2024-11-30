@@ -8,7 +8,22 @@ import { publicProcedure, router } from '@/trpc'
 const payload = await getPayloadHMR({ config: configPromise })
 
 export const tagRouter = router({
-  getBlogs: publicProcedure
+  getAllTags: publicProcedure.query(async () => {
+    try {
+      const { docs } = await payload.find({
+        collection: 'tags',
+        depth: 5,
+        draft: false,
+      })
+
+      return docs
+    } catch (error: any) {
+      console.log(error)
+      throw new Error(error.message)
+    }
+  }),
+
+  getBlogsByTag: publicProcedure
     .input(
       z.object({
         tagSlug: z.string(),
@@ -43,7 +58,7 @@ export const tagRouter = router({
       }
     }),
 
-  getAllTags: publicProcedure
+  getPaginatedTags: publicProcedure
     .input(
       z.object({
         cursor: z.number().optional(),
@@ -85,6 +100,7 @@ export const tagRouter = router({
         throw new Error(error.message)
       }
     }),
+
   getTagBySlug: publicProcedure
     .input(z.object({ slug: z.string() }))
     .query(async ({ input }) => {

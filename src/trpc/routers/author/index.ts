@@ -8,6 +8,24 @@ import { publicProcedure, router } from '@/trpc'
 const payload = await getPayloadHMR({ config: configPromise })
 
 export const authorRouter = router({
+  getAllAuthors: publicProcedure.query(async () => {
+    try {
+      const { docs: authors } = await payload.find({
+        collection: 'users',
+        where: {
+          role: {
+            equals: 'author',
+          },
+        },
+      })
+
+      return authors
+    } catch (error: any) {
+      console.error(error)
+      throw new Error(error.message)
+    }
+  }),
+
   getAllAuthorsWithCount: publicProcedure
     .input(
       z.object({

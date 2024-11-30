@@ -23,7 +23,7 @@ const List: React.FC<ListProps> = ({ params, ...block }) => {
         isPending,
         isFetchingNextPage,
         hasNextPage,
-      } = trpc.blog.getAllBlogs.useInfiniteQuery(
+      } = trpc.blog.getPaginatedBlogs.useInfiniteQuery(
         { limit: 10 },
         {
           getNextPageParam: lastPage => lastPage.nextCursor,
@@ -52,7 +52,7 @@ const List: React.FC<ListProps> = ({ params, ...block }) => {
         isPending,
         isFetchingNextPage,
         hasNextPage,
-      } = trpc.tag.getAllTags.useInfiniteQuery(
+      } = trpc.tag.getPaginatedTags.useInfiniteQuery(
         { limit: 10 },
         {
           getNextPageParam: lastPage => lastPage.nextCursor,

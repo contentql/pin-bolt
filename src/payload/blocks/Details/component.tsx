@@ -49,7 +49,7 @@ const Details: React.FC<DetailsProps> = ({ params, ...block }) => {
         data: blogs,
         isPending,
         isFetching,
-      } = trpc.tag.getBlogs.useQuery({
+      } = trpc.tag.getBlogsByTag.useQuery({
         tagSlug: params?.route?.at(-1)!,
       })
 
