@@ -2,6 +2,8 @@ FROM node:20-alpine
 
 RUN apk add --no-cache libc6-compat
 
+COPY . .
+
 ARG DATABASE_URI
 ARG DATABASE_SECRET
 ARG PAYLOAD_SECRET
