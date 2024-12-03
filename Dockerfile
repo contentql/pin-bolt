@@ -1,10 +1,6 @@
 FROM node:20-alpine
 
 RUN apk add --no-cache libc6-compat
-WORKDIR /app
-
-# Install dependencies based on the preferred package manager
-COPY . .
 
 ARG DATABASE_URI
 ARG DATABASE_SECRET
@@ -41,8 +37,8 @@ ENV SUBSCRIPTION_PLAN=$SUBSCRIPTION_PLAN
 ENV NODE_ENV production
 
 RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile && yarn run build; \
+  elif [ -f package-lock.json ]; then npm ci && npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i @libsql/linux-x64-musl && pnpm i --frozen-lockfile && pnpm run build; \
   else echo "Lockfile not found." && exit 1; \
   fi
