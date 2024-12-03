@@ -82,8 +82,7 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Adding @libsql/linux-x64-musl again
-RUN corepack enable pnpm &&  pnpm i @libsql/linux-x64-musl
-RUN pnpm run db:sync
+RUN corepack enable pnpm &&  pnpm i @libsql/linux-x64-musl && pnpm run db:sync
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/src/scripts ./src/scripts
 
