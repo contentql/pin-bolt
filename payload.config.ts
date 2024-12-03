@@ -38,9 +38,9 @@ const getClient = () => {
     return prodNoSyncClient
   }
 
-  if (process.env.RAILWAY_SERVICE_ID) {
-    return prodSyncClient
-  }
+  // if (process.env.RAILWAY_SERVICE_ID) {
+  //   return prodSyncClient
+  // }
 
   return prodNoSyncClient
 }
