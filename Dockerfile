@@ -83,7 +83,9 @@ RUN adduser --system --uid 1001 nextjs
 
 # Adding @libsql/linux-x64-musl again
 RUN corepack enable pnpm &&  pnpm i @libsql/linux-x64-musl
+RUN pnpm run db:sync
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/src/scripts ./src/scripts
 
 # Set the correct permission for prerender cache
 RUN mkdir .next
@@ -102,5 +104,5 @@ ENV PORT 3000
 
 # server.js is created by next build from the standalone output
 # https://nextjs.org/docs/pages/api-reference/next-config-js/output
-RUN pnpm run db:sync
+
 CMD HOSTNAME="0.0.0.0" node server.js
