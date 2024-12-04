@@ -26,27 +26,50 @@ export const pageRouter = router({
         if (Array.isArray(path)) path = path.join('/')
         if (path !== '/') path = ensurePath(path).replace(/\/$/, '')
 
-        const { docs: allPages } = await payload.find({
+        const { docs: pageData } = await payload.find({
           collection: collectionSlug.pages,
           depth: 5,
           overrideAccess: true,
+          draft: false,
+          where: {
+            path: {
+              equals: path,
+            },
+          },
         })
 
-        if (!allPages?.length) {
-          throw new TRPCError({ code: 'NOT_FOUND', message: 'Page not found' })
+        if (pageData.length) {
+          return pageData?.[0]
+        } else {
+          const { docs: allPages } = await payload.find({
+            collection: collectionSlug.pages,
+            depth: 5,
+            overrideAccess: true,
+            draft: false,
+          })
+
+          if (!allPages?.length) {
+            throw new TRPCError({
+              code: 'NOT_FOUND',
+              message: 'Page not found',
+            })
+          }
+
+          const correctMatching = allPages.find(page => page.path === path)
+
+          const matchingPage =
+            correctMatching ??
+            allPages.find(page => matchNextJsPath(path, page.path!))
+
+          if (!matchingPage) {
+            throw new TRPCError({
+              code: 'NOT_FOUND',
+              message: 'Page not found',
+            })
+          }
+
+          return matchingPage
         }
-
-        const correctMatching = allPages.find(page => page.path === path)
-
-        const matchingPage =
-          correctMatching ??
-          allPages.find(page => matchNextJsPath(path, page.path!))
-
-        if (!matchingPage) {
-          throw new TRPCError({ code: 'NOT_FOUND', message: 'Page not found' })
-        }
-
-        return matchingPage
       } catch (error: any) {
         if (error instanceof TRPCError) {
           throw error

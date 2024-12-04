@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url'
 
 import { ResetPassword } from '@/emails/reset-password'
 import { UserAccountVerification } from '@/emails/verify-email'
-import { blocks } from '@/payload/blocks/index'
+import { blocksConfig } from '@/payload/blocks/blockConfig'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,10 +28,15 @@ export default cqlConfig({
 
   secret: env.PAYLOAD_SECRET,
 
+  // db: sqliteAdapter({
+  //   client: {
+  //     url: env.DATABASE_URI,
+  //     authToken: env.DATABASE_SECRET,
+  //   },
+  // }),
   db: sqliteAdapter({
     client: {
-      url: env.DATABASE_URI,
-      authToken: env.DATABASE_SECRET,
+      url: 'file:./payload.db',
     },
   }),
 
@@ -53,7 +58,7 @@ export default cqlConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
 
-  blocks,
+  blocks: blocksConfig,
 
   collections: [
     {

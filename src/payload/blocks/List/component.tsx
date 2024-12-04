@@ -1,147 +1,65 @@
-'use client'
-
 import { Params } from '../types'
+import configPromise from '@payload-config'
 import { ListType } from '@payload-types'
-import dynamic from 'next/dynamic'
+import { getPayload } from 'payload'
 import React from 'react'
 
-import { Skeleton } from '@/components/common/Skeleton'
-import { trpc } from '@/trpc/client'
-
-import BlogCardLoading from './components/BlogCardLoading'
-
-// import AuthorsList from './components/AuthorsList';
-// import BlogsList from './components/BlogsList';
-// import TagsList from './components/TagsList';
+import AuthorsList from './components/AuthorsList'
+import BlogsList from './components/BlogsList'
+import TagsList from './components/TagsList'
 
 interface ListProps extends ListType {
   params: Params
 }
 
-const BlogsList = dynamic(() => import('./components/BlogsList'), {
-  ssr: false,
-  loading: () => (
-    <div className='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
-      {[1, 2, 3].map(i => (
-        <BlogCardLoading key={i} />
-      ))}
-    </div>
-  ),
-})
+const List: React.FC<ListProps> = async ({ params, ...block }) => {
+  const payload = await getPayload({
+    config: configPromise,
+  })
 
-const TagsList = dynamic(() => import('./components/TagsList'), {
-  ssr: false,
-  loading: () => (
-    <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-4'>
-      {[1, 2, 3, 4].map(i => (
-        <div key={i}>
-          <Skeleton className='size-40 rounded' />
-          <Skeleton className='mt-4 h-8 w-[80%]' />
-        </div>
-      ))}
-    </div>
-  ),
-})
-
-const AuthorsList = dynamic(() => import('./components/AuthorsList'), {
-  ssr: false,
-  loading: () => (
-    <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-4'>
-      {[1, 2, 3].map(i => (
-        <div key={i}>
-          <Skeleton className='aspect-[9/16] h-full max-h-80 w-full rounded' />
-          <Skeleton className='mt-4 h-8 w-[80%]' />
-        </div>
-      ))}
-    </div>
-  ),
-})
-
-const List: React.FC<ListProps> = ({ params, ...block }) => {
   switch (block?.collectionSlug) {
     case 'blogs': {
-      const {
-        data,
-        fetchNextPage,
-        isPending,
-        isFetchingNextPage,
-        hasNextPage,
-      } = trpc.blog.getPaginatedBlogs.useInfiniteQuery(
-        { limit: 10 },
-        {
-          getNextPageParam: lastPage => lastPage.nextCursor,
-        },
-      )
+      const { docs: blogs = [] } = await payload.find({
+        collection: 'blogs',
+        depth: 5,
+        draft: false,
+        limit: 1000,
+      })
 
-      const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
-      const flattedList = docsList.flat()
-
-      return (
-        <BlogsList
-          blogs={flattedList}
-          title={block['title']}
-          isPending={isPending}
-          isFetchingNextPage={isFetchingNextPage}
-          hasNextPage={hasNextPage}
-          fetchNextPage={fetchNextPage}
-        />
-      )
+      return <BlogsList blogs={blogs} title={block['title']} />
     }
 
     case 'tags': {
-      const {
-        data,
-        fetchNextPage,
-        isPending,
-        isFetchingNextPage,
-        hasNextPage,
-      } = trpc.tag.getPaginatedTags.useInfiniteQuery(
-        { limit: 10 },
-        {
-          getNextPageParam: lastPage => lastPage.nextCursor,
-        },
-      )
-
-      const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
-      const flattedList = docsList.flat()
+      const { docs: tags = [] } = await payload.find({
+        collection: 'tags',
+        depth: 5,
+        draft: false,
+        limit: 1000,
+      })
 
       return (
         <TagsList
-          tags={flattedList}
+          tags={tags.map(tag => ({ ...tag, count: 0 }))}
           title={block?.title || ''}
-          isPending={isPending}
-          fetchNextPage={fetchNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          hasNextPage={hasNextPage}
         />
       )
     }
 
     case 'users': {
-      const {
-        data,
-        fetchNextPage,
-        isPending,
-        isFetchingNextPage,
-        hasNextPage,
-      } = trpc.author.getAllAuthorsWithCount.useInfiniteQuery(
-        { limit: 10 },
-        {
-          getNextPageParam: lastPage => lastPage.nextCursor,
+      const { docs: authors = [] } = await payload.find({
+        collection: 'users',
+        where: {
+          role: {
+            equals: 'author',
+          },
         },
-      )
-
-      const docsList = data?.pages ? data?.pages?.map(({ docs }) => docs) : []
-      const flattedList = docsList.flat()
+        limit: 1000,
+      })
 
       return (
         <AuthorsList
-          authors={flattedList}
+          authors={authors.map(author => ({ ...author, count: 0 }))}
           block={block}
-          isPending={isPending}
-          fetchNextPage={fetchNextPage}
-          isFetchingNextPage={isFetchingNextPage}
-          hasNextPage={hasNextPage}
         />
       )
     }

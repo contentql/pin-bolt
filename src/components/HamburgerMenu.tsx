@@ -132,7 +132,6 @@ const HamburgerMenu = ({
                                   className='flex list-none items-center gap-1'
                                   key={details.label}>
                                   <Link
-                                    prefetch
                                     key={details.label}
                                     href={details.href}
                                     onClick={() => setOpen(false)}
@@ -150,7 +149,6 @@ const HamburgerMenu = ({
                     </Accordion>
                   ) : (
                     <Link
-                      prefetch
                       href={href}
                       onClick={() => setOpen(false)}
                       className='w-full rounded px-3 py-2 transition-colors hover:bg-secondary/10'

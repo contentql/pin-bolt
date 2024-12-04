@@ -1,7 +1,6 @@
 import { Page, User } from '@payload-types'
+import Image from 'next/image'
 import Link from 'next/link'
-
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 
 type LinkType = (number | null) | Page
 
@@ -31,20 +30,20 @@ const AuthorCard = ({ author, authorLink }: AuthorCardType) => {
 
   return (
     <Link
-      prefetch
       href={`${slicedSlug}${authorDetails.username}`}
       className='group block cursor-pointer'
       key={authorDetails.username}>
-      <Avatar className='aspect-[9/16] h-full max-h-80 w-full rounded'>
+      <div className='relative aspect-[9/16] h-full max-h-80 w-full overflow-hidden rounded bg-secondary'>
         {authorDetails.image && (
-          <AvatarImage
+          <Image
             src={authorDetails.image.url}
-            className='h-full w-full animate-image-blur transition-transform hover:scale-110'
+            fill
+            alt={authorDetails.name}
+            className='h-full w-full animate-image-blur object-cover transition-transform hover:scale-110'
+            sizes='800px'
           />
         )}
-
-        <AvatarFallback className='rounded' />
-      </Avatar>
+      </div>
 
       <p
         title={authorDetails?.name || ''}

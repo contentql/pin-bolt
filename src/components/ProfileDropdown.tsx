@@ -20,11 +20,6 @@ import HamburgerMenu from './HamburgerMenu'
 import { Avatar, AvatarFallback, AvatarImage } from './common/Avatar'
 import Button from './common/Button'
 
-const variants = {
-  visible: { opacity: 1, scale: 1 },
-  hidden: { opacity: 0, scale: 0.5 },
-}
-
 const ProfileDropdown = ({
   user,
   navLinks,
