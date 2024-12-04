@@ -104,6 +104,7 @@ const HamburgerMenu = ({
               <div className='mt-2'>
                 <p className='leading-3'>{userDetails.name}</p>
                 <Link
+                  prefetch
                   href='/profile'
                   onClick={() => setOpen(false)}
                   className='text-sm leading-3 text-primary hover:text-primary/80'>
@@ -132,6 +133,7 @@ const HamburgerMenu = ({
                                   className='flex list-none items-center gap-1'
                                   key={details.label}>
                                   <Link
+                                    prefetch
                                     key={details.label}
                                     href={details.href}
                                     onClick={() => setOpen(false)}
@@ -150,6 +152,7 @@ const HamburgerMenu = ({
                   ) : (
                     <Link
                       href={href}
+                      prefetch
                       onClick={() => setOpen(false)}
                       className='w-full rounded px-3 py-2 transition-colors hover:bg-secondary/10'
                       target={newTab ? '_blank' : '_self'}>

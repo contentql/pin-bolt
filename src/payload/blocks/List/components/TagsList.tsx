@@ -92,6 +92,7 @@ const TagsList = ({
           <>
             {tagsList.map(tag => (
               <Link
+                prefetch={!!tag.slug}
                 href={`${slicedSlug}${tag.slug}`}
                 className='group block cursor-pointer'
                 key={tag.title}>

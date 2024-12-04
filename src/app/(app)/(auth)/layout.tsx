@@ -6,7 +6,7 @@ import Button from '@/components/common/Button'
 const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <Link href='/'>
+      <Link href='/' prefetch>
         <Button className='fixed left-4 top-4' size='sm' variant='outline'>
           <ArrowLeft size={16} />
           Back to Home

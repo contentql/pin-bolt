@@ -30,6 +30,7 @@ const AuthorCard = ({ author, authorLink }: AuthorCardType) => {
 
   return (
     <Link
+      prefetch={!!authorDetails.username}
       href={`${slicedSlug}${authorDetails.username}`}
       className='group block cursor-pointer'
       key={authorDetails.username}>
