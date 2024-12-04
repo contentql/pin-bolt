@@ -23,7 +23,7 @@ const nextConfig = {
     reactCompiler: false,
   },
   reactStrictMode: true,
-  output: 'standalone',
+  // output: 'standalone',
   compiler: {
     // removeConsole: process.env.NODE_ENV !== 'development', // Remove console.log in production
   },
