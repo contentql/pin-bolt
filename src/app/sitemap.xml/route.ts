@@ -1,13 +1,13 @@
 import { collectionSlug } from '@contentql/core'
 import { env } from '@env'
 import configPromise from '@payload-config'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { NextResponse } from 'next/server'
+import { getPayload } from 'payload'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const payload = await getPayloadHMR({ config: configPromise })
+  const payload = await getPayload({ config: configPromise })
 
   const { docs: pages } = await payload.find({
     collection: collectionSlug.pages,

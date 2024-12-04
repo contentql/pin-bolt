@@ -121,8 +121,8 @@ const CommandBar = () => {
 
       globalSearchMutate({ search: searchQuery })
     },
-    800,
     [searchQuery],
+    800
   )
 
   // This hook will update the kbar actions

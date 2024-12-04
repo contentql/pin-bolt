@@ -1,7 +1,7 @@
 import configPromise from '@payload-config'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { TRPCError, initTRPC } from '@trpc/server'
 import { NextRequest } from 'next/server'
+import { getPayload } from 'payload'
 import superjson from 'superjson'
 
 export const createTRPCContext = (req: NextRequest) => {
@@ -10,7 +10,7 @@ export const createTRPCContext = (req: NextRequest) => {
   }
 }
 
-const payload = await getPayloadHMR({
+const payload = await getPayload({
   config: configPromise,
 })
 

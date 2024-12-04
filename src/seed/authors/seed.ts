@@ -1,11 +1,11 @@
 import configPromise from '@payload-config'
 import { User } from '@payload-types'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { Ora } from 'ora'
+import { getPayload } from 'payload'
 
 import { authorsData, authorsImageList } from './data'
 
-const payload = await getPayloadHMR({ config: configPromise })
+const payload = await getPayload({ config: configPromise })
 
 const seed = async (spinner: Ora) => {
   spinner.start(`Started uploading author images...`)

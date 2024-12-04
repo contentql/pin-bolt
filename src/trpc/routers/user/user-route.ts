@@ -1,14 +1,14 @@
 import { collectionSlug } from '@contentql/core'
 import configPromise from '@payload-config'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { TRPCError } from '@trpc/server'
 import { cookies } from 'next/headers'
+import { getPayload } from 'payload'
 
 import { router, userProcedure } from '@/trpc/'
 
 import { UpdateProfileImageSchema, UpdateUserSchema } from './validator'
 
-const payload = await getPayloadHMR({ config: configPromise })
+const payload = await getPayload({ config: configPromise })
 
 export const userRouter = router({
   // ! use this route only if you need a user when loading the page

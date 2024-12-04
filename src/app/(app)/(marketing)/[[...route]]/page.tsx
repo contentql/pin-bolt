@@ -1,10 +1,10 @@
 import { env } from '@env'
 import configPromise from '@payload-config'
 import { DetailsType, ListType } from '@payload-types'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { dehydrate } from '@tanstack/react-query'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
 
 import ReactQueryHydrate from '@/components/ReactQueryHydrate'
 import RenderBlocks from '@/payload/blocks/RenderBlocks'
@@ -18,7 +18,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ route: string[] }>
 }): Promise<Metadata | {}> {
-  const payload = await getPayloadHMR({
+  const payload = await getPayload({
     config: configPromise,
   })
 

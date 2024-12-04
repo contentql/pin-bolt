@@ -1,11 +1,11 @@
 import configPromise from '@payload-config'
 import { Tag, User } from '@payload-types'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { Ora } from 'ora'
+import { getPayload } from 'payload'
 
 import { blogListData, dynamicAccessBlogData, styleGuideBlogData } from './data'
 
-const payload = await getPayloadHMR({ config: configPromise })
+const payload = await getPayload({ config: configPromise })
 
 const createStyleGuideBlog = async ({
   tags,
