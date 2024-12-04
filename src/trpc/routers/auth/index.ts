@@ -1,7 +1,7 @@
 import configPromise from '@payload-config'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { TRPCError } from '@trpc/server'
 import { cookies } from 'next/headers'
+import { getPayload } from 'payload'
 
 import { publicProcedure, router } from '@/trpc'
 
@@ -13,7 +13,7 @@ import {
   VerifyEmailSchema,
 } from './validator'
 
-const payload = await getPayloadHMR({
+const payload = await getPayload({
   config: configPromise,
 })
 

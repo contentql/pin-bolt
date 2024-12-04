@@ -12,39 +12,6 @@ import { blocks } from '@/payload/blocks/index'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-const isUnderdevelopment = process.env.NODE_ENV === 'development'
-const getClient = () => {
-  const developmentClient = {
-    url: 'file:./payload-lite.db',
-  }
-
-  const prodNoSyncClient = {
-    url: env.DATABASE_URI,
-    authToken: env.DATABASE_SECRET,
-  }
-
-  const prodSyncClient = {
-    url: 'file:payload-lite.db',
-    syncUrl: env.DATABASE_URI,
-    authToken: env.DATABASE_SECRET,
-    syncInterval: 60,
-  }
-
-  if (isUnderdevelopment) {
-    return developmentClient
-  }
-
-  if (process.env.VERCEL) {
-    return prodNoSyncClient
-  }
-
-  // if (process.env.RAILWAY_SERVICE_ID) {
-  //   return prodSyncClient
-  // }
-
-  return prodNoSyncClient
-}
-
 export default cqlConfig({
   admin: {
     components: {
@@ -62,7 +29,10 @@ export default cqlConfig({
   secret: env.PAYLOAD_SECRET,
 
   db: sqliteAdapter({
-    client: getClient(),
+    client: {
+      url: env.DATABASE_URI,
+      authToken: env.DATABASE_SECRET,
+    },
   }),
 
   s3: {

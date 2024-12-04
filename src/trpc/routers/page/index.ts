@@ -1,14 +1,14 @@
 import { collectionSlug } from '@contentql/core'
 import configPromise from '@payload-config'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { TRPCError } from '@trpc/server'
+import { getPayload } from 'payload'
 import { z } from 'zod'
 
 import { publicProcedure, router } from '@/trpc'
 import { ensurePath } from '@/utils/ensurePath'
 import { matchNextJsPath } from '@/utils/matchNextJsPath'
 
-const payload = await getPayloadHMR({
+const payload = await getPayload({
   config: configPromise,
 })
 

@@ -1,6 +1,7 @@
 /* THIS FILE WAS GENERATED AUTOMATICALLY BY PAYLOAD. */
 import configPromise from '@payload-config'
-import { RootLayout } from '@payloadcms/next/layouts'
+import { RootLayout, handleServerFunctions } from '@payloadcms/next/layouts'
+import { ServerFunctionClient } from 'payload'
 
 /* DO NOT MODIFY IT BECAUSE IT COULD BE REWRITTEN AT ANY TIME. */
 import React from 'react'
@@ -12,8 +13,20 @@ type Args = {
   children: React.ReactNode
 }
 
+const serverFunction: ServerFunctionClient = async function (args) {
+  'use server'
+  return handleServerFunctions({
+    ...args,
+    config: configPromise,
+    importMap,
+  })
+}
+
 const Layout = ({ children }: Args) => (
-  <RootLayout config={configPromise} importMap={importMap}>
+  <RootLayout
+    config={configPromise}
+    importMap={importMap}
+    serverFunction={serverFunction}>
     {children}
   </RootLayout>
 )

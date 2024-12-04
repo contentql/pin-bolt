@@ -1,27 +1,24 @@
 import { env } from '@env'
 import configPromise from '@payload-config'
 import { DetailsType, ListType } from '@payload-types'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
 import { dehydrate } from '@tanstack/react-query'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { getPayload } from 'payload'
 
 import ReactQueryHydrate from '@/components/ReactQueryHydrate'
-// import RenderBlocks from '@/payload/blocks/RenderBlocks'
-import { blocksJSX } from '@/payload/blocks/blocks'
+import RenderBlocks from '@/payload/blocks/RenderBlocks'
 import { serverClient } from '@/trpc/serverClient'
 import { createSSRHelper } from '@/trpc/ssr'
 
 type StaticRoute = { route: string | string[] | null }
-
-export const revalidate = 60
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ route: string[] }>
 }): Promise<Metadata | {}> {
-  const payload = await getPayloadHMR({
+  const payload = await getPayload({
     config: configPromise,
   })
 
@@ -109,56 +106,56 @@ const staticGenerationMapping = {
   users: serverClient.author.getAllAuthors(),
 } as const
 
-export async function generateStaticParams(): Promise<StaticRoute[]> {
-  const allPagesData = await serverClient.page.getAllPages()
-  const staticParams: StaticRoute[] = []
+// export async function generateStaticParams(): Promise<StaticRoute[]> {
+//   const allPagesData = await serverClient.page.getAllPages()
+//   const staticParams: StaticRoute[] = []
 
-  for (const page of allPagesData) {
-    if (!page) {
-      continue // Skip invalid pages
-    }
+//   for (const page of allPagesData) {
+//     if (!page) {
+//       continue // Skip invalid pages
+//     }
 
-    // If the route is dynamic (contains `[`)
-    if (page?.path?.includes('[') && page.layout) {
-      const blockData = page.layout.find(block => block.blockType === 'Details')
+//     // If the route is dynamic (contains `[`)
+//     if (page?.path?.includes('[') && page.layout) {
+//       const blockData = page.layout.find(block => block.blockType === 'Details')
 
-      // If it has a Details block with a valid collectionSlug
-      if (blockData?.blockType === 'Details' && blockData.collectionSlug) {
-        const slug = blockData.collectionSlug
+//       // If it has a Details block with a valid collectionSlug
+//       if (blockData?.blockType === 'Details' && blockData.collectionSlug) {
+//         const slug = blockData.collectionSlug
 
-        // Fetch all slugs for the given collection (e.g., blogs, tags, users)
-        const data = await staticGenerationMapping[slug]
+//         // Fetch all slugs for the given collection (e.g., blogs, tags, users)
+//         const data = await staticGenerationMapping[slug]
 
-        if (data && Array.isArray(data)) {
-          let path = ''
-          for (const item of data) {
-            if ('username' in item) {
-              path = item.username
-            } else if ('slug' in item) {
-              path = `${item.slug}`
-            }
+//         if (data && Array.isArray(data)) {
+//           let path = ''
+//           for (const item of data) {
+//             if ('username' in item) {
+//               path = item.username
+//             } else if ('slug' in item) {
+//               path = `${item.slug}`
+//             }
 
-            // Dynamically replace `[parameter]` with actual slug
-            const dynamicPath = page.path.replace(/\[(.*?)\]/, path)
+//             // Dynamically replace `[parameter]` with actual slug
+//             const dynamicPath = page.path.replace(/\[(.*?)\]/, path)
 
-            staticParams.push({
-              route: dynamicPath.split('/').filter(Boolean),
-            })
-          }
-        }
-        continue
-      }
-    }
+//             staticParams.push({
+//               route: dynamicPath.split('/').filter(Boolean),
+//             })
+//           }
+//         }
+//         continue
+//       }
+//     }
 
-    // Statics (non-dynamic paths)
-    const nonDynamicPath = page?.path?.split('/').filter(Boolean)[0]
-    if (nonDynamicPath) {
-      staticParams.push({ route: [nonDynamicPath] })
-    }
-  }
+//     // Statics (non-dynamic paths)
+//     const nonDynamicPath = page?.path?.split('/').filter(Boolean)[0]
+//     if (nonDynamicPath) {
+//       staticParams.push({ route: [nonDynamicPath] })
+//     }
+//   }
 
-  return staticParams
-}
+//   return staticParams
+// }
 
 const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
   const resolvedParams = (await params).route
@@ -215,8 +212,11 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
             break
           case 'Details':
             if (block.collectionSlug) {
+              console.log('details block hitted')
+
               const selectedDetailsPrefetch =
                 detailsPrefetch[block.collectionSlug]
+
               if (selectedDetailsPrefetch) {
                 await selectedDetailsPrefetch
               }
@@ -230,7 +230,7 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
 
     return (
       <ReactQueryHydrate state={dehydratedState}>
-        <div className='relative space-y-20'>
+        {/* <div className='relative space-y-20'>
           {pageData?.layout?.map((block, index) => {
             // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
             const Block = blocksJSX[block.blockType] as React.FC<any>
@@ -247,7 +247,12 @@ const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
 
             return <h3 key={block.id}>Block does not exist </h3>
           })}
-        </div>
+        </div> */}
+
+        <RenderBlocks
+          params={{ route: resolvedParams }}
+          placeholderData={pageData}
+        />
       </ReactQueryHydrate>
     )
   } catch (error) {

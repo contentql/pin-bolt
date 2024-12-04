@@ -1,57 +1,51 @@
 'use client'
 
 import { Page } from '@payload-types'
-import { useLivePreview } from '@payloadcms/live-preview-react'
-import React, { Suspense } from 'react'
+import { notFound } from 'next/navigation'
+import React from 'react'
 
-import { blocksJSX } from '@/payload/blocks/blocks'
 import { trpc } from '@/trpc/client'
 
+import { blocksJSX } from './blocks'
 import { Params } from './types'
 
 interface RenderBlocksProps {
   params: Params
-  pageInitialData: Page
+  placeholderData: Page
 }
 
 const RenderBlocks: React.FC<RenderBlocksProps> = ({
-  pageInitialData,
   params,
+  placeholderData,
 }) => {
-  const url = typeof window !== 'undefined' ? window.location.origin : ''
-
   // Fetch the page data using path
-  const { data: pageData, isLoading: isPageLoading } =
-    trpc.page.getPageData.useQuery(
-      { path: params.route },
-      { initialData: pageInitialData },
-    )
+  const { data: pageData } = trpc.page.getPageData.useQuery(
+    {
+      path: params.route,
+    },
+    {
+      placeholderData,
+    },
+  )
 
-  // Fetch page data for live preview
-  const { data: livePreviewData } = useLivePreview<Page | undefined>({
-    initialData: undefined,
-    serverURL: url,
-    depth: 2,
-  })
-
-  // Determine which data to use based on whether live preview data is available
-  const dataToUse = livePreviewData?.layout || pageData?.layout
+  // showing 404 page if page-data is not found
+  if (!pageData) {
+    return notFound()
+  }
 
   return (
-    <Suspense fallback={null}>
-      <div className='relative space-y-20'>
-        {dataToUse?.map((block, index) => {
-          // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
-          const Block = blocksJSX[block.blockType] as React.FC<any>
+    <div className='relative space-y-20'>
+      {pageData?.layout?.map((block, index) => {
+        // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
+        const Block = blocksJSX[block.blockType] as React.FC<any>
 
-          if (Block) {
-            return <Block {...block} params={params} key={index} />
-          }
+        if (Block) {
+          return <Block {...block} params={params} key={index} />
+        }
 
-          return <h3 key={block.id}>Block does not exist </h3>
-        })}
-      </div>
-    </Suspense>
+        return <h3 key={block.id}>Block does not exist </h3>
+      })}
+    </div>
   )
 }
 

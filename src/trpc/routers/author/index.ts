@@ -1,11 +1,11 @@
 import configPromise from '@payload-config'
 import { Tag, User } from '@payload-types'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { getPayload } from 'payload'
 import { z } from 'zod'
 
 import { publicProcedure, router } from '@/trpc'
 
-const payload = await getPayloadHMR({ config: configPromise })
+const payload = await getPayload({ config: configPromise })
 
 export const authorRouter = router({
   getAllAuthors: publicProcedure.query(async () => {
