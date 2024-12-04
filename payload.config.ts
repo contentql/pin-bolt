@@ -28,10 +28,15 @@ export default cqlConfig({
 
   secret: env.PAYLOAD_SECRET,
 
+  // db: sqliteAdapter({
+  //   client: {
+  //     url: env.DATABASE_URI,
+  //     authToken: env.DATABASE_SECRET,
+  //   },
+  // }),
   db: sqliteAdapter({
     client: {
-      url: env.DATABASE_URI,
-      authToken: env.DATABASE_SECRET,
+      url: 'file:./payload.db',
     },
   }),
 

@@ -7,22 +7,73 @@ import { cache } from 'react'
 
 import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
+import { ensurePath } from '@/utils/ensurePath'
+import { matchNextJsPath } from '@/utils/matchNextJsPath'
 
 type StaticRoute = { route: string | string[] | null }
 
-// Added react cache let's see what happens!
-const queryPageBySlug = cache(async ({ route }: { route: string[] }) => {
-  console.log("i'm being called again!")
+// revalidates every 10mins
+export const revalidate = 600
+// allows dynamic params static generation
+export const dynamicParams = true
 
-  const pageData = await serverClient.page.getPageData({ path: route })
-  return pageData
-})
+// moved the TRPC logic to function
+const queryPageBySlug = cache(
+  async ({ path }: { path?: string[] | string }) => {
+    const payload = await getPayload({
+      config: configPromise,
+    })
+
+    if (!path) path = '/'
+    if (Array.isArray(path)) path = path.join('/')
+    if (path !== '/') path = ensurePath(path).replace(/\/$/, '')
+
+    const { docs: pageData } = await payload.find({
+      collection: 'pages',
+      depth: 5,
+      overrideAccess: true,
+      draft: false,
+      where: {
+        path: {
+          equals: path,
+        },
+      },
+    })
+
+    if (pageData.length) {
+      return pageData?.[0]
+    } else {
+      const { docs: allPages } = await payload.find({
+        collection: 'pages',
+        depth: 5,
+        overrideAccess: true,
+        draft: false,
+      })
+
+      if (!allPages?.length) {
+        return undefined
+      }
+
+      const correctMatching = allPages.find(page => page.path === path)
+
+      const matchingPage =
+        correctMatching ??
+        allPages.find(page => matchNextJsPath(path, page.path!))
+
+      if (!matchingPage) {
+        return undefined
+      }
+
+      return matchingPage
+    }
+  },
+)
 
 const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
   const resolvedParams = (await params).route
 
   const pageData = await queryPageBySlug({
-    route: resolvedParams,
+    path: resolvedParams,
   })
 
   if (!pageData) {
@@ -61,11 +112,14 @@ export async function generateMetadata({
     config: configPromise,
   })
 
-  const { route = [] } = await params
+  const { route } = await params
 
   try {
-    // calling the site-settings to get all the data
-    const pageData = await queryPageBySlug({ route })
+    const pageData = await queryPageBySlug({ path: route })
+
+    if (!pageData) {
+      return {}
+    }
 
     let metadata = pageData.meta
 

@@ -21,9 +21,10 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@contentql/core": "^0.3.6",
+    "@contentql/core": "^0.3.7",
     "@hookform/resolvers": "^3.4.0",
     "@libsql/client": "0.14.0",
+    "@payload-enchants/cached-local-api": "^1.2.2",
     "@payloadcms/db-sqlite": "^3.2.2",
     "@payloadcms/live-preview-react": "^3.2.2",
     "@payloadcms/next": "^3.2.2",

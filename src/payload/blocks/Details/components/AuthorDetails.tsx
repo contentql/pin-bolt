@@ -36,12 +36,13 @@ const AuthorDetails: React.FC<AuthorDetailsProps> = ({
   return (
     <>
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-        <div className='relative aspect-[9/16] h-full max-h-80 w-full rounded bg-secondary'>
+        <div className='relative aspect-[9/16] h-full max-h-80 w-full overflow-hidden rounded bg-secondary'>
           {authorDetails.image && (
             <Image
               alt={`${authorDetails.image.alt}`}
               src={authorDetails.image.url}
               fill
+              sizes='800px'
               className='h-full w-full animate-image-blur object-cover'
             />
           )}
