@@ -1,12 +1,14 @@
+'use client'
+
 import { Tag } from '@payload-types'
 import {
   FetchNextPageOptions,
   InfiniteQueryObserverResult,
 } from '@tanstack/react-query'
 import { TRPCClientErrorLike } from '@trpc/client'
+import Image from 'next/image'
 import Link from 'next/link'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 import Button from '@/components/common/Button'
 import { Skeleton } from '@/components/common/Skeleton'
 import { tagRouter } from '@/trpc/routers/tag'
@@ -90,20 +92,20 @@ const TagsList = ({
           <>
             {tagsList.map(tag => (
               <Link
-                prefetch
                 href={`${slicedSlug}${tag.slug}`}
                 className='group block cursor-pointer'
                 key={tag.title}>
-                <Avatar className='size-24 rounded sm:size-40'>
+                <div className='relative size-24 overflow-hidden rounded sm:size-40'>
                   {tag.image && (
-                    <AvatarImage
+                    <Image
                       src={tag.image.url}
-                      className='h-full w-full animate-image-blur object-contain'
+                      alt={tag.image.alt}
+                      height={160}
+                      width={160}
+                      className='h-full w-full animate-image-blur'
                     />
                   )}
-
-                  <AvatarFallback className='rounded' />
-                </Avatar>
+                </div>
 
                 <p
                   title={tag?.title || ''}

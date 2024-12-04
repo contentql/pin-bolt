@@ -1,3 +1,5 @@
+'use client'
+
 import { Blog, ListType } from '@payload-types'
 import {
   FetchNextPageOptions,

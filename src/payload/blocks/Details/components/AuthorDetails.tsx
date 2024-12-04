@@ -1,9 +1,9 @@
 import BlogCardLoading from '../../List/components/BlogCardLoading'
 import BlogsList from '../../List/components/BlogsList'
 import { Blog, User } from '@payload-types'
+import Image from 'next/image'
 import Link from 'next/link'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/common/Avatar'
 import { logoMapping } from '@/utils/logoMapping'
 
 import NoPostsFound from './NoPostsFound'
@@ -36,16 +36,16 @@ const AuthorDetails: React.FC<AuthorDetailsProps> = ({
   return (
     <>
       <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
-        <Avatar className='aspect-[9/16] h-full max-h-80 w-full rounded'>
+        <div className='relative aspect-[9/16] h-full max-h-80 w-full rounded bg-secondary'>
           {authorDetails.image && (
-            <AvatarImage
+            <Image
+              alt={`${authorDetails.image.alt}`}
               src={authorDetails.image.url}
-              className='h-full w-full animate-image-blur'
+              fill
+              className='h-full w-full animate-image-blur object-cover'
             />
           )}
-
-          <AvatarFallback className='rounded' />
-        </Avatar>
+        </div>
 
         <div className='flex flex-col justify-center lg:col-span-3'>
           <h3 className='text-xl font-semibold'>{authorDetails.name}</h3>

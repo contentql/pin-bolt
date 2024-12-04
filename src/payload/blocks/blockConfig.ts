@@ -12,7 +12,7 @@ import { NewsletterConfig } from './Newsletter'
 
 // Exporting an array that consolidates all block configurations
 // This array is useful for registering or iterating over all blocks and their configurations in one place
-export const blocks = [
+export const blocksConfig = [
   HomeConfig,
   DetailsConfig,
   ListConfig,

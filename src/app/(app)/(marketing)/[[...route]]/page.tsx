@@ -1,18 +1,57 @@
 import { env } from '@env'
 import configPromise from '@payload-config'
-import { DetailsType, ListType } from '@payload-types'
-import { dehydrate } from '@tanstack/react-query'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
+import { cache } from 'react'
 
-import ReactQueryHydrate from '@/components/ReactQueryHydrate'
-import RenderBlocks from '@/payload/blocks/RenderBlocks'
+import { blocksJSX } from '@/payload/blocks/blocks'
 import { serverClient } from '@/trpc/serverClient'
-import { createSSRHelper } from '@/trpc/ssr'
 
 type StaticRoute = { route: string | string[] | null }
 
+// Added react cache let's see what happens!
+const queryPageBySlug = cache(async ({ route }: { route: string[] }) => {
+  console.log("i'm being called again!")
+
+  const pageData = await serverClient.page.getPageData({ path: route })
+  return pageData
+})
+
+const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
+  const resolvedParams = (await params).route
+
+  const pageData = await queryPageBySlug({
+    route: resolvedParams,
+  })
+
+  if (!pageData) {
+    return notFound()
+  }
+
+  const layoutData = pageData.layout ?? []
+
+  return (
+    <div className='relative space-y-20'>
+      {layoutData?.map((block, index) => {
+        // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
+        const Block = blocksJSX[block.blockType] as React.FC<any>
+
+        if (Block) {
+          return (
+            <Block {...block} params={{ route: resolvedParams }} key={index} />
+          )
+        }
+
+        return <h3 key={block.id}>Block does not exist </h3>
+      })}
+    </div>
+  )
+}
+
+export default Page
+
+// generates metadata
 export async function generateMetadata({
   params,
 }: {
@@ -26,7 +65,7 @@ export async function generateMetadata({
 
   try {
     // calling the site-settings to get all the data
-    const pageData = await serverClient.page.getPageData({ path: route })
+    const pageData = await queryPageBySlug({ route })
 
     let metadata = pageData.meta
 
@@ -100,165 +139,60 @@ export async function generateMetadata({
   }
 }
 
+// generate static-pages
 const staticGenerationMapping = {
   blogs: serverClient.blog.getAllBlogs(),
   tags: serverClient.tag.getAllTags(),
   users: serverClient.author.getAllAuthors(),
 } as const
 
-// export async function generateStaticParams(): Promise<StaticRoute[]> {
-//   const allPagesData = await serverClient.page.getAllPages()
-//   const staticParams: StaticRoute[] = []
+export async function generateStaticParams(): Promise<StaticRoute[]> {
+  const allPagesData = await serverClient.page.getAllPages()
+  const staticParams: StaticRoute[] = []
 
-//   for (const page of allPagesData) {
-//     if (!page) {
-//       continue // Skip invalid pages
-//     }
+  for (const page of allPagesData) {
+    if (!page) {
+      continue // Skip invalid pages
+    }
 
-//     // If the route is dynamic (contains `[`)
-//     if (page?.path?.includes('[') && page.layout) {
-//       const blockData = page.layout.find(block => block.blockType === 'Details')
+    // If the route is dynamic (contains `[`)
+    if (page?.path?.includes('[') && page.layout) {
+      const blockData = page.layout.find(block => block.blockType === 'Details')
 
-//       // If it has a Details block with a valid collectionSlug
-//       if (blockData?.blockType === 'Details' && blockData.collectionSlug) {
-//         const slug = blockData.collectionSlug
+      // If it has a Details block with a valid collectionSlug
+      if (blockData?.blockType === 'Details' && blockData.collectionSlug) {
+        const slug = blockData.collectionSlug
 
-//         // Fetch all slugs for the given collection (e.g., blogs, tags, users)
-//         const data = await staticGenerationMapping[slug]
+        // Fetch all slugs for the given collection (e.g., blogs, tags, users)
+        const data = await staticGenerationMapping[slug]
 
-//         if (data && Array.isArray(data)) {
-//           let path = ''
-//           for (const item of data) {
-//             if ('username' in item) {
-//               path = item.username
-//             } else if ('slug' in item) {
-//               path = `${item.slug}`
-//             }
-
-//             // Dynamically replace `[parameter]` with actual slug
-//             const dynamicPath = page.path.replace(/\[(.*?)\]/, path)
-
-//             staticParams.push({
-//               route: dynamicPath.split('/').filter(Boolean),
-//             })
-//           }
-//         }
-//         continue
-//       }
-//     }
-
-//     // Statics (non-dynamic paths)
-//     const nonDynamicPath = page?.path?.split('/').filter(Boolean)[0]
-//     if (nonDynamicPath) {
-//       staticParams.push({ route: [nonDynamicPath] })
-//     }
-//   }
-
-//   return staticParams
-// }
-
-const Page = async ({ params }: { params: Promise<{ route: string[] }> }) => {
-  const resolvedParams = (await params).route
-  const helpers = await createSSRHelper()
-
-  const listPrefetch: {
-    [key in NonNullable<ListType['collectionSlug']>]: undefined | Promise<void>
-  } = {
-    blogs: helpers.blog.getPaginatedBlogs.prefetchInfinite({
-      limit: 10,
-    }),
-    users: helpers.author.getAllAuthorsWithCount.prefetchInfinite({
-      limit: 10,
-    }),
-    tags: helpers.tag.getPaginatedTags.prefetchInfinite({
-      limit: 10,
-    }),
-  }
-
-  const detailsPrefetch: {
-    [key in NonNullable<DetailsType['collectionSlug']>]:
-      | undefined
-      | Promise<void>
-  } = {
-    blogs: helpers.blog.getBlogBySlug.prefetch({
-      slug: resolvedParams?.at(-1) ?? '',
-    }),
-    tags: helpers.tag.getBlogsByTag.prefetch({
-      tagSlug: resolvedParams?.at(-1) ?? '',
-    }),
-    users: helpers.author.getBlogsByAuthorName.prefetch({
-      authorName: resolvedParams?.at(-1) ?? '',
-    }),
-  }
-
-  try {
-    const pageData = await serverClient.page.getPageData({
-      path: resolvedParams || [],
-    })
-
-    const layoutData = pageData.layout ?? []
-
-    if (layoutData.length) {
-      for await (const block of layoutData) {
-        switch (block.blockType) {
-          case 'List':
-            if (block.collectionSlug) {
-              const selectedListPrefetch = listPrefetch[block.collectionSlug]
-
-              if (selectedListPrefetch) {
-                await selectedListPrefetch
-              }
+        if (data && Array.isArray(data)) {
+          let path = ''
+          for (const item of data) {
+            if ('username' in item) {
+              path = item.username
+            } else if ('slug' in item) {
+              path = `${item.slug}`
             }
-            break
-          case 'Details':
-            if (block.collectionSlug) {
-              console.log('details block hitted')
 
-              const selectedDetailsPrefetch =
-                detailsPrefetch[block.collectionSlug]
+            // Dynamically replace `[parameter]` with actual slug
+            const dynamicPath = page.path.replace(/\[(.*?)\]/, path)
 
-              if (selectedDetailsPrefetch) {
-                await selectedDetailsPrefetch
-              }
-            }
-            break
+            staticParams.push({
+              route: dynamicPath.split('/').filter(Boolean),
+            })
+          }
         }
+        continue
       }
     }
 
-    const dehydratedState = dehydrate(helpers.queryClient)
-
-    return (
-      <ReactQueryHydrate state={dehydratedState}>
-        {/* <div className='relative space-y-20'>
-          {pageData?.layout?.map((block, index) => {
-            // Casting to 'React.FC<any>' to bypass TypeScript error related to 'Params' type incompatibility.
-            const Block = blocksJSX[block.blockType] as React.FC<any>
-
-            if (Block) {
-              return (
-                <Block
-                  {...block}
-                  params={{ route: resolvedParams }}
-                  key={index}
-                />
-              )
-            }
-
-            return <h3 key={block.id}>Block does not exist </h3>
-          })}
-        </div> */}
-
-        <RenderBlocks
-          params={{ route: resolvedParams }}
-          placeholderData={pageData}
-        />
-      </ReactQueryHydrate>
-    )
-  } catch (error) {
-    console.error('Error: Page not found', error)
-    notFound()
+    // Statics (non-dynamic paths)
+    const nonDynamicPath = page?.path?.split('/').filter(Boolean)[0]
+    if (nonDynamicPath) {
+      staticParams.push({ route: [nonDynamicPath] })
+    }
   }
-}
 
-export default Page
+  return staticParams
+}
