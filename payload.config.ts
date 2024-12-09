@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url'
 import { ResetPassword } from '@/emails/reset-password'
 import { UserAccountVerification } from '@/emails/verify-email'
 import { blocksConfig } from '@/payload/blocks/blockConfig'
+import { revalidatePages } from '@/payload/hooks/revalidatePages'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -87,6 +88,13 @@ export default cqlConfig({
             })
           },
         },
+      },
+    },
+    {
+      slug: collectionSlug.pages,
+      fields: [],
+      hooks: {
+        afterChange: [revalidatePages],
       },
     },
   ],
