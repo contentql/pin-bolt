@@ -1,6 +1,6 @@
 import { Params } from '../types'
 import configPromise from '@payload-config'
-import { DetailsType, User } from '@payload-types'
+import { DetailsType } from '@payload-types'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 
@@ -44,7 +44,7 @@ const Details: React.FC<DetailsProps> = async ({ params, ...block }) => {
     case 'tags': {
       const slug = params?.route?.at(-1) ?? ''
 
-      const { docs: tagData } = await payload.find({
+      const { docs: tagDocs } = await payload.find({
         collection: 'tags',
         where: {
           slug: {
@@ -53,53 +53,54 @@ const Details: React.FC<DetailsProps> = async ({ params, ...block }) => {
         },
       })
 
+      const tag = tagDocs?.[0]
+
+      // if tag not found showing 404
+      if (!tag) {
+        return notFound()
+      }
+
       const { docs: blogsData } = await payload.find({
         collection: 'blogs',
         where: {
           'tags.value': {
-            contains: tagData?.at(0)?.id,
+            contains: tag.id,
           },
         },
       })
 
-      const tagDetails = (tagData || [])?.at(0)
-
-      // if tag not found showing 404
-      if (!tagDetails) {
-        return notFound()
-      }
-
-      if (tagDetails) {
-        return <TagDetails blogs={blogsData} tagDetails={tagDetails} />
-      }
+      return <TagDetails blogs={blogsData} tagDetails={tag} />
     }
 
     case 'users': {
       const authorName = params?.route?.at(-1) ?? ''
+      const { docs: authorDocs } = await payload.find({
+        collection: 'users',
+        where: {
+          username: {
+            equals: authorName,
+          },
+        },
+      })
+
+      const author = authorDocs?.[0]
+
+      if (!author) {
+        return notFound()
+      }
+
       const { docs: blogs } = await payload.find({
         collection: 'blogs',
-        draft: false, // Optionally set draft filter
+        draft: false,
+        where: {
+          'author.value': {
+            equals: author.id,
+          },
+        },
       })
-
-      const blogsRelatedWithAuthor = blogs.filter(blog => {
-        return blog.author?.find(
-          blogAuthor => (blogAuthor.value as User).username === authorName,
-        )
-      })
-
-      const author = Array.isArray(blogsRelatedWithAuthor?.[0]?.author)
-        ? blogsRelatedWithAuthor?.[0]?.author.filter(({ value }) => {
-            return (
-              typeof value === 'object' &&
-              value.username === params?.route?.at(-1)!
-            )
-          })[0]?.value
-        : undefined
 
       if (typeof author === 'object') {
-        return (
-          <AuthorDetails author={author} blogsData={blogsRelatedWithAuthor} />
-        )
+        return <AuthorDetails author={author} blogsData={blogs} />
       }
     }
   }

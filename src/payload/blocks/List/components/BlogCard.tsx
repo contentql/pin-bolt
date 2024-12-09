@@ -102,7 +102,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
     <div className='block space-y-4'>
       <Link
         href={`${slicedBlogSlug}${blog.slug}`}
-        prefetch={!!blog.slug}
+        prefetch
         tabIndex={-1}
         className='relative block aspect-video w-full cursor-pointer overflow-hidden rounded bg-secondary outline-none'>
         {imageURL && (
@@ -132,7 +132,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
 
                 return (
                   <Link
-                    prefetch={!!details.slug}
+                    prefetch
                     href={`${slicedTagSlug}${details.slug}`}
                     className={`text-xs font-bold uppercase ${details.color}-tag`}
                     key={index}>
@@ -149,7 +149,7 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
 
         <Link
           href={`${slicedBlogSlug}${blog.slug}`}
-          prefetch={!!blog.slug}
+          prefetch
           className='line-clamp-2 text-lg font-semibold transition-colors hover:text-primary'
           title={blog.title}>
           {blog.title}

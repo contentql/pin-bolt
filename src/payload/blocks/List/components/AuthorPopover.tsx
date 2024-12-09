@@ -53,7 +53,7 @@ const AuthorPopover = ({
           <AvatarFallback className='text-sm'>{initials}</AvatarFallback>
         </Avatar>
 
-        <Link href={href} prefetch={!!href} className='font-semibold'>
+        <Link href={href} prefetch className='font-semibold'>
           {user.name}
         </Link>
         <p className='mt-1 text-sm text-secondary'>{user.bio}</p>
