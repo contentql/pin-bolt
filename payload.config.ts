@@ -4,6 +4,7 @@ import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { data } from 'userdb'
 
 import { ResetPassword } from '@/emails/reset-password'
 import { UserAccountVerification } from '@/emails/verify-email'
@@ -11,6 +12,19 @@ import { blocksConfig } from '@/payload/blocks/blockConfig'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+const getDbConfig = () => {
+  // Retrieve the subdomain (or other identifier) at runtime
+  const currentHost = 'manoj'
+
+  // Determine the DB configuration
+  const dbConfig = data[currentHost] || {
+    url: env.DATABASE_URI,
+    secret: env.DATABASE_SECRET,
+  }
+
+  return dbConfig
+}
 
 export default cqlConfig({
   admin: {
@@ -30,6 +44,8 @@ export default cqlConfig({
 
   db: sqliteAdapter({
     client: {
+      // url: getDbConfig().url,
+      // authToken: getDbConfig().secret,
       url: env.DATABASE_URI,
       authToken: env.DATABASE_SECRET,
     },

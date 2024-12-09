@@ -1,11 +1,31 @@
 import configPromise from '@payload-config'
 import { Tag } from '@payload-types'
 import { getPayload } from 'payload'
+import { data } from 'userdb'
 import { z } from 'zod'
 
 import { publicProcedure, router } from '@/trpc'
 
-const payload = await getPayload({ config: configPromise })
+const currentHost = 'manoj'
+// Determine the DB configuration based on currentHost
+const dbConfig = data[currentHost] || {
+  url: process.env.DATABASE_URI,
+  secret: process.env.DATABASE_SECRET,
+}
+
+const dynamicConfig = {
+  ...configPromise,
+  db: {
+    client: {
+      url: dbConfig.url,
+      authToken: dbConfig.secret,
+    },
+  },
+}
+
+const payload = await getPayload({ config: dynamicConfig })
+
+// const payload = await getPayload({ config: configPromise })
 
 export const tagRouter = router({
   getAllTags: publicProcedure.query(async () => {

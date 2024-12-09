@@ -5,12 +5,30 @@ import { z } from 'zod'
 
 import { publicProcedure, router } from '@/trpc'
 
-const payload = await getPayload({
-  config: configPromise,
-})
+// const currentHost = 'manoj'
+// // Determine the DB configuration based on currentHost
+// const dbConfig = data[currentHost] || {
+//   url: process.env.DATABASE_URI,
+//   secret: process.env.DATABASE_SECRET,
+// }
+
+// const dynamicConfig = {
+//   ...configPromise,
+//   db: sqliteAdapter({
+//     client: {
+//       url: dbConfig.url,
+//       authToken: dbConfig.secret,
+//     },
+//   }),
+// }
+
+// const payload = await getPayload({ config: dynamicConfig })
+const payload = await getPayload({ config: configPromise })
 
 export const blogRouter = router({
-  getAllBlogs: publicProcedure.query(async () => {
+  getAllBlogs: publicProcedure.query(async ({ ctx }) => {
+    const { req } = ctx
+
     try {
       const { docs } = await payload.find({
         collection: 'blogs',
