@@ -174,18 +174,28 @@ export async function generateMetadata({
         })
       }
 
+      const hasOGData = ogImage.length && Object.keys(titleAndDescription)
+
       return {
         ...titleAndDescription,
         // we're appending the http|https int the env variable
         metadataBase: env.PAYLOAD_URL as unknown as URL,
-        openGraph: {
-          ...titleAndDescription,
-          images: ogImage,
-        },
-        twitter: {
-          ...titleAndDescription,
-          images: ogImage,
-        },
+        ...(hasOGData
+          ? {
+              openGraph: {
+                ...titleAndDescription,
+                images: ogImage,
+              },
+            }
+          : {}),
+        ...(hasOGData
+          ? {
+              twitter: {
+                ...titleAndDescription,
+                images: ogImage,
+              },
+            }
+          : {}),
       }
     }
 

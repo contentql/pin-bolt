@@ -95,11 +95,14 @@ const Footer = ({ metadata }: { metadata: SiteSetting }) => {
                 const Component = logoMapping[platform]
 
                 return Component ? (
-                  <Link href={value} target='_blank' key={id}>
-                    <li className='flex list-none items-center gap-1'>
+                  <li key={id} className='flex list-none items-center gap-1'>
+                    <Link
+                      href={value}
+                      target='_blank'
+                      aria-label={`${platform} link`}>
                       <Component className='size-6 [&_path]:fill-secondary' />
-                    </li>
-                  </Link>
+                    </Link>
+                  </li>
                 ) : null
               })}
             </ul>

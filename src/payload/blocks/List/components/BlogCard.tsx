@@ -181,8 +181,9 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                   initials={initials}>
                   <Avatar
                     key={user.name}
+                    role='button'
                     className='-ml-2 cursor-pointer border-2 border-background'>
-                    <AvatarImage src={user.url?.src} />
+                    <AvatarImage src={user.url?.src} alt={`${user.name}-pic`} />
                     <AvatarFallback className='text-sm'>
                       {initials}
                     </AvatarFallback>

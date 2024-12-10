@@ -97,7 +97,7 @@ const HamburgerMenu = ({
           <div className='mx-3 mb-4 border-b pb-6'>
             <div className='flex items-center gap-4'>
               <Avatar className='size-10'>
-                <AvatarImage src={userDetails.url?.src} />
+                <AvatarImage src={userDetails.url?.src} alt='user-profile' />
                 <AvatarFallback className='text-sm'>{initials}</AvatarFallback>
               </Avatar>
 

@@ -48,12 +48,43 @@ const List: React.FC<ListProps> = async ({ params, ...block }) => {
         { tags: ['list-tags'] },
       )()
 
-      return (
-        <TagsList
-          tags={tags.map(tag => ({ ...tag, count: 0 }))}
-          title={block?.title || ''}
-        />
-      )
+      const { docs: blogs } = await unstable_cache(
+        async () =>
+          await payload.find({
+            collection: 'blogs',
+            limit: 1000,
+            select: {
+              tags: true,
+            },
+            populate: {
+              tags: {
+                slug: true,
+              },
+            },
+          }),
+        ['list', 'tags', 'with-blog-count'],
+        { tags: ['list-tags-with-blog-count'] },
+      )()
+
+      const tagsWithCount = tags.map(tag => {
+        const count = blogs.filter(blog => {
+          const blogTags = blog.tags
+
+          if (blogTags) {
+            return blogTags.find(({ value }) => {
+              if (typeof value === 'number') {
+                return value === tag.id
+              } else {
+                return value.id === tag.id
+              }
+            })
+          }
+        }).length
+
+        return { ...tag, count }
+      })
+
+      return <TagsList tags={tagsWithCount} title={block?.title || ''} />
     }
 
     case 'users': {

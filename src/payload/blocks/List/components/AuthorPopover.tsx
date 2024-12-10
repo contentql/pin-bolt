@@ -49,7 +49,7 @@ const AuthorPopover = ({
 
       <PopoverContent align='start' alignOffset={offset}>
         <Avatar key={user.name} className='mb-4 size-10'>
-          <AvatarImage src={user.url?.src} />
+          <AvatarImage src={user.url?.src} alt={`${user.name}-pic`} />
           <AvatarFallback className='text-sm'>{initials}</AvatarFallback>
         </Avatar>
 

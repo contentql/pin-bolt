@@ -79,7 +79,7 @@ const ProfileDropdown = ({
         <DropdownMenu>
           <DropdownMenuTrigger className='hidden items-center gap-1 lg:flex'>
             <Avatar>
-              <AvatarImage src={userDetails.url?.src} />
+              <AvatarImage src={userDetails.url?.src} alt='user-profile' />
               <AvatarFallback className='text-sm'>{initials}</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
