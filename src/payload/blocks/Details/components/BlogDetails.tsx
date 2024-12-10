@@ -178,7 +178,6 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
 
                 return (
                   <Link
-                    prefetch
                     href={`${slicedTagSlug}${details.slug}`}
                     className={`text-sm font-bold uppercase ${details.color}-tag`}
                     key={index}>

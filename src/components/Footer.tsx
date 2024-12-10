@@ -42,7 +42,7 @@ const Footer = ({ metadata }: { metadata: SiteSetting }) => {
       <div className='container sm:flex sm:justify-between'>
         <div className='space-y-4'>
           {logoDetails.url && (
-            <Link href='/' prefetch>
+            <Link href='/'>
               <Image
                 src={logoDetails.url}
                 alt={logoDetails.alt}
@@ -67,7 +67,6 @@ const Footer = ({ metadata }: { metadata: SiteSetting }) => {
                   <div className='space-y-2'>
                     {children.map(details => (
                       <Link
-                        prefetch
                         href={details.href}
                         key={details.label}
                         className='block'

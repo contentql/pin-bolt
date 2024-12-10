@@ -57,7 +57,7 @@ const Navbar = ({
       <div className='container flex h-14 items-center justify-between'>
         {logoDetails.url && (
           <div className='flex-1'>
-            <Link href='/' prefetch>
+            <Link href='/'>
               <Image
                 src={logoDetails.url}
                 alt={logoDetails.alt}
@@ -88,7 +88,6 @@ const Navbar = ({
                           {children.map(details => (
                             <Link
                               href={details.href}
-                              prefetch
                               key={details.label}
                               target={details.newTab ? '_blank' : '_self'}>
                               <DropdownMenuItem className='cursor-pointer'>
@@ -99,10 +98,7 @@ const Navbar = ({
                         </DropdownMenuContent>
                       </DropdownMenu>
                     ) : (
-                      <Link
-                        href={href}
-                        target={newTab ? '_blank' : '_self'}
-                        prefetch={!newTab}>
+                      <Link href={href} target={newTab ? '_blank' : '_self'}>
                         {label}
                       </Link>
                     )}
