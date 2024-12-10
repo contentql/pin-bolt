@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@contentql/core": "^0.3.7",
+    "@contentql/core": "file:.yalc/@contentql/core",
     "@hookform/resolvers": "^3.4.0",
     "@libsql/client": "0.14.0",
     "@payload-enchants/cached-local-api": "^1.2.2",

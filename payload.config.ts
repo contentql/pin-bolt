@@ -12,6 +12,14 @@ import { blocksConfig } from '@/payload/blocks/blockConfig'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const isEcommerceEnabled = async () => {
+  const data = await fetch('https://jsonplaceholder.typicode.com/todos/1')
+
+  const todo = await data.json()
+
+  return true
+}
+
 export default cqlConfig({
   admin: {
     components: {
@@ -54,7 +62,7 @@ export default cqlConfig({
   },
 
   blocks: blocksConfig,
-
+  disabledEcommerce: await isEcommerceEnabled(),
   collections: [
     {
       slug: collectionSlug.users,
