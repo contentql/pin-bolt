@@ -1,19 +1,38 @@
 import { env } from '@env'
+import configPromise from '@payload-config'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
 import type { Metadata, Viewport } from 'next'
+import { unstable_cache } from 'next/cache'
+import { getPayload } from 'payload'
 import { Toaster } from 'sonner'
 
 import '@/app/(app)/globals.css'
 import GoogleAdsense from '@/components/GoogleAdsense'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
 import Provider from '@/trpc/Provider'
-import { serverClient } from '@/trpc/serverClient'
+
+const getCachedSiteSettings = unstable_cache(
+  async () => {
+    const payload = await getPayload({
+      config: configPromise,
+    })
+
+    const data = await payload.findGlobal({
+      slug: 'site-settings',
+      draft: false,
+    })
+
+    return data
+  },
+  ['site-settings'],
+  { tags: ['site-settings'] },
+)
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
     // calling the site-settings to get all the data
-    const metadata = await serverClient.siteSettings.getSiteSettings()
+    const metadata = await getCachedSiteSettings()
     const generalSettings = metadata?.general
 
     const ogImageUrl =
@@ -74,7 +93,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const metadata = await serverClient.siteSettings.getSiteSettings()
+  const metadata = await getCachedSiteSettings()
   const generalSettings = metadata?.general
 
   const faviconUrl =

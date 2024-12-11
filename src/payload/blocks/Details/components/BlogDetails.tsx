@@ -103,7 +103,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
         if (typeof value === 'object') {
           return {
             title: value.title,
-            color: 'purple',
+            color: value.color ?? 'purple',
             slug: value.slug!,
           }
         }
@@ -178,7 +178,6 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
 
                 return (
                   <Link
-                    prefetch={!!details.slug}
                     href={`${slicedTagSlug}${details.slug}`}
                     className={`text-sm font-bold uppercase ${details.color}-tag`}
                     key={index}>
@@ -284,7 +283,10 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ blog }) => {
                     key={`${slicedUserSlug}${user.slug}`}>
                     <div className='mb-4 flex w-full cursor-pointer items-center gap-3'>
                       <Avatar>
-                        <AvatarImage src={user.url?.src} />
+                        <AvatarImage
+                          src={user.url?.src}
+                          alt={`${user.name}-pic`}
+                        />
                         <AvatarFallback className='text-sm'>
                           {initials}
                         </AvatarFallback>

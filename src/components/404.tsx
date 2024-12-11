@@ -138,7 +138,7 @@ const PageNotFound: React.FC = () => {
 
       <p className='my-4 p-2'>Looks like your lost!</p>
 
-      <Link href='/' prefetch>
+      <Link href='/'>
         <Button variant='outline'>
           <ArrowLeft size={16} />
           Back to home

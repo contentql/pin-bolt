@@ -1,6 +1,7 @@
 import { Params } from '../types'
 import configPromise from '@payload-config'
 import { ListType } from '@payload-types'
+import { unstable_cache } from 'next/cache'
 import { getPayload } from 'payload'
 import React from 'react'
 
@@ -19,42 +20,88 @@ const List: React.FC<ListProps> = async ({ params, ...block }) => {
 
   switch (block?.collectionSlug) {
     case 'blogs': {
-      const { docs: blogs = [] } = await payload.find({
-        collection: 'blogs',
-        depth: 5,
-        draft: false,
-        limit: 1000,
-      })
+      const { docs: blogs = [] } = await unstable_cache(
+        async () =>
+          await payload.find({
+            collection: 'blogs',
+            depth: 5,
+            draft: false,
+            limit: 1000,
+          }),
+        ['list', 'blogs'],
+        { tags: ['list-blogs'] },
+      )()
 
       return <BlogsList blogs={blogs} title={block['title']} />
     }
 
     case 'tags': {
-      const { docs: tags = [] } = await payload.find({
-        collection: 'tags',
-        depth: 5,
-        draft: false,
-        limit: 1000,
+      const { docs: tags = [] } = await unstable_cache(
+        async () =>
+          await payload.find({
+            collection: 'tags',
+            depth: 5,
+            draft: false,
+            limit: 1000,
+          }),
+        ['list', 'tags'],
+        { tags: ['list-tags'] },
+      )()
+
+      const { docs: blogs } = await unstable_cache(
+        async () =>
+          await payload.find({
+            collection: 'blogs',
+            limit: 1000,
+            select: {
+              tags: true,
+            },
+            populate: {
+              tags: {
+                slug: true,
+              },
+            },
+          }),
+        ['list', 'tags', 'with-blog-count'],
+        { tags: ['list-tags-with-blog-count'] },
+      )()
+
+      const tagsWithCount = tags.map(tag => {
+        const count = blogs.filter(blog => {
+          const blogTags = blog.tags
+
+          if (blogTags) {
+            return blogTags.find(({ value }) => {
+              if (typeof value === 'number') {
+                return value === tag.id
+              } else {
+                return value.id === tag.id
+              }
+            })
+          }
+        }).length
+
+        return { ...tag, count }
       })
 
-      return (
-        <TagsList
-          tags={tags.map(tag => ({ ...tag, count: 0 }))}
-          title={block?.title || ''}
-        />
-      )
+      return <TagsList tags={tagsWithCount} title={block?.title || ''} />
     }
 
     case 'users': {
-      const { docs: authors = [] } = await payload.find({
-        collection: 'users',
-        where: {
-          role: {
-            equals: 'author',
-          },
-        },
-        limit: 1000,
-      })
+      const { docs: authors = [] } = await unstable_cache(
+        async () =>
+          await payload.find({
+            collection: 'users',
+            where: {
+              role: {
+                equals: 'author',
+              },
+            },
+            limit: 1000,
+          }),
+        ['list', 'authors'],
+        { tags: ['list-authors'] },
+      )()
 
       return (
         <AuthorsList

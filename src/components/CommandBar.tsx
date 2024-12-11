@@ -122,7 +122,7 @@ const CommandBar = () => {
       globalSearchMutate({ search: searchQuery })
     },
     [searchQuery],
-    800
+    800,
   )
 
   // This hook will update the kbar actions
@@ -168,6 +168,7 @@ const CommandBar = () => {
       <Button
         size='icon'
         variant='outline'
+        aria-label='Global Search'
         onClick={() => {
           // in case of no results found clearing the search results
           if (formattedSearchResults.length > 0) {

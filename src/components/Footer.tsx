@@ -42,7 +42,7 @@ const Footer = ({ metadata }: { metadata: SiteSetting }) => {
       <div className='container sm:flex sm:justify-between'>
         <div className='space-y-4'>
           {logoDetails.url && (
-            <Link href='/' prefetch>
+            <Link href='/'>
               <Image
                 src={logoDetails.url}
                 alt={logoDetails.alt}
@@ -67,7 +67,6 @@ const Footer = ({ metadata }: { metadata: SiteSetting }) => {
                   <div className='space-y-2'>
                     {children.map(details => (
                       <Link
-                        prefetch
                         href={details.href}
                         key={details.label}
                         className='block'
@@ -95,11 +94,14 @@ const Footer = ({ metadata }: { metadata: SiteSetting }) => {
                 const Component = logoMapping[platform]
 
                 return Component ? (
-                  <Link href={value} target='_blank' key={id}>
-                    <li className='flex list-none items-center gap-1'>
+                  <li key={id} className='flex list-none items-center gap-1'>
+                    <Link
+                      href={value}
+                      target='_blank'
+                      aria-label={`${platform} link`}>
                       <Component className='size-6 [&_path]:fill-secondary' />
-                    </li>
-                  </Link>
+                    </Link>
+                  </li>
                 ) : null
               })}
             </ul>

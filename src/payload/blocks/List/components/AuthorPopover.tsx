@@ -49,11 +49,11 @@ const AuthorPopover = ({
 
       <PopoverContent align='start' alignOffset={offset}>
         <Avatar key={user.name} className='mb-4 size-10'>
-          <AvatarImage src={user.url?.src} />
+          <AvatarImage src={user.url?.src} alt={`${user.name}-pic`} />
           <AvatarFallback className='text-sm'>{initials}</AvatarFallback>
         </Avatar>
 
-        <Link href={href} prefetch={!!href} className='font-semibold'>
+        <Link href={href} className='font-semibold'>
           {user.name}
         </Link>
         <p className='mt-1 text-sm text-secondary'>{user.bio}</p>

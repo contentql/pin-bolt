@@ -24,6 +24,7 @@ const ShareList = () => {
       <Link
         target='_blank'
         rel='noopener'
+        aria-label='share on Twitter'
         href={`https://twitter.com/share?url=${url}`}
         className='transition-colors hover:text-primary'>
         <TwitterLogo />
@@ -33,6 +34,7 @@ const ShareList = () => {
       <Link
         target='_blank'
         rel='noopener'
+        aria-label='share on Facebook'
         className='transition-colors hover:text-primary'
         href={`https://www.facebook.com/sharer/sharer.php?u=${url}`}>
         <FacebookLogo />
@@ -42,6 +44,7 @@ const ShareList = () => {
       <Link
         target='_blank'
         rel='noopener'
+        aria-label='share on Whatsapp'
         className='transition-colors hover:text-primary'
         href={`https://${screenWidth < 1024 ? 'api' : 'web'}.whatsapp.com/send?text=${url}`}>
         <WhatsappLogo />
@@ -51,6 +54,7 @@ const ShareList = () => {
       <Link
         target='_blank'
         rel='noopener'
+        aria-label='share on Linkedin'
         className='transition-colors hover:text-primary'
         href={`https://www.linkedin.com/shareArticle?url=${url}`}>
         <LinkedinLogo />

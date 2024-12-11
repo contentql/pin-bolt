@@ -102,7 +102,6 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
     <div className='block space-y-4'>
       <Link
         href={`${slicedBlogSlug}${blog.slug}`}
-        prefetch={!!blog.slug}
         tabIndex={-1}
         className='relative block aspect-video w-full cursor-pointer overflow-hidden rounded bg-secondary outline-none'>
         {imageURL && (
@@ -132,7 +131,6 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
 
                 return (
                   <Link
-                    prefetch={!!details.slug}
                     href={`${slicedTagSlug}${details.slug}`}
                     className={`text-xs font-bold uppercase ${details.color}-tag`}
                     key={index}>
@@ -149,7 +147,6 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
 
         <Link
           href={`${slicedBlogSlug}${blog.slug}`}
-          prefetch={!!blog.slug}
           className='line-clamp-2 text-lg font-semibold transition-colors hover:text-primary'
           title={blog.title}>
           {blog.title}
@@ -181,8 +178,9 @@ const BlogCard = ({ blog, blogLink, tagLink, authorLink }: BlogCardType) => {
                   initials={initials}>
                   <Avatar
                     key={user.name}
+                    role='button'
                     className='-ml-2 cursor-pointer border-2 border-background'>
-                    <AvatarImage src={user.url?.src} />
+                    <AvatarImage src={user.url?.src} alt={`${user.name}-pic`} />
                     <AvatarFallback className='text-sm'>
                       {initials}
                     </AvatarFallback>
