@@ -17,6 +17,20 @@ import { revalidateTags } from '@/payload/hooks/revalidateTags'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const getCSRFList = () => {
+  const url = env.PAYLOAD_URL
+  if (process.env.NODE_ENV === 'production') {
+    const regex = /^(https:\/\/[a-zA-Z0-9-]+)\.up\.railway\.app$/
+    const customDomain = url.replace(regex, '$1.contentql.io')
+
+    return [url, customDomain]
+  }
+
+  return [url]
+}
+
+console.log('CSRF-list', getCSRFList())
+
 export default cqlConfig({
   admin: {
     components: {
@@ -27,10 +41,7 @@ export default cqlConfig({
     },
   },
   cors: '*',
-  csrf: [
-    'https://pin-bolt-production.contentql.io',
-    'https://pin-bolt-production.up.railway.app',
-  ],
+  csrf: getCSRFList(),
 
   baseURL: env.PAYLOAD_URL,
 
