@@ -41,7 +41,7 @@ export default cqlConfig({
     },
   },
   cors: '*',
-  csrf: [env.PAYLOAD_URL, '*contentql.io'],
+  csrf: undefined,
 
   baseURL: env.PAYLOAD_URL,
 
@@ -87,6 +87,9 @@ export default cqlConfig({
         },
       ],
       auth: {
+        cookies: {
+          sameSite: 'None',
+        },
         verify: {
           generateEmailHTML: ({ token, user }) => {
             return UserAccountVerification({
