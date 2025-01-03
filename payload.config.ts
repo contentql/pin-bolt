@@ -26,7 +26,7 @@ export default cqlConfig({
       },
     },
   },
-  cors: [env.PAYLOAD_URL],
+  cors: '*',
   csrf: [env.PAYLOAD_URL],
 
   baseURL: env.PAYLOAD_URL,
