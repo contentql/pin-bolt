@@ -17,19 +17,7 @@ import { revalidateTags } from '@/payload/hooks/revalidateTags'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-// const getCSRFList = () => {
-//   const url = env.PAYLOAD_URL
-//   if (process.env.NODE_ENV === 'production') {
-//     const regex = /^(https:\/\/[a-zA-Z0-9-]+)\.up\.railway\.app$/
-//     const customDomain = url.replace(regex, '$1.contentql.io')
-
-//     return [url, customDomain]
-//   }
-
-//   return [url]
-// }
-
-const convertRailwayURL = (url: any) => {
+const convertRailwayURL = (url: string) => {
   const railwayDomain = '.up.railway.app'
   const contentqlDomain = '.contentql.io'
 
@@ -41,8 +29,6 @@ const convertRailwayURL = (url: any) => {
   // Return the original URL if it doesn't match
   return url
 }
-
-// console.log('CSRF-list', getCSRFList())
 
 export default cqlConfig({
   admin: {
