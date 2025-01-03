@@ -27,7 +27,10 @@ export default cqlConfig({
     },
   },
   cors: '*',
-  csrf: [env.PAYLOAD_URL, '*.contentql.io'],
+  csrf: [
+    'https://pin-bolt-production.contentql.io',
+    'https://pin-bolt-production.up.railway.app',
+  ],
 
   baseURL: env.PAYLOAD_URL,
 
