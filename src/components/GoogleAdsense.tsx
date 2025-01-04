@@ -4,7 +4,7 @@ import { SiteSetting } from '@payload-types'
 
 const GoogleAdsense = ({ metadata }: { metadata: SiteSetting }) => {
   if (
-    !metadata?.monetization?.adSenseId &&
+    !metadata?.monetization?.adSenseId ||
     process.env.NODE_ENV !== 'production'
   ) {
     return null
