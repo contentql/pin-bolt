@@ -22,6 +22,15 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     reactCompiler: false,
+    serverActions: {
+      // Allow Server Actions to be called from these domains
+      allowedOrigins: [
+        'contentql.io',
+        '*.contentql.io',
+        'up.railway.app',
+        '*.up.railway.app',
+      ],
+    },
   },
   reactStrictMode: true,
   // output: 'standalone',
