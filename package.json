@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev",
     "devsafe": "rm -rf .next && cross-env NODE_OPTIONS=--no-deprecation next dev",
-    "build": "cross-env NODE_OPTIONS=--no-deprecation next build",
+    "build": "cross-env NODE_OPTIONS=--no-deprecation payload migrate && next build",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation payload migrate &&  next start",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation next lint",
     "generate:types": "payload generate:types",
     "generate:importMap": "payload generate:importMap",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "@contentql/core": "file:.yalc/@contentql/core",
+    "@contentql/core": "0.4.8",
     "@hookform/resolvers": "^3.4.0",
     "@libsql/client": "0.14.0",
     "@payload-enchants/cached-local-api": "^1.2.2",
