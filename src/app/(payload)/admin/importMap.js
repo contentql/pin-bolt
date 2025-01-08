@@ -69,6 +69,8 @@ import { CustomPublishOnFieldLabel as CustomPublishOnFieldLabel_6a7c9851ebd211fa
 import { CustomPublishOnField as CustomPublishOnField_6a7c9851ebd211fa288fcd19fbdf430e } from '@contentql/core/client'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
+import { ColorField as ColorField_6a7c9851ebd211fa288fcd19fbdf430e } from '@contentql/core/client'
+import { RadiusField as RadiusField_6a7c9851ebd211fa288fcd19fbdf430e } from '@contentql/core/client'
 import { default as default_fe373fe27f1063cfe032cdbcc74c397a } from '/src/payload/style/icons/Icon.tsx'
 import { default as default_d04d5322bc326e90e9d559df021a5610 } from '/src/payload/style/icons/Logo.tsx'
 
@@ -144,6 +146,8 @@ export const importMap = {
   "@contentql/core/client#CustomPublishOnField": CustomPublishOnField_6a7c9851ebd211fa288fcd19fbdf430e,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
+  "@contentql/core/client#ColorField": ColorField_6a7c9851ebd211fa288fcd19fbdf430e,
+  "@contentql/core/client#RadiusField": RadiusField_6a7c9851ebd211fa288fcd19fbdf430e,
   "/src/payload/style/icons/Icon.tsx#default": default_fe373fe27f1063cfe032cdbcc74c397a,
   "/src/payload/style/icons/Logo.tsx#default": default_d04d5322bc326e90e9d559df021a5610
 }

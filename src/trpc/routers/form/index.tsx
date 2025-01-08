@@ -29,7 +29,7 @@ export const formRouter = router({
   newFormSubmission: publicProcedure
     ?.input(
       z.object({
-        id: z.number(),
+        id: z.union([z.string(), z.number()]),
         data: z.array(
           z.object({
             field: z.string(),
@@ -44,7 +44,8 @@ export const formRouter = router({
         const submission = await payload.create({
           collection: 'form-submissions',
           data: {
-            form: id,
+            // typecasting id, to support mongo & other databases
+            form: id as any,
             submissionData: data,
           },
         })
