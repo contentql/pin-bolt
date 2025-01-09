@@ -1,14 +1,12 @@
 import { collectionSlug, cqlConfig } from '@contentql/core'
 import { env } from '@env'
 import { slateEditor } from '@payloadcms/richtext-slate'
-import { sqliteAdapter } from '@payloadcms/db-sqlite'
-import { migrations } from '@/migrations'
-
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 import { ResetPassword } from '@/emails/reset-password'
 import { UserAccountVerification } from '@/emails/verify-email'
+import { migrations } from '@/migrations'
 import { blocksConfig } from '@/payload/blocks/blockConfig'
 import { revalidateAuthors } from '@/payload/hooks/revalidateAuthors'
 import { revalidateBlogs } from '@/payload/hooks/revalidateBlogs'
@@ -48,17 +46,10 @@ export default cqlConfig({
 
   secret: env.PAYLOAD_SECRET,
 
-  // dbURI: env.DATABASE_URI,
-  // dbSecret: env.DATABASE_SECRET,
-  // syncDB: false,
-
-  db: sqliteAdapter({
-    client: {
-      url: env.DATABASE_URI!,
-      authToken: env.DATABASE_SECRET,
-    },
-    prodMigrations: migrations,
-  }),
+  dbURI: env.DATABASE_URI,
+  dbSecret: env.DATABASE_SECRET,
+  syncDB: false,
+  prodMigrations: migrations,
 
   s3: {
     accessKeyId: env.S3_ACCESS_KEY_ID,
