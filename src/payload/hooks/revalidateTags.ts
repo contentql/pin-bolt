@@ -4,9 +4,13 @@ import type { CollectionAfterChangeHook } from 'payload'
 
 export const revalidateTags: CollectionAfterChangeHook<Tag> = async ({
   doc,
+  previousDoc,
 }) => {
   // if page is published & their is no dynamic block directly revalidating the page
-  if (doc._status === 'published') {
+  if (
+    doc._status === 'published' ||
+    (previousDoc._status === 'published' && doc._status === 'draft')
+  ) {
     revalidateTag('list-tags')
     revalidateTag('list-tags-with-blog-count')
 
