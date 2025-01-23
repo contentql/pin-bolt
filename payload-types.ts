@@ -299,6 +299,23 @@ export interface Form {
             blockName?: string | null;
             blockType: 'textarea';
           }
+        | {
+            name: string;
+            label?: string | null;
+            /**
+             * Enter the maximum size of each file in MB
+             */
+            size: number;
+            width?: number | null;
+            /**
+             * Check this box if you want to allow multiple attachments
+             */
+            multiple: boolean;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'upload';
+          }
       )[]
     | null;
   submitButtonLabel?: string | null;
@@ -515,6 +532,7 @@ export interface FormSubmission {
     | {
         field: string;
         value: string;
+        file?: (number | Media)[] | null;
         id?: string | null;
       }[]
     | null;
@@ -957,6 +975,18 @@ export interface FormsSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        upload?:
+          | T
+          | {
+              name?: T;
+              label?: T;
+              size?: T;
+              width?: T;
+              multiple?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   submitButtonLabel?: T;
   confirmationType?: T;
@@ -992,6 +1022,7 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
     | {
         field?: T;
         value?: T;
+        file?: T;
         id?: T;
       };
   updatedAt?: T;

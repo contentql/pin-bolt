@@ -6,6 +6,7 @@ import { default as number } from './Number'
 import { default as select } from './Select'
 import { default as text } from './Text'
 import { default as textarea } from './Textarea'
+import UploadField from './UploadField'
 
 export const fieldsJsx = {
   text,
@@ -16,4 +17,5 @@ export const fieldsJsx = {
   number,
   checkbox,
   message,
+  upload: UploadField,
 }
